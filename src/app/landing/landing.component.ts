@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Classroom } from 'src/models/classroom.model';
+import { CLASSROOMS } from 'src/models/mock-classroom';
 import { ModalService } from '../_modal';
 
 import Web3 from 'web3';
@@ -22,14 +23,12 @@ export class LandingComponent implements OnInit {
 
   @ViewChild('onLoginPlaceholder1') onLoginPlaceholder1: ElementRef;
   public form: FormGroup;
-  public classrooms: Classroom[] = [];
+  classrooms = CLASSROOMS;
 
   constructor(private modalService: ModalService) { }
 
   ngOnInit() {
-    this.classrooms.push(new Classroom(1, "Learn Solidity", "smartcontract", "26th May 2020", "23th July 2020", 400, true, false, false));
-    this.classrooms.push(new Classroom(2, "Learn Defi", "smartcontract", "1st June 2020", "27th July 2020", 200, true, false, false));
-    this.classrooms.push(new Classroom(3, "Learn Dapp", "smartcontract", "23th July 2020", "11th Aug 2020", 300, true, false, false));
+
   }
   openModal(id: string) {
     this.modalService.open(id);

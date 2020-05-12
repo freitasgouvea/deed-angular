@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/filter';
 import { LocationStrategy, PlatformLocation, Location } from '@angular/common';
 
-var didScroll;
 var lastScrollTop = 0;
 var delta = 5;
 var navbarHeight = 0;
