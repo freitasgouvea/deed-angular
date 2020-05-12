@@ -20,11 +20,11 @@
               <p class="lead  text-white">Here you can see all details of this course and interact with classroom smart
                 contract.</p>
               <div class="btn-wrapper">
-                <a href="#secretary" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                <a (click)="openModal('custom-modal-details');" class="btn btn-success btn-icon mb-3 mb-sm-0">
                   <span class="btn-inner--icon"><i class="fa fa-search"></i></span>
                   <span class="btn-inner--text">Details</span>
                 </a>
-                <a href="#secretary" class="btn btn-white btn-icon mb-3 mb-sm-0">
+                <a href="#clasrooms" class="btn btn-white btn-icon mb-3 mb-sm-0">
                   <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
                   <span class="btn-inner--text">Back</span>
                 </a>
@@ -151,10 +151,10 @@
                 </div>
               </div>
             </div>
-            <div class="progress">
-              <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
-                aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
+              aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
         <div class="modal-footer">
@@ -191,10 +191,10 @@
                 </div>
               </div>
             </div>
-            <div class="progress">
-              <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
-                aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
+              aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
         <div class="modal-footer">
@@ -231,10 +231,10 @@
                 </div>
               </div>
             </div>
-            <div class="progress">
-              <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
-                aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
+              aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
         <div class="modal-footer">
@@ -271,15 +271,97 @@
                 </div>
               </div>
             </div>
-            <div class="progress">
-              <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
-                aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
+              aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary">Save changes</button>
           <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-3');">Close</button>
+        </div>
+      </form>
+    </jw-modal>
+    <jw-modal id="custom-modal-details">
+      <form role="form">
+        <div class="modal-header">
+          <h3 class="modal-title">Classroom Details</h3>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true"
+                    (blur)="focus1=false">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true"
+                    (blur)="focus1=false">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true"
+                    (blur)="focus1=false">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-details');">Close</button>
         </div>
       </form>
     </jw-modal>
