@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import Portis from '@portis/web3';
 import Web3 from 'web3';
-//import * as ethers from 'ethers'
-//import { environment } from '../../environments/environment';
-//import * as University from '../../../build/contracts/University.json';
+import * as ethers from 'ethers'
+import { environment } from '../../environments/environment';
+import * as University from '../../../build/contracts/University.json';
 
 import { Student } from 'src/models/student.model';
 
@@ -26,7 +26,6 @@ export class PortisService {
   });
 
   constructor() {
-
     //this.initEthers();
   }
 
@@ -56,6 +55,42 @@ export class PortisService {
     });
   }
 
+  private conectUniversity() {
+    if (!environment.universityAddress)
+      throw new Error('invalid contract address!');
+    if (!University || !University.abi)
+      throw new Error('invalid contract json, try to run truffle compile!');
+    if (window.ethereum) {
+      this.portis.provider = new ethers.providers.Web3Provider(window.ethereum);
+      window.ethereum.enable().then(() => {
+        const signer = this.portis.provider.getSigner();
+        const deploymentKey = Object.keys(University.networks)[0];
+        const universityAddress = University
+          .networks[deploymentKey]
+          .address;
+        this.contractInstance = new ethers.Contract(
+          universityAddress,
+          University.abi,
+          signer
+        );
+        ethereum.on('accountsChanged', this.callbackAccountChanged);
+      });
+    } else {
+      console.warn('try to use Metamask!');
+      this.provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+    }
+  }
+
+  private callbackAccountChanged() {
+    this.conectUniversity;
+  }
+
+  public async getUniversityName() {
+    const name = this.contractInstance.name();
+    console.log(name)
+    return name;
+  }
+
   /*
 
   //TODO: receber o email para o registro
@@ -65,7 +100,7 @@ export class PortisService {
       this.loginAddress = walletAddress;
     });
 
-  //TODO: configure new ethers.js
+  
 
     async initPortis() {
     this.provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -116,9 +151,9 @@ export class PortisService {
     }
     private callbackAccountChanged() {
       this.initEthers;
-    }
+  }
 
-      public async set(value: string) {
+  public async set(value: string) {
     this.contractInstance.set(value);
   }
   public async get() {
