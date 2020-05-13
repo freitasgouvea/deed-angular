@@ -120,6 +120,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "deed"
+    }
+  },
+  "defaultProject": "deed",
+  "cli": {
+    "analytics": false
+  }
 }
