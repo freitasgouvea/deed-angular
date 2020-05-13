@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Classroom } from 'src/models/classroom.model';
 import { CLASSROOMS } from 'src/models/mock-classroom';
+import { Student } from 'src/models/student.model';
 import { ModalService } from '../_modal';
 
 import { PortisService } from '../services/portis.service';
@@ -32,6 +33,7 @@ export class LandingComponent implements OnInit {
   ngOnInit() {
 
   }
+
   openModal(id: string) {
     this.modalService.open(id);
   }
@@ -56,6 +58,17 @@ export class LandingComponent implements OnInit {
     else {
       this.mode = 'unconnected';
     }
+  }
+
+  getClassrooms(id: Number) {
+    const data = localStorage.getItem('classrooms');
+    console.log(data)
+    if (data) {
+      this.classrooms = JSON.parse(data);
+    } else {
+      this.classrooms = [];
+    }
+
   }
 
 }
