@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Classroom } from 'src/models/classroom.model';
 import { ModalService } from '../_modal';
 
+import { PortisService } from '../services/portis.service';
 import Web3 from 'web3';
 
 @Component({
@@ -19,17 +20,16 @@ export class ClassroomComponent implements OnInit {
   public classrooms: Classroom[] = [];
   public form: FormGroup;
 
-  constructor(private modalService: ModalService) { }
+  constructor(private modalService: ModalService, private portisService: PortisService) { }
 
   async ngOnInit() {
-    const portis = new Portis("24362e3c-2da0-445c-a0ee-b1e33da455ce", "rinkeby");
-    const web3 = new Web3(portis.provider);
-    await portis.provider.enable();
-    const accounts = await web3.eth.getAccounts();
-    if (accounts[0] == '') {
-      this.mode = 'unconnected';
-    } else {
+    this.mode = 'loadingPage';
+    const resposta = await this.portisService.initPortis();
+    if (resposta == true) {
       this.mode = 'connected';
+    } 
+    else {
+      this.mode = 'unconnected';
     }
   }
 
