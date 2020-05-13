@@ -33,6 +33,21 @@ export class ClassroomComponent implements OnInit {
     }
   }
 
+  address: any;
+
+  private async conectPortis(): Promise<any> {
+    this.mode = 'loadingPage';
+    const resposta = await this.portisService.initPortis();
+    this.address = this.portisService.getAddress();
+    console.log(this.address)
+    if (resposta == true) {
+      this.mode = 'connected';
+    } 
+    else {
+      this.mode = 'unconnected';
+    }
+  }
+
   openModal(id: string) {
     this.modalService.open(id);
   }

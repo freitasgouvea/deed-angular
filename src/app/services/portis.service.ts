@@ -48,6 +48,14 @@ export class PortisService {
     }
   }
 
+  async getAddress() {
+    const web3 = new Web3(this.portis.provider);
+    web3.eth.getAccounts((error, accounts) => {
+      console.log(accounts);
+      return accounts
+    });
+  }
+
   /*
 
   //TODO: receber o email para o registro
