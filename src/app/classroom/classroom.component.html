@@ -34,7 +34,7 @@
               <div class="card card-lift--hover shadow border-0 text-center">
                 <div class="card-body py-5">
                   <div class="icon icon-shape icon-shape-warning rounded-circle fa-3x mb-4">
-                    <i class="fa fa-sync fa-spin"></i>
+                    <i class="fa fa-wifi"></i>
                   </div>
                   <h6 class="text-warning text-uppercase">Connecting</h6>
                   <p class="description mt-3">Connecting to your Wallet Provider and DeEd University.</p>
@@ -76,46 +76,69 @@
                   <p class="description mt-3">Address: usdhfusdgfuisdhidshfiodshfhdsiofjhdiofjdio</p>
                   <p class="description mt-3">Amount: 400 DAI</p>
                   <p class="description mt-3">Status: 300 Points</p>
-                  <div #onLoginPlaceholder1></div>
                   <button class="btn btn-success mt-4" (click)="conectPortis()">Register DeEd</button>
                 </div>
               </div>
             </div>
           </div>
           <div class="row mb-4">
-            <div class="col-lg-4">
+            <div class="col-lg-4 mt-4">
               <div class="card card-lift--hover shadow border-0 text-center">
                 <div class="card-body py-5">
                   <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
                     1
                   </div>
-                  <h6 class="text-default text-uppercase">APPLY FOR THIS COURSE</h6>
+                  <h6 class="text-default text-uppercase">Apply For This Course</h6>
                   <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                  <a (click)="openModal('custom-modal-1')" class="btn btn-default mt-4 text-white">APPLY</a>
+                  <a (click)="openModal('custom-modal-1')" class="btn btn-default mt-4 text-white">Apply</a>
                 </div>
               </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4 mt-4">
               <div class="card card-lift--hover shadow border-0 text-center">
                 <div class="card-body py-5">
                   <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
                     2
                   </div>
-                  <h6 class="text-default text-uppercase">Start Application</h6>
+                  <h6 class="text-default text-uppercase">Call for a Grant</h6>
                   <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                  <a (click)="openModal('custom-modal-2')" class="btn btn-default mt-4 text-white">Deposit</a>
+                  <a (click)="openModal('custom-modal-2')" class="btn btn-default mt-4 text-white">Call</a>
                 </div>
               </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4 mt-4">
               <div class="card card-lift--hover shadow border-0 text-center">
                 <div class="card-body py-5">
                   <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
                     3
                   </div>
+                  <h6 class="text-default text-uppercase">Start Application</h6>
+                  <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                  <a (click)="openModal('custom-modal-3')" class="btn btn-default mt-4 text-white">Deposit</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 mt-4">
+              <div class="card card-lift--hover shadow border-0 text-center">
+                <div class="card-body py-5">
+                  <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
+                    4
+                  </div>
+                  <h6 class="text-default text-uppercase">Access Material</h6>
+                  <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                  <a (click)="openModal('custom-modal-4')" class="btn btn-default mt-4 text-white">Recieve</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 mt-4">
+              <div class="card card-lift--hover shadow border-0 text-center">
+                <div class="card-body py-5">
+                  <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
+                    5
+                  </div>
                   <h6 class="text-default text-uppercase">Submit Your Answer</h6>
                   <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                  <a (click)="openModal('custom-modal-3')" class="btn btn-default mt-4 text-white">Submit</a>
+                  <a (click)="openModal('custom-modal-5')" class="btn btn-default mt-4 text-white">Submit</a>
                 </div>
               </div>
             </div>
@@ -246,7 +269,7 @@
     <jw-modal id="custom-modal-3">
       <form role="form">
         <div class="modal-header">
-          <h3 class="modal-title">Submit your answer</h3>
+          <h3 class="modal-title">Call for a grant</h3>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -280,6 +303,86 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-primary">Save changes</button>
           <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-3');">Close</button>
+        </div>
+      </form>
+    </jw-modal>
+    <jw-modal id="custom-modal-4">
+      <form role="form">
+        <div class="modal-header">
+          <h3 class="modal-title">Recieve classroom material</h3>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true"
+                    (blur)="focus1=false">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
+              aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-4');">Close</button>
+        </div>
+      </form>
+    </jw-modal>
+    <jw-modal id="custom-modal-5">
+      <form role="form">
+        <div class="modal-header">
+          <h3 class="modal-title">Submit your answer</h3>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true"
+                    (blur)="focus1=false">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
+              aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-5');">Close</button>
         </div>
       </form>
     </jw-modal>

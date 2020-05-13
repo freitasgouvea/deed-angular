@@ -27,7 +27,7 @@
                   <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
                   <span class="btn-inner--text">Classroms</span>
                 </a>
-                <a href="#secretary" class="btn btn-default btn-icon mb-3 mb-sm-0">
+                <a href="#secretary" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                   <span class="btn-inner--icon"><i class="fa fa-info-circle"></i></span>
                   <span class="btn-inner--text">Secretary</span>
                 </a>
@@ -37,7 +37,7 @@
               <div class="card card-lift--hover shadow border-0 text-center">
                 <div class="card-body py-5">
                   <div class="icon icon-shape icon-shape-warning rounded-circle fa-3x mb-4">
-                    <i class="fa fa-sync fa-spin"></i>
+                    <i class="fa fa-wifi"></i>
                   </div>
                   <h6 class="text-warning text-uppercase">Connecting</h6>
                   <p class="description mt-3">Connecting to your Wallet Provider and DeEd University.</p>
@@ -180,8 +180,9 @@
                     <td>{{ classroom.startDate }}</td>
                     <td>{{ classroom.finishDate }}</td>
                     <td>{{ classroom.price }}</td>
-                    <td><a href="#clasroomInfo" [class.selected]="classroom === selectedClassroom"
-                        (click)="onSelect(classroom)" class="btn btn-sm btn-default">Details</a></td>
+                    <td><a [class.selected]="classroom === selectedClassroom"
+                        (click)="onSelect(classroom);openModal('custom-modal-classroom')"
+                        class="btn btn-sm btn-default text-white">Details</a></td>
                   </tr>
                 </tbody>
               </table>
@@ -191,70 +192,24 @@
       </div>
     </div>
   </section>
-  <section id="clasroomInfo" *ngIf="selectedClassroom" class="section section-shaped section-lg">
-    <div class="shape shape-style-1 bg-gradient-default">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <div class="container py-lg-md d-flex">
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="card shadow border-0">
-            <div class="card-header py-5">
-              <h3>{{selectedClassroom.title | uppercase}} <span class="badge badge-pill badge-success">open</span></h3>
-            </div>
-            <div class="card-body py-5">
-              <div class="row">
-                <div class="col-md-6">
-                  <h4 class="text-light">Start <span class="text-default">{{selectedClassroom.startDate}}</span></h4>
-                  <h4 class="text-light">Finish <span class="text-default">{{selectedClassroom.finishDate}}</span></h4>
-                </div>
-                <div class="col-md-6">
-                  <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
-                  <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <h4 class="text-light">Informations</h4>
-                  <h2 class="description mt-3">Argon is a great free UI package based on Angular that includes the most
-                    important components and features.Argon is a great free UI package based on Angular that includes
-                    the most
-                    important components and features.Argon is a great free UI package based on Angular that includes
-                    the most
-                    important components and features.</h2>
-                  <h2 class="description mt-3">Argon is a great free UI package based on Angular that includes the most
-                    important components and features.Argon is a great free UI package based on Angular that includes
-                    the most
-                    important components and features.Argon is a great free UI package based on Angular that includes
-                    the most
-                    important components and features.</h2>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer">
-              <a href="#clasrooms" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-                <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
-                <span class="btn-inner--text">Back</span>
-              </a>
-              <a href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
-                <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
-                <span class="btn-inner--text">Go to Classroom</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
   <section id="secretary" class="section pb-0 bg-gradient-default">
     <div class="container">
+      <h1 class="display-3 text-white">secretary</h1>
+      <p class="lead text-white">Here you can see the informations of the University and how DeEd works.</p>
+      <div class="btn-wrapper">
+        <a href="#clasrooms" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+          <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+          <span class="btn-inner--text">Classrooms</span>
+        </a>
+        <a href="#" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+          <span class="btn-inner--icon"><i class="fa fa-cube"></i></span>
+          <span class="btn-inner--text">Admin</span>
+        </a>
+        <a href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
+          <span class="btn-inner--icon"><i class="fa fa-gratipay"></i></span>
+          <span class="btn-inner--text">Donate</span>
+        </a>
+      </div>
       <div class="row row-grid align-items-center">
         <div class="col-md-4 order-lg-2 ml-lg-auto">
           <div class="position-relative pl-md-5">
@@ -262,21 +217,59 @@
           </div>
         </div>
         <div class="col-lg-8 order-lg-1">
-          <h1 class="display-3 text-white">secretary</h1>
-          <p class="lead  text-white">Here you can see the informations of the university and how DeEd works.</p>
+          <div class="card shadow shadow-lg--hover mt-5">
+            <div class="card-body">
+              <div class="d-flex px-3">
+                <div>
+                  <div class="icon icon-shape bg-gradient-primary rounded-circle text-white">
+                    <i class="fa fa-link"></i>
+                  </div>
+                </div>
+                <div class="pl-4">
+                  <h5 class="title text-primary">University Status</h5>
+                <ul>
+                  <li id="university.cut">Cut: <strong>51</strong></li>
+                  <li id="university._studentGSNDeposit">Funds: <strong>7000</strong> DAI</li>
+                  <li id="university.operationalBudget">Bugdet: <strong>15000</strong> DAI</li>
+                  <li id="university.donationsReceived">Donations: <strong>5000</strong> DAI</li>
+                  <li id="university.revenueReceived">Revenue: <strong>15000</strong> DAI</li>
+                  <li id="university.returnsReceived">Returns: <strong>3000</strong> DAI</li>
+                </ul>
+                  <a href="javascript:void(0)" class="text-primary">See on Etherscan</a>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="card shadow shadow-lg--hover mt-5">
             <div class="card-body">
               <div class="d-flex px-3">
                 <div>
                   <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
-                    <i class="fa fa-link"></i>
+                    <i class="fa fa-gratipay"></i>
                   </div>
                 </div>
                 <div class="pl-4">
-                  <h5 class="title text-success">Smart Contract</h5>
+                  <h5 class="title text-success">Make a Donnation</h5>
                   <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that
                     process will continue whatever.</p>
-                  <a href="javascript:void(0)" class="text-success">See on Etherscan</a>
+                  <a href="javascript:void(0)" class="text-success">Support Now</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card shadow shadow-lg--hover mt-5">
+            <div class="card-body">
+              <div class="d-flex px-3">
+                <div>
+                  <div class="icon icon-shape bg-gradient-danger rounded-circle text-white">
+                    <i class="fa fa-code"></i>
+                  </div>
+                </div>
+                <div class="pl-4">
+                  <h5 class="title text-danger">Smart Contract</h5>
+                  <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that
+                    process will continue whatever.</p>
+                  <a href="javascript:void(0)" class="text-danger">Show the Code</a>
                 </div>
               </div>
             </div>
@@ -389,5 +382,55 @@
         <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-1');">Close</button>
       </div>
     </form>
+  </jw-modal>
+  <jw-modal id="custom-modal-classroom">
+    <div id="clasroomInfo" *ngIf="selectedClassroom" class="container py-lg-md d-flex">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card shadow border-0">
+            <div class="card-body py-5">
+              <h3>{{selectedClassroom.title | uppercase}} <span class="badge badge-pill badge-success">open</span></h3>
+              <div class="row">
+                <div class="col-md-6">
+                  <h4 class="text-light">Start <span class="text-default">{{selectedClassroom.startDate}}</span></h4>
+                  <h4 class="text-light">Finish <span class="text-default">{{selectedClassroom.finishDate}}</span></h4>
+                </div>
+                <div class="col-md-6">
+                  <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
+                  <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <h2 class="description mt-3">Argon is a great free UI package based on Angular that includes the most
+                    important components and features.Argon is a great free UI package based on Angular that includes
+                    the most
+                    important components and features.Argon is a great free UI package based on Angular that includes
+                    the most
+                    important components and features.</h2>
+                  <h2 class="description mt-3">Argon is a great free UI package based on Angular that includes the most
+                    important components and features.Argon is a great free UI package based on Angular that includes
+                    the most
+                    important components and features.Argon is a great free UI package based on Angular that includes
+                    the most
+                    important components and features.</h2>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="#clasrooms" (click)="closeModal('custom-modal-classroom')"
+                class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+                <span class="btn-inner--text">Back</span>
+              </a>
+              <a href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
+                <span class="btn-inner--text">Go to Classroom</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </jw-modal>
 </main>
