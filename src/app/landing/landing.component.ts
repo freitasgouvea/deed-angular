@@ -51,7 +51,7 @@ export class LandingComponent implements OnInit {
 
   address: any;
 
-  private async conectPortis(): Promise<any> {
+  async conectPortis(): Promise<any> {
     this.mode = 'loadingPage';
     const resposta = await this.portisService.initPortis();
     this.address = this.portisService.getAddress();
