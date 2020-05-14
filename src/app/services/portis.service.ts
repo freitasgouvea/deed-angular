@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Portis from '@portis/web3';
 //import Web3 from 'web3';
-import * as ethers from 'ethers'
+import * as ethers from 'ethers';
 import { environment } from '../../environments/environment';
 
 import * as University from '../../../build/contracts/University.json';
@@ -10,14 +10,12 @@ import { Student } from 'src/models/student.model';
 declare let window: any;
 declare let ethereum: any;
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PortisService {
-
   public provider: any;
-  public contractInstance: any;
+  public universityContractInstance: any;
   public networkName: any;
 
   public universityName: any;
@@ -26,8 +24,8 @@ export class PortisService {
   public loginAddress: any;
   public students: Student[] = [];
 
-  portis = new Portis("211b48db-e8cc-4b68-82ad-bf781727ea9e", "ropsten", {
-    scope: ["email"]
+  portis = new Portis('211b48db-e8cc-4b68-82ad-bf781727ea9e', 'ropsten', {
+    scope: ['email'],
   });
 
   constructor() {
@@ -37,22 +35,19 @@ export class PortisService {
   async initPortis() {
     this.provider = new ethers.providers.Web3Provider(this.portis.provider);
     await this.portis.provider.enable();
-    this.networkName = await this.provider.network.name;
+    this.networkName = await this.provider.getNetwork();
     const accounts = await this.provider.listAccounts();
-    console.log(accounts[0], this.networkName);
-    if (accounts[0] = '') {
+    if ((accounts[0] = '')) {
       console.warn('Not Connected!');
-      return false
-    }
-    else {
+      return false;
+    } else {
       console.log('Connected with Portis!');
-      return true
+      return true;
     }
   }
 
   async getAddress() {
     const accounts = await this.provider.listAccounts();
-    console.log(accounts[0]);
     return accounts[0];
   }
 
@@ -63,35 +58,70 @@ export class PortisService {
       throw new Error('invalid contract json, try to run truffle compile!');
     if (this.portis.provider) {
       const signer = this.provider.getSigner();
-      this.contractInstance = new ethers.Contract(
+      this.universityContractInstance = new ethers.Contract(
         environment.universityAddress,
         University.abi,
         signer
       );
-      console.log(this.contractInstance);
-      this.universityName = await this.contractInstance.name();
-      console.log('conected to University ' + this.universityName );
+      this.universityName = await this.universityContractInstance.name();
     } else {
       console.warn('try to connect with portis!');
-      this.provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+      this.provider = new ethers.providers.JsonRpcProvider(
+        'http://localhost:8545'
+      );
     }
   }
 
   public async getUniversityName() {
-    const name = this.contractInstance.name();
-    console.log(name)
-    return name;
+    const answer = await this.universityContractInstance.name();
+    const val = ethers.utils.parseBytes32String(answer);
+    return val;
+  }
+
+  public async getUniversityCut() {
+    const answer = await this.universityContractInstance.cut();
+    const val = answer / 1e4;
+    return val;
+  }
+
+  public async getUniversityFunds() {
+    const answer = await this.universityContractInstance.availableFunds();
+    const val = ethers.utils.formatEther(answer);
+    return val;
+  }
+
+  public async getUniversityBudget() {
+    const answer = await this.universityContractInstance.operationalBudget();
+    const val = ethers.utils.formatEther(answer);
+    return val;
+  }
+
+  public async getUniversityDonations() {
+    const answer = await this.universityContractInstance.donationsReceived();
+    const val = ethers.utils.formatEther(answer);
+    return val;
+  }
+
+  public async getUniversityRevenue() {
+    const answer = await this.universityContractInstance.revenueReceived();
+    const val = ethers.utils.formatEther(answer);
+    return val;
+  }
+
+  public async getUniversityReturns() {
+    const answer = await this.universityContractInstance.returnsReceived();
+    const val = ethers.utils.formatEther(answer);
+    return val;
   }
 
   public async getUniversityOwner() {
-    const owner = this.contractInstance.owner();
-    console.log(owner)
+    const owner = this.universityContractInstance.owner();
     return owner;
   }
 
   public async changeUniversityName(_newName: string) {
     const newName = ethers.utils.formatBytes32String(_newName);
-    await this.contractInstance.set(newName);
+    await this.universityContractInstance.set(newName);
     console.log(newName);
     return newName;
   }
@@ -165,5 +195,4 @@ export class PortisService {
     return this.contractInstance.get();
   }
     */
-
 }

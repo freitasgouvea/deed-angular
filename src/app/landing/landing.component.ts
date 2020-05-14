@@ -7,31 +7,45 @@ import { Student } from 'src/models/student.model';
 import { ModalService } from '../_modal';
 
 import { PortisService } from '../services/portis.service';
+import { InfuraService } from '../services/infura.service';
 import Web3 from 'web3';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.scss']
+  styleUrls: ['./landing.component.css'],
 })
-
 export class LandingComponent implements OnInit {
   focus: any;
   focus1: any;
   page = 2;
   page1 = 3;
 
+  universityEtherscan = "https://" + environment.network + ".etherscan.io/address/" + environment.universityAddress;
+  universityName: any;
+  universityCut: any;
+  universityFunds: any;
+  universityBudget: any;
+  universityDonations: any;
+  universityRevenue: any;
+  universityReturns: any;
+
   public mode = 'unconnected';
+  public connectedPortis = false;
 
   @ViewChild('onLoginPlaceholder1') onLoginPlaceholder1: ElementRef;
   public form: FormGroup;
   classrooms = CLASSROOMS;
   selectedClassroom: Classroom;
 
-  constructor(private modalService: ModalService, private portisService: PortisService) { }
+  constructor(
+    private modalService: ModalService,
+    public portisService: PortisService,
+    public infuraService: InfuraService
+  ) {}
 
   ngOnInit() {
-
   }
 
   openModal(id: string) {
@@ -53,28 +67,32 @@ export class LandingComponent implements OnInit {
 
   async conectPortis(): Promise<any> {
     this.mode = 'loadingPage';
-    const resposta = await this.portisService.initPortis();
+    const answer = await this.portisService.initPortis();
     this.address = this.portisService.getAddress();
-    console.log(this.address);
     const connectUniversity = await this.portisService.conectUniversity();
-    //console.log(connectUniversity);
-    if (resposta == true) {
-      this.mode = 'connected';
-    } 
-    else {
-      this.mode = 'unconnected';
-    }
+    this.mode = 'connected';
+    this.connectedPortis = true;
+    await this.refreshUniversityInfo();
+  }
+
+  async refreshUniversityInfo(): Promise<any> {
+    const service = this.connectedPortis ? this.portisService : this.infuraService;
+    this.universityName = await service.getUniversityName();
+    this.universityCut = await service.getUniversityCut();
+    this.universityDonations = await service.getUniversityDonations();
+    this.universityFunds = await service.getUniversityFunds();
+    this.universityBudget = await service.getUniversityBudget();
+    this.universityRevenue = await service.getUniversityRevenue();
+    this.universityReturns = await service.getUniversityReturns();
   }
 
   getClassrooms(id: Number) {
     const data = localStorage.getItem('classrooms');
-    console.log(data)
+    console.log(data);
     if (data) {
       this.classrooms = JSON.parse(data);
     } else {
       this.classrooms = [];
     }
-
   }
-
 }
