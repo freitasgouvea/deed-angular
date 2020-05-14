@@ -45,8 +45,8 @@ export class LandingComponent implements OnInit {
     public infuraService: InfuraService
   ) {}
 
-  async ngOnInit() {
-    await this.refreshUniversityInfo();
+  ngOnInit() {
+     this.refreshUniversityInfo();
   }
 
   openModal(id: string) {
