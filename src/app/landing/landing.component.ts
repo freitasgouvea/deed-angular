@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Classroom } from 'src/models/classroom.model';
+import { GenericUser } from 'src/models/genericUser.model';
 import { CLASSROOMS } from 'src/models/mock-classroom';
 import { Student } from 'src/models/student.model';
 import { ModalService } from '../_modal';
@@ -40,6 +41,7 @@ export class LandingComponent implements OnInit {
   @ViewChild('onLoginPlaceholder1') onLoginPlaceholder1: ElementRef;
   public form: FormGroup;
   classrooms = CLASSROOMS;
+  UniversityAdminsArray: GenericUser[];
   selectedClassroom: Classroom;
 
   constructor(
@@ -72,6 +74,10 @@ export class LandingComponent implements OnInit {
   async conectPortis(): Promise<any> {
     this.mode = 'loadingPage';
     const answer = await this.portisService.initPortis();
+    if (!answer) {
+      this.mode = 'unconnected';
+      return;
+    }
     this.address = await this.portisService.getAddress();
     const connectUniversity = await this.portisService.conectUniversity();
     this.mode = 'connected';
@@ -100,5 +106,13 @@ export class LandingComponent implements OnInit {
     } else {
       this.classrooms = [];
     }
+  }
+
+  revokeRole(role: string, address: string) {
+
+  }
+
+  refreshRoles() {
+
   }
 }

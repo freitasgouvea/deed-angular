@@ -191,7 +191,7 @@
                     <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
                     <span class="btn-inner--text">Classrooms</span>
                 </button>
-                <button href="#" class="btn btn-neutral btn-icon mb-3 mb-sm-0" [disabled]=!userIsUniversityAdmin>
+                <button (click)="refreshRoles();openModal('custom-modal-university-admin')" class="btn btn-neutral btn-icon mb-3 mb-sm-0" [disabled]=!userIsUniversityAdmin>
                     <span class="btn-inner--icon"><i class="fa fa-cogs"></i></span>
                     <span class="btn-inner--text">Admin</span>
                 </button>
@@ -229,8 +229,6 @@
                                         <li id="university.donationsReceived">Donations: <strong>{{universityDonations}}</strong> DAI</li>
                                         <li id="university.revenueReceived">Revenue: <strong>{{universityRevenue}}</strong> DAI</li>
                                         <li id="university.returnsReceived">Returns: <strong>{{universityReturns}}</strong> DAI</li>
-                                        <!--TODO: remove button for refresh and fetch data on sync-->
-                                        <button class="btn btn-success mt-4" (click)="refreshUniversityInfo()">Refresh</button>
                                     </ul>
                                     <a href="{{universityEtherscan}}" target="_blank" class="text-primary">See on Etherscan</a>
                                 </div>
@@ -406,6 +404,61 @@
                             <a href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
                                 <span class="btn-inner--text">Go to Classroom</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
+    <jw-modal id="custom-modal-university-admin">
+        <div id="UniversityInfo" class="container py-lg-md d-flex">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow border-0">
+                        <div class="card-body py-5">
+                            <h3>University Admin <span class="badge badge-pill badge-success">ready</span></h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2 class="description mt-3">View here a list of every address listed under each role. Add new addresses using the input field. Remove address by clicking the delete button in the list.</h2>
+                                    <h4 class="UniversityAdmins mt-3">University Admins:</h4>
+                                    <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of UniversityAdminsArray">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('CLASSLIST_ADMIN_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                                </div>
+                                                <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true" (blur)="focus1=false"> <button type="button" class="btn btn-primary">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="classroomListAdmins mt-3">Classroom List Admins:</h4>
+                                    <h4 class="GrantsManagers mt-3">Grants Managers:</h4>
+                                    <h4 class="FundsManagers mt-3">Funds Managers:</h4>
+                                    <h4 class="Overseers mt-3">Universit Overseers:</h4>
+                                    <h4 class="RegisteredProviders mt-3">University Registered Providers:</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#information" (click)="closeModal('custom-modal-university-admin')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                <span class="btn-inner--text">Back</span>
                             </a>
                         </div>
                     </div>
