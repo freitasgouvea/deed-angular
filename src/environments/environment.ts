@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  universityAddress: "fjndjfdnf"
+  universityAddress: "0x25F96Ac4D65a5e111E5A19Ddd521C18bd5e89EFe"
 };
 
 /*

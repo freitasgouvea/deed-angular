@@ -55,7 +55,9 @@ export class LandingComponent implements OnInit {
     this.mode = 'loadingPage';
     const resposta = await this.portisService.initPortis();
     this.address = this.portisService.getAddress();
-    console.log(this.address)
+    console.log(this.address);
+    const connectUniversity = await this.portisService.conectUniversity();
+    //console.log(connectUniversity);
     if (resposta == true) {
       this.mode = 'connected';
     } 

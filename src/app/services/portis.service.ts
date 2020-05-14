@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Portis from '@portis/web3';
-import Web3 from 'web3';
+//import Web3 from 'web3';
 import * as ethers from 'ethers'
 import { environment } from '../../environments/environment';
 
@@ -16,12 +16,17 @@ declare let ethereum: any;
 })
 export class PortisService {
 
-  //private provider: any;
-  private contractInstance: any;
+  public provider: any;
+  public contractInstance: any;
+  public networkName: any;
+
+  public universityName: any;
+
   public email: any;
   public loginAddress: any;
   public students: Student[] = [];
-  portis = new Portis("211b48db-e8cc-4b68-82ad-bf781727ea9e", "kovan", {
+
+  portis = new Portis("211b48db-e8cc-4b68-82ad-bf781727ea9e", "ropsten", {
     scope: ["email"]
   });
 
@@ -30,17 +35,15 @@ export class PortisService {
   }
 
   async initPortis() {
-    const web3 = new Web3(this.portis.provider);
+    this.provider = new ethers.providers.Web3Provider(this.portis.provider);
     await this.portis.provider.enable();
-    const accounts = await web3.eth.getAccounts();
-    web3.eth.getAccounts((error, accounts) => {
-      console.log(accounts);
-    });
-    console.log(this.loginAddress, this.email);
+    this.networkName = await this.provider.network.name;
+    const accounts = await this.provider.listAccounts();
+    console.log(accounts[0], this.networkName);
     if (accounts[0] = '') {
       console.warn('Not Connected!');
       return false
-    } 
+    }
     else {
       console.log('Connected with Portis!');
       return true
@@ -48,41 +51,30 @@ export class PortisService {
   }
 
   async getAddress() {
-    const web3 = new Web3(this.portis.provider);
-    web3.eth.getAccounts((error, accounts) => {
-      console.log(accounts);
-      return accounts
-    });
+    const accounts = await this.provider.listAccounts();
+    console.log(accounts[0]);
+    return accounts[0];
   }
 
-  private conectUniversity() {
+  async conectUniversity() {
     if (!environment.universityAddress)
       throw new Error('invalid contract address!');
     if (!University || !University.abi)
       throw new Error('invalid contract json, try to run truffle compile!');
-    if (window.ethereum) {
-      this.portis.provider = new ethers.providers.Web3Provider(window.ethereum);
-      window.ethereum.enable().then(() => {
-        const signer = this.portis.provider.getSigner();
-        const deploymentKey = Object.keys(University.networks)[0];
-        const universityAddress = University
-          .networks[deploymentKey]
-          .address;
-        this.contractInstance = new ethers.Contract(
-          universityAddress,
-          University.abi,
-          signer
-        );
-        ethereum.on('accountsChanged', this.callbackAccountChanged);
-      });
+    if (this.portis.provider) {
+      const signer = this.provider.getSigner();
+      this.contractInstance = new ethers.Contract(
+        environment.universityAddress,
+        University.abi,
+        signer
+      );
+      console.log(this.contractInstance);
+      this.universityName = await this.contractInstance.name();
+      console.log('conected to University ' + this.universityName );
     } else {
-      console.warn('try to use Metamask!');
-      this.portis.provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+      console.warn('try to connect with portis!');
+      this.provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
     }
-  }
-
-  private callbackAccountChanged() {
-    this.conectUniversity;
   }
 
   public async getUniversityName() {

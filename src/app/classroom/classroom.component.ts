@@ -25,6 +25,8 @@ export class ClassroomComponent implements OnInit {
   async ngOnInit() {
     this.mode = 'loadingPage';
     const resposta = await this.portisService.initPortis();
+    //const connectUniversity = await this.portisService.conectUniversity();
+    //console.log(connectUniversity);
     if (resposta == true) {
       this.mode = 'connected';
     } 
