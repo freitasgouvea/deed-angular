@@ -3,8 +3,8 @@ import Portis from '@portis/web3';
 import Web3 from 'web3';
 import * as ethers from 'ethers'
 import { environment } from '../../environments/environment';
-import * as University from '../../../build/contracts/University.json';
 
+import * as University from '../../../build/contracts/University.json';
 import { Student } from 'src/models/student.model';
 
 declare let window: any;
@@ -16,12 +16,12 @@ declare let ethereum: any;
 })
 export class PortisService {
 
-  private provider: any;
+  //private provider: any;
   private contractInstance: any;
   public email: any;
   public loginAddress: any;
   public students: Student[] = [];
-  portis = new Portis("211b48db-e8cc-4b68-82ad-bf781727ea9e", "rinkeby", {
+  portis = new Portis("211b48db-e8cc-4b68-82ad-bf781727ea9e", "kovan", {
     scope: ["email"]
   });
 
@@ -42,7 +42,7 @@ export class PortisService {
       return false
     } 
     else {
-      console.warn('Connected with Portis!');
+      console.log('Connected with Portis!');
       return true
     }
   }
@@ -77,7 +77,7 @@ export class PortisService {
       });
     } else {
       console.warn('try to use Metamask!');
-      this.provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+      this.portis.provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
     }
   }
 
@@ -89,6 +89,19 @@ export class PortisService {
     const name = this.contractInstance.name();
     console.log(name)
     return name;
+  }
+
+  public async getUniversityOwner() {
+    const owner = this.contractInstance.owner();
+    console.log(owner)
+    return owner;
+  }
+
+  public async changeUniversityName(_newName: string) {
+    const newName = ethers.utils.formatBytes32String(_newName);
+    await this.contractInstance.set(newName);
+    console.log(newName);
+    return newName;
   }
 
   /*
