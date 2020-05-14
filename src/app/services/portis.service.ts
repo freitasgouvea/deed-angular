@@ -115,7 +115,7 @@ export class PortisService {
   }
 
   public async getUniversityOwner() {
-    const owner = this.universityContractInstance.owner();
+    const owner = await this.universityContractInstance.owner();
     return owner;
   }
 
