@@ -126,6 +126,13 @@ export class PortisService {
     return newName;
   }
 
+  public async studentSelfRegister(_name: string) {
+    const name = ethers.utils.formatBytes32String(_name);
+    const register = await this.universityContractInstance.studentSelfRegister(name);
+    console.log(register);
+    return register;
+  }
+
   /*
 
   //TODO: receber o email para o registro
