@@ -64,7 +64,7 @@
                                     <h6 class="text-primary text-uppercase">Register Your Account</h6>
                                     <p class="description mt-3">To use to DeEd you need to register at University.</p>
                                     <div #onLoginPlaceholder1></div>
-                                    <button class="btn btn-primary mt-4" (click)="openModal('custom-modal-1')">Register DeEd</button>
+                                    <button class="btn btn-primary mt-4" (click)="openModal('custom-modal-register')">Register DeEd</button>
                                 </div>
                             </div>
                         </div>
@@ -337,38 +337,56 @@
             </div>
         </div>
     </section>
-    <jw-modal id="custom-modal-1">
+    <jw-modal id="custom-modal-register">
         <form role="form">
-            <div class="modal-header">
-                <h3 class="modal-title">Register at University</h3>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group" [ngClass]="{'focused':focus===true}">
-                            <div class="input-group input-group-alternative mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+            <div id="regsiter" class="container py-lg-md d-flex">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card shadow bg-gradient-default border-0">
+                            <div class="card-body py-5">
+                                <h3 class="text-center text-white">Register at University</h3>
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <div class="form-group" [ngClass]="{'focused':focus===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                                </div>
+                                                <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                                </div>
+                                                <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true" (blur)="focus1=false">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <h2 class="description text-white">Argon is a great free UI package based on Angular that includes the most important components and features.Argon is a great free UI package based on Angular that includes the most important components and features.Argon
+                                            is a great free UI package based on Angular that includes the most important components and features.</h2>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                            <div class="input-group input-group-alternative mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                </div>
-                                <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true" (blur)="focus1=false">
+                            <div class="card-footer bg-gradient-default">
+                                <a (click)="closeModal('custom-modal-register')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+                                    <span class="btn-inner--text">Back</span>
+                                </a>
+                                <a class="btn btn-success btn-icon mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
+                                    <span class="btn-inner--text">Register</span>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-1');">Close</button>
             </div>
         </form>
     </jw-modal>
@@ -379,7 +397,7 @@
                     <div class="card shadow border-0">
                         <div class="card-body py-5">
                             <h3>{{selectedClassroom.title}} <span class="badge badge-pill badge-success">open</span></h3>
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="col-md-6">
                                     <h4 class="text-light">Start <span class="text-default">{{selectedClassroom.startDate}}</span></h4>
                                     <h4 class="text-light">Finish <span class="text-default">{{selectedClassroom.finishDate}}</span></h4>
@@ -389,21 +407,19 @@
                                     <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.Argon is a great free UI package based on Angular that includes the most important components and features.Argon
-                                        is a great free UI package based on Angular that includes the most important components and features.</h2>
-                                    <h2 class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.Argon is a great free UI package based on Angular that includes the most important components and features.Argon
+                                    <h2 class="description">Argon is a great free UI package based on Angular that includes the most important components and features.Argon is a great free UI package based on Angular that includes the most important components and features.Argon
                                         is a great free UI package based on Angular that includes the most important components and features.</h2>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="#clasrooms" (click)="closeModal('custom-modal-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                            <a (click)="closeModal('custom-modal-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                            <a class="btn btn-success btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
                                 <span class="btn-inner--text">Go to Classroom</span>
                             </a>
