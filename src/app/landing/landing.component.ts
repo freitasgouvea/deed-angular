@@ -49,6 +49,7 @@ export class LandingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+     this.refreshUniversityInfo();
   }
 
   openModal(id: string) {
