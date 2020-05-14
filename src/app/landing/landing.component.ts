@@ -30,6 +30,9 @@ export class LandingComponent implements OnInit {
   universityDonations: any;
   universityRevenue: any;
   universityReturns: any;
+  universityAdmin: any;
+
+  userIsUniversityAdmin: boolean;
 
   public mode = 'unconnected';
   public connectedPortis = false;
@@ -69,11 +72,13 @@ export class LandingComponent implements OnInit {
   async conectPortis(): Promise<any> {
     this.mode = 'loadingPage';
     const answer = await this.portisService.initPortis();
-    this.address = this.portisService.getAddress();
+    this.address = await this.portisService.getAddress();
     const connectUniversity = await this.portisService.conectUniversity();
     this.mode = 'connected';
     this.connectedPortis = true;
     await this.refreshUniversityInfo();
+    const adminAddress = await this.portisService.getUniversityOwner();
+    this.userIsUniversityAdmin = (this.address === adminAddress);
   }
 
   async refreshUniversityInfo(): Promise<any> {
