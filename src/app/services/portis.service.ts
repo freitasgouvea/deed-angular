@@ -146,6 +146,8 @@ export class PortisService {
     return register;
   }
 
+}
+
   /*
 
   //TODO: receber o email para o registro
@@ -184,4 +186,5 @@ export class PortisService {
     const roleBytes = (role == 'DEFAULT_ADMIN_ROLE') ? ethers.utils.formatBytes32String('') : ethers.utils.solidityKeccak256(["string"], [role]);
     await this.universityContractInstance.grantRole(roleBytes, address);
   }
-}
+
+  */
