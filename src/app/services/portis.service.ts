@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 
 import * as University from '../../../build/contracts/University.json';
 import { Student } from 'src/models/student.model';
-import {GenericUser} from "../../models/genericUser.model";
+import {baseClientService} from './baseClient.service';
 
 declare let window: any;
 declare let ethereum: any;
@@ -14,12 +14,9 @@ declare let ethereum: any;
 @Injectable({
   providedIn: 'root',
 })
-export class PortisService {
-  public provider: any;
-  public universityContractInstance: any;
-  public networkName: any;
-
+export class PortisService extends baseClientService {
   public universityName: any;
+  public account: any;
 
   public email: any;
   public loginAddress: any;
@@ -30,15 +27,16 @@ export class PortisService {
   });
 
   constructor() {
-    //this.initEthers();
+    super();
   }
 
   async initPortis() {
-    this.provider = new ethers.providers.Web3Provider(this.portis.provider);
+    const provider = new ethers.providers.Web3Provider(this.portis.provider);
     await this.portis.provider.enable();
+    this.setupProvider(provider);
     this.networkName = await this.provider.getNetwork();
-    const accounts = await this.provider.listAccounts();
-    if ((accounts[0] = '')) {
+    const address = await this.getAddress();
+    if ((address === '')) {
       console.warn('Not Connected!');
       return false;
     } else {
@@ -48,8 +46,8 @@ export class PortisService {
   }
 
   async getAddress() {
-    const accounts = await this.provider.listAccounts();
-    return accounts[0];
+    const addresses = await this.provider.listAccounts();
+    return addresses[0];
   }
 
   async conectUniversity() {
@@ -58,12 +56,7 @@ export class PortisService {
     if (!University || !University.abi)
       throw new Error('invalid contract json, try to run truffle compile!');
     if (this.portis.provider) {
-      const signer = this.provider.getSigner();
-      this.universityContractInstance = new ethers.Contract(
-        environment.universityAddress,
-        University.abi,
-        signer
-      );
+      this.connectContracts(this.provider.getSigner());
       this.universityName = await this.universityContractInstance.name();
     } else {
       console.warn('try to connect with portis!');
@@ -71,83 +64,5 @@ export class PortisService {
         'http://localhost:8545'
       );
     }
-  }
-
-  public async getUniversityName() {
-    const answer = await this.universityContractInstance.name();
-    const val = ethers.utils.parseBytes32String(answer);
-    return val;
-  }
-
-  public async getUniversityCut() {
-    const answer = await this.universityContractInstance.cut();
-    const val = answer / 1e4;
-    return val;
-  }
-
-  public async getUniversityFunds() {
-    const answer = await this.universityContractInstance.availableFunds();
-    const val = ethers.utils.formatEther(answer);
-    return val;
-  }
-
-  public async getUniversityBudget() {
-    const answer = await this.universityContractInstance.operationalBudget();
-    const val = ethers.utils.formatEther(answer);
-    return val;
-  }
-
-  public async getUniversityDonations() {
-    const answer = await this.universityContractInstance.donationsReceived();
-    const val = ethers.utils.formatEther(answer);
-    return val;
-  }
-
-  public async getUniversityRevenue() {
-    const answer = await this.universityContractInstance.revenueReceived();
-    const val = ethers.utils.formatEther(answer);
-    return val;
-  }
-
-  public async getUniversityReturns() {
-    const answer = await this.universityContractInstance.returnsReceived();
-    const val = ethers.utils.formatEther(answer);
-    return val;
-  }
-
-  public async getUniversityOwner() {
-    const owner = await this.universityContractInstance.owner();
-    return owner;
-  }
-
-  public async changeUniversityName(_newName: string) {
-    const newName = ethers.utils.formatBytes32String(_newName);
-    await this.universityContractInstance.set(newName);
-    console.log(newName);
-    return newName;
-  }
-
-  public async listRoles(role: string) {
-    let list: Array<GenericUser> = [];
-    const roleBytes = (role == 'DEFAULT_ADMIN_ROLE') ? ethers.utils.formatBytes32String('') : ethers.utils.solidityKeccak256(["string"], [role]);
-    const size = await this.universityContractInstance.getRoleMemberCount(roleBytes);
-    let index = 0;
-    while (index < size){
-      const member = await this.universityContractInstance.getRoleMember(roleBytes, index);
-      list.push(new GenericUser(index, member));
-      index++;
-    }
-    return list;
-  }
-
-  async revokeRole(role: string, address: string) {
-    if (role == 'DEFAULT_ADMIN_ROLE') return;
-    const roleBytes = ethers.utils.solidityKeccak256(["string"], [role]);
-    await this.universityContractInstance.revokeRole(roleBytes, address);
-  }
-
-  async grantRole(role: string, address: string) {
-    const roleBytes = (role == 'DEFAULT_ADMIN_ROLE') ? ethers.utils.formatBytes32String('') : ethers.utils.solidityKeccak256(["string"], [role]);
-    await this.universityContractInstance.grantRole(roleBytes, address);
   }
 }

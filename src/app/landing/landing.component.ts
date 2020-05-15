@@ -52,7 +52,7 @@ export class LandingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-     this.refreshUniversityInfo();
+    this.refreshUniversityInfo();
   }
 
   openModal(id: string) {
@@ -114,7 +114,6 @@ export class LandingComponent implements OnInit {
   }
 
   grantRole(role: string, address: string) {
-    address = address.replace(/<[^>]*>?/gm, '');
     this.portisService.grantRole(role, address).then(() => this.loadUniversityAdmin());
   }
 
