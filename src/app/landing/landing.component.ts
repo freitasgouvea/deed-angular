@@ -38,7 +38,8 @@ export class LandingComponent implements OnInit {
 
   public userIsUniversityAdmin: boolean;
   public mode = 'unconnected';
-  public txMode= 'off';
+  public txMode = 'off';
+  public receipt: any;
   public connectedPortis = false;
   public form: FormGroup;
   public students: Student[] = [];
@@ -110,6 +111,7 @@ export class LandingComponent implements OnInit {
   }
 
   async studentSelfRegister(): Promise<any> {
+    this.txOn(); 
     if (this._name == '') {
       this.txMode = 'failedTX';
     } else {
