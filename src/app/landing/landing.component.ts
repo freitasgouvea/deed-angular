@@ -1,7 +1,8 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Classroom } from 'src/models/classroom.model';
+import { GenericUser } from 'src/models/genericUser.model';
 import { CLASSROOMS } from 'src/models/mock-classroom';
 import { Student } from 'src/models/student.model';
 import { ModalService } from '../_modal';
@@ -10,6 +11,7 @@ import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
 import Web3 from 'web3';
 import { environment } from 'src/environments/environment';
+import { ResourceLoader } from '@angular/compiler';
 
 @Component({
   selector: 'app-landing',
@@ -35,6 +37,7 @@ export class LandingComponent implements OnInit {
   userIsUniversityAdmin: boolean;
 
   public mode = 'unconnected';
+  public modeUniversityAdmin = 'unconnected';
   public connectedPortis = false;
 
   @ViewChild('onLoginPlaceholder1') onLoginPlaceholder1: ElementRef;
@@ -72,6 +75,10 @@ export class LandingComponent implements OnInit {
   async conectPortis(): Promise<any> {
     this.mode = 'loadingPage';
     const answer = await this.portisService.initPortis();
+    if (!answer) {
+      this.mode = 'unconnected';
+      return;
+    }
     this.address = await this.portisService.getAddress();
     const connectUniversity = await this.portisService.conectUniversity();
     this.mode = 'connected';
@@ -100,5 +107,34 @@ export class LandingComponent implements OnInit {
     } else {
       this.classrooms = [];
     }
+  }
+
+  revokeRole(role: string, address: string) {
+    this.portisService.revokeRole(role, address).then(() => this.loadUniversityAdmin());
+  }
+
+  grantRole(role: string, address: string) {
+    address = address.replace(/<[^>]*>?/gm, '');
+    this.portisService.grantRole(role, address).then(() => this.loadUniversityAdmin());
+  }
+
+  roleMembersAdmin: Map<string, Array<GenericUser>>;
+
+  loadUniversityAdmin() {
+    this.roleMembersAdmin = new Map<string, Array<GenericUser>>();
+    this.getRoleMembers('DEFAULT_ADMIN_ROLE').then( result => {this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'] = result});
+    this.getRoleMembers('FUNDS_MANAGER_ROLE').then( result => {this.roleMembersAdmin["FUNDS_MANAGER_ROLE"] = result});
+    this.getRoleMembers('CLASSLIST_ADMIN_ROLE').then( result => {this.roleMembersAdmin["CLASSLIST_ADMIN_ROLE"] = result});
+    this.getRoleMembers('GRANTS_MANAGER_ROLE').then( result => {this.roleMembersAdmin["GRANTS_MANAGER_ROLE"] = result});
+    this.getRoleMembers('UNIVERSITY_OVERSEER_ROLE').then( result => {this.roleMembersAdmin["UNIVERSITY_OVERSEER_ROLE"] = result});
+    this.getRoleMembers('REGISTERED_SUPPLIER_ROLE').then( result => {this.roleMembersAdmin["REGISTERED_SUPPLIER_ROLE"] = result});
+    this.getRoleMembers('READ_STUDENT_LIST_ROLE').then( result => {
+        this.roleMembersAdmin["READ_STUDENT_LIST_ROLE"] = result;
+        this.modeUniversityAdmin = 'loaded';
+      });
+  }
+
+  async getRoleMembers(role: string){
+    return await this.portisService.listRoles(role);
   }
 }

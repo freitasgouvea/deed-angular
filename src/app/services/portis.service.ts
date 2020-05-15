@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 
 import * as University from '../../../build/contracts/University.json';
 import { Student } from 'src/models/student.model';
+import {GenericUser} from "../../models/genericUser.model";
 
 declare let window: any;
 declare let ethereum: any;
@@ -126,73 +127,27 @@ export class PortisService {
     return newName;
   }
 
-  /*
-
-  //TODO: receber o email para o registro
-
-      this.portis.onLogin((walletAddress, email) => {
-      this.email = email;
-      this.loginAddress = walletAddress;
-    });
-
-  
-
-    async initPortis() {
-    this.provider = new ethers.providers.Web3Provider(window.ethereum);
-    await this.portis.provider.enable().then(() => {
-      this.loginAddress = this.provider.getSigner()
-      console.log(this.loginAddress);
-    });
-    if (this.loginAddress = '') {
-      console.warn('Not Connected!');
-      return false
-    } 
-    else {
-      console.warn('Connected with Portis!');
-      return true
+  public async listRoles(role: string) {
+    let list: Array<GenericUser> = [];
+    const roleBytes = (role == 'DEFAULT_ADMIN_ROLE') ? ethers.utils.formatBytes32String('') : ethers.utils.solidityKeccak256(["string"], [role]);
+    const size = await this.universityContractInstance.getRoleMemberCount(roleBytes);
+    let index = 0;
+    while (index < size){
+      const member = await this.universityContractInstance.getRoleMember(roleBytes, index);
+      list.push(new GenericUser(index, member));
+      index++;
     }
+    return list;
   }
 
-  //TODO: Conect with University Smart Contract
-  //TODO: Conect with Student Factory Smart Contract
-  //TODO: Conect with Classroom Factory Smart Contract
-
-  EXAMPLE:
-
-    private initEthers() {
-      if (!environment.contractAddress)
-        throw new Error('invalid contract address!');
-      if (!University || !University.abi)
-        throw new Error('invalid contract json, try to run truffle compile!');
-      if (window.ethereum) {
-        this.provider = new ethers.providers.Web3Provider(window.ethereum);
-        window.ethereum.enable().then(() => {
-          const signer = this.provider.getSigner();
-          const deploymentKey = Object.keys(University.networks)[0];
-          const contractAddress = University
-            .networks[deploymentKey]
-            .address;
-          this.contractInstance = new ethers.Contract(
-            contractAddress,
-            University.abi,
-            signer
-          );
-          ethereum.on('accountsChanged', this.callbackAccountChanged);
-        });
-      } else {
-        console.warn('try to use Metamask!');
-        this.provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
-      }
-    }
-    private callbackAccountChanged() {
-      this.initEthers;
+  async revokeRole(role: string, address: string) {
+    if (role == 'DEFAULT_ADMIN_ROLE') return;
+    const roleBytes = ethers.utils.solidityKeccak256(["string"], [role]);
+    await this.universityContractInstance.revokeRole(roleBytes, address);
   }
 
-  public async set(value: string) {
-    this.contractInstance.set(value);
+  async grantRole(role: string, address: string) {
+    const roleBytes = (role == 'DEFAULT_ADMIN_ROLE') ? ethers.utils.formatBytes32String('') : ethers.utils.solidityKeccak256(["string"], [role]);
+    await this.universityContractInstance.grantRole(roleBytes, address);
   }
-  public async get() {
-    return this.contractInstance.get();
-  }
-    */
 }
