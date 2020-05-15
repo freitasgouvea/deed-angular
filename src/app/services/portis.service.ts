@@ -137,6 +137,40 @@ export class PortisService {
       list.push(new GenericUser(index, member));
       index++;
     }
+  }
+
+  public async studentSelfRegister(_name: string) {
+    const name = ethers.utils.formatBytes32String(_name);
+    const register = await this.universityContractInstance.studentSelfRegister(name);
+    console.log(register);
+    return register;
+  }
+
+  /*
+
+  //TODO: receber o email para o registro
+
+      this.portis.onLogin((walletAddress, email) => {
+      this.email = email;
+      this.loginAddress = walletAddress;
+    });
+
+  
+
+    async initPortis() {
+    this.provider = new ethers.providers.Web3Provider(window.ethereum);
+    await this.portis.provider.enable().then(() => {
+      this.loginAddress = this.provider.getSigner()
+      console.log(this.loginAddress);
+    });
+    if (this.loginAddress = '') {
+      console.warn('Not Connected!');
+      return false
+    } 
+    else {
+      console.warn('Connected with Portis!');
+      return true
+    }
     return list;
   }
 
