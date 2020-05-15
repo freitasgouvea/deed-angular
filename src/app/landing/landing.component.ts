@@ -34,14 +34,18 @@ export class LandingComponent implements OnInit {
   universityReturns: any;
   universityAdmin: any;
 
-  userIsUniversityAdmin: boolean;
+  //StudentSelfRegister
+  public _name = 'any';
+  address: any;
 
+  public userIsUniversityAdmin: boolean;
   public mode = 'unconnected';
   public modeUniversityAdmin = 'unconnected';
+  public txMode = 'off';
+  public receipt: any;
   public connectedPortis = false;
-
-  @ViewChild('onLoginPlaceholder1') onLoginPlaceholder1: ElementRef;
   public form: FormGroup;
+  public students: Student[] = [];
   classrooms = CLASSROOMS;
   selectedClassroom: Classroom;
 
@@ -66,11 +70,17 @@ export class LandingComponent implements OnInit {
     this.selectedClassroom = classroom;
   }
 
+  txOn() {
+    this.txMode= 'portisAlert';
+  }
+
+  txOff() {
+    this.txMode= 'off';
+  }
+
   clear() {
     this.form.reset();
   }
-
-  address: any;
 
   async conectPortis(): Promise<any> {
     this.mode = 'loadingPage';
@@ -86,6 +96,9 @@ export class LandingComponent implements OnInit {
     await this.refreshUniversityInfo();
     const adminAddress = await this.portisService.getUniversityOwner();
     this.userIsUniversityAdmin = (this.address === adminAddress);
+    //TODO: Student Address and Student Smart Contract Address
+    //const adminAddress = await this.portisService.getUniversityOwner();
+    //this.userIsUniversityAdmin = (this.address === adminAddress);
   }
 
   async refreshUniversityInfo(): Promise<any> {
@@ -97,6 +110,26 @@ export class LandingComponent implements OnInit {
     this.universityBudget = await service.getUniversityBudget();
     this.universityRevenue = await service.getUniversityRevenue();
     this.universityReturns = await service.getUniversityReturns();
+  }
+
+  async refreshAccountInfo(): Promise<any> {
+    this.address = await this.portisService.getAddress();
+    //TODO: call student smart contract
+  }
+
+  async studentSelfRegister(): Promise<any> {
+    this.txOn(); 
+    if (this._name == '') {
+      this.txMode = 'failedTX';
+    } else {
+      this.txMode = 'processingTX';
+      const selfRegister = await this.portisService.studentSelfRegister(this._name);
+      if (!selfRegister) {
+        this.txMode = 'failedTX';
+      } else {
+        this.txMode = 'successTX';
+      }
+    }
   }
 
   getClassrooms(id: Number) {

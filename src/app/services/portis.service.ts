@@ -65,4 +65,18 @@ export class PortisService extends baseClientService {
       );
     }
   }
+  }
+    return register;
+    console.log(register);
+    const register = await this.universityContractInstance.studentSelfRegister(name);
+    const name = ethers.utils.formatBytes32String(_name);
+  public async studentSelfRegister(_name: string) {
+
+  }
+    return newName;
+    console.log(newName);
+    await this.universityContractInstance.set(newName);
+    const newName = ethers.utils.formatBytes32String(_newName);
+  public async changeUniversityName(_newName: string) {
+
 }
