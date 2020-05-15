@@ -100,4 +100,11 @@ export class baseClientService {
     const roleBytes = (role == 'DEFAULT_ADMIN_ROLE') ? ethers.utils.formatBytes32String('') : ethers.utils.solidityKeccak256(["string"], [role]);
     await this.universityContractInstance.grantRole(roleBytes, address);
   }
+  
+  public async studentSelfRegister(_name: string) {
+    const name = ethers.utils.formatBytes32String(_name);
+    const register = await this.universityContractInstance.studentSelfRegister(name);
+    console.log(register);
+    return register;
+  }
 }
