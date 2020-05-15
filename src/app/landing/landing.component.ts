@@ -66,6 +66,14 @@ export class LandingComponent implements OnInit {
     this.selectedClassroom = classroom;
   }
 
+  txOn() {
+    this.txMode= 'portisAlert';
+  }
+
+  txOff() {
+    this.txMode= 'off';
+  }
+
   clear() {
     this.form.reset();
   }
