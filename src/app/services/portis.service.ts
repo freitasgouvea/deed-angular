@@ -146,36 +146,6 @@ export class PortisService {
     return register;
   }
 
-}
-
-  /*
-
-  //TODO: receber o email para o registro
-
-      this.portis.onLogin((walletAddress, email) => {
-      this.email = email;
-      this.loginAddress = walletAddress;
-    });
-
-  
-
-    async initPortis() {
-    this.provider = new ethers.providers.Web3Provider(window.ethereum);
-    await this.portis.provider.enable().then(() => {
-      this.loginAddress = this.provider.getSigner()
-      console.log(this.loginAddress);
-    });
-    if (this.loginAddress = '') {
-      console.warn('Not Connected!');
-      return false
-    } 
-    else {
-      console.warn('Connected with Portis!');
-      return true
-    }
-    return list;
-  }
-
   async revokeRole(role: string, address: string) {
     if (role == 'DEFAULT_ADMIN_ROLE') return;
     const roleBytes = ethers.utils.solidityKeccak256(["string"], [role]);
@@ -187,4 +157,4 @@ export class PortisService {
     await this.universityContractInstance.grantRole(roleBytes, address);
   }
 
-  */
+}
