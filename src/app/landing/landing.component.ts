@@ -71,7 +71,7 @@ export class LandingComponent implements OnInit {
   }
 
   txOn() {
-    this.txMode= 'portisAlert';
+    this.txMode= 'preTX';
   }
 
   txOff() {

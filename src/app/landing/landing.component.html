@@ -400,7 +400,7 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <div *ngIf="txMode=='portisAlert'" class="alert alert-neutral" role="alert">
+                                    <div *ngIf="txMode=='preTX'" class="alert alert-neutral" role="alert">
                                         <strong class="text-default">You Need Confirm Trasation on Portis Wallet!</strong>
                                     </div>
                                     <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
@@ -416,15 +416,15 @@
                             </div>
                         </div>
                         <div class="card-footer bg-gradient-default">
-                            <a (click)="closeModal('custom-modal-register'); txOff()"
-                                class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
-                                <span class="btn-inner--text">Back</span>
-                            </a>
-                            <a type="submit" (click)="studentSelfRegister()" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="studentSelfRegister()" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Register</span>
                             </a>
+                            <a (click)="closeModal('custom-modal-register'); txOff()"
+                            class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                            <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+                            <span class="btn-inner--text">Back</span>
+                        </a>
                         </div>
                     </div>
                 </div>
