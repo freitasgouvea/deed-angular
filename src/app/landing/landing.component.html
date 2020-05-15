@@ -20,8 +20,7 @@
                             <h1 class="display-3  text-white">decentralized
                                 <span>university</span>
                             </h1>
-                            <p class="lead  text-white">The design system comes with four pre-built pages to help you
-                                get started faster. You can change the text and images and you're good to go.</p>
+                            <p class="lead  text-white">The design system comes with four pre-built pages to help you get started faster. You can change the text and images and you're good to go.</p>
                             <div class="btn-wrapper">
                                 <a href="#clasrooms" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                     <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
@@ -67,8 +66,7 @@
                                     <h6 class="text-primary text-uppercase">Register Your Account</h6>
                                     <p class="description mt-3">To use to DeEd you need to register at University.</p>
                                     <div #onLoginPlaceholder1></div>
-                                    <button class="btn btn-primary mt-4"
-                                        (click)="openModal('custom-modal-register'); txOn();">Register DeEd</button>
+                                    <button class="btn btn-primary mt-4" (click)="openModal('custom-modal-register'); txOn();">Register DeEd</button>
                                 </div>
                             </div>
                         </div>
@@ -91,112 +89,115 @@
             </div>
             <!-- SVG separator -->
             <div class="separator separator-bottom separator-skew">
-                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                    xmlns="http://www.w3.org/2000/svg">
+                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
                     <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
                 </svg>
             </div>
         </section>
         <!-- 1st Hero Variation -->
     </div>
-    <section id="clasrooms" class="section section-lg">
+    <section *ngIf=!classlistLoaded id="classroom_loading">
         <div class="container">
-            <div class="row justify-content-left mb-4">
-                <div class="col-lg-8">
-                    <h2 class="display-3">classrooms</h2>
-                    <p class="lead text-default">Here you can see and access the classrooms of the university.</p>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <div class="row row-grid">
-                        <div class="col-lg-4">
-                            <div class="card card-lift--hover shadow border-0">
-                                <img class="card-img-top"
-                                    src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46"
-                                    alt="Card image cap">
-                                <div class="card-body py-5">
-                                    <h4 class="text-default text-uppercase">Learn Solidity</h4>
-                                    <div>
-                                        <span class="badge badge-pill badge-success">26th May 2020</span>
-                                    </div>
-                                    <p class="description mt-3">Argon is a great free UI package based on Angular that
-                                        includes the most important components and features.</p>
-                                    <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="card card-lift--hover shadow border-0">
-                                <img class="card-img-top"
-                                    src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46"
-                                    alt="Card image cap">
-                                <div class="card-body py-5">
-                                    <h4 class="text-default text-uppercase">Learn Dapp</h4>
-                                    <div>
-                                        <span class="badge badge-pill badge-success">23th July 2020</span>
-                                    </div>
-                                    <p class="description mt-3">Argon is a great free UI package based on Angular that
-                                        includes the most important components and features.</p>
-                                    <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="card card-lift--hover shadow border-0">
-                                <img class="card-img-top"
-                                    src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46"
-                                    alt="Card image cap">
-                                <div class="card-body py-5">
-                                    <h4 class="text-default text-uppercase">Learn Solidity</h4>
-                                    <div>
-                                        <span class="badge badge-pill badge-success">1st June 2020</span>
-                                    </div>
-                                    <p class="description mt-3">Argon is a great free UI package based on Angular that
-                                        includes the most important components and features.</p>
-                                    <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
-                                </div>
-                            </div>
+            <div class="card shadow-lg border-0">
+                <div class="p-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-12">
+                            <h2 class="display-3">Loading...</h2>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <section class="section section-lg pt-0">
-        <div class="container">
-            <div class="card shadow-lg border-0">
-                <div class="p-5">
-                    <div class="row align-items-center">
-                        <div class="col-lg-12">
-                            <table class="table table-hover" responsive>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Classroom</th>
-                                        <th scope="col">Start</th>
-                                        <th scope="col">Finish</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody *ngFor="let classroom of classrooms">
-                                    <tr>
-                                        <th scope="row">{{ classroom.title }}</th>
-                                        <td>{{ classroom.startDate }}</td>
-                                        <td>{{ classroom.finishDate }}</td>
-                                        <td>{{ classroom.price }}</td>
-                                        <td><a [class.selected]="classroom === selectedClassroom"
-                                                (click)="onSelect(classroom);openModal('custom-modal-classroom')"
-                                                class="btn btn-sm btn-default text-white">Details</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+    <section *ngIf=classlistLoaded id="classroom_section">
+        <section id="clasrooms" class="section section-lg">
+            <div class="container">
+                <div class="row justify-content-left mb-4">
+                    <div class="col-lg-8">
+                        <h2 class="display-3">classrooms</h2>
+                        <p class="lead text-default">Here you can see and access the classrooms of the university.</p>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="row row-grid">
+                            <div class="col-lg-4">
+                                <div class="card card-lift--hover shadow border-0">
+                                    <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46" alt="Card image cap">
+                                    <div class="card-body py-5">
+                                        <h4 class="text-default text-uppercase">Learn Solidity</h4>
+                                        <div>
+                                            <span class="badge badge-pill badge-success">26th May 2020</span>
+                                        </div>
+                                        <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.</p>
+                                        <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card card-lift--hover shadow border-0">
+                                    <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46" alt="Card image cap">
+                                    <div class="card-body py-5">
+                                        <h4 class="text-default text-uppercase">Learn Dapp</h4>
+                                        <div>
+                                            <span class="badge badge-pill badge-success">23th July 2020</span>
+                                        </div>
+                                        <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.</p>
+                                        <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card card-lift--hover shadow border-0">
+                                    <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46" alt="Card image cap">
+                                    <div class="card-body py-5">
+                                        <h4 class="text-default text-uppercase">Learn Solidity</h4>
+                                        <div>
+                                            <span class="badge badge-pill badge-success">1st June 2020</span>
+                                        </div>
+                                        <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.</p>
+                                        <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <button *ngIf=userIsUniversityAdmin class="btn btn-neutral btn-icon mb-3 mb-sm-0"><span class="btn-inner--icon"></span><i class="fa fa-plus"></i></button>
             </div>
-        </div>
+        </section>
+        <section class="section section-lg pt-0">
+            <div class="container">
+                <div class="card shadow-lg border-0">
+                    <div class="p-5">
+                        <div class="row align-items-center">
+                            <div class="col-lg-12">
+                                <table class="table table-hover" responsive>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Classroom</th>
+                                            <th scope="col">Start</th>
+                                            <th scope="col">Finish</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngFor="let classroom of classrooms">
+                                        <tr>
+                                            <th scope="row">{{ classroom.title }}</th>
+                                            <td>{{ classroom.startDate }}</td>
+                                            <td>{{ classroom.finishDate }}</td>
+                                            <td>{{ classroom.price }}</td>
+                                            <td><a [class.selected]="classroom === selectedClassroom" (click)="onSelect(classroom);openModal('custom-modal-classroom')" class="btn btn-sm btn-default text-white">Details</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <button *ngIf=userIsUniversityAdmin class="btn btn-neutral btn-icon mb-3 mb-sm-0"><span class="btn-inner--icon"></span><i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+        </section>
     </section>
     <section id="Informations" class="section pb-0 bg-gradient-default">
         <div class="container">
@@ -262,8 +263,7 @@
                                 </div>
                                 <div class="pl-4">
                                     <h5 class="title text-success">Make a Donation</h5>
-                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every
-                                        summer, and that process will continue whatever.</p>
+                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
                                     <a href="javascript:void(0)" class="text-success">Support Now</a>
                                 </div>
                             </div>
@@ -279,8 +279,7 @@
                                 </div>
                                 <div class="pl-4">
                                     <h5 class="title text-danger">Smart Contract</h5>
-                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every
-                                        summer, and that process will continue whatever.</p>
+                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
                                     <a href="javascript:void(0)" class="text-danger">Show the Code</a>
                                 </div>
                             </div>
@@ -296,8 +295,7 @@
                                 </div>
                                 <div class="pl-4">
                                     <h5 class="title text-info">White Papper</h5>
-                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every
-                                        summer, and that process will continue whatever.</p>
+                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
                                     <a href="javascript:void(0)" class="text-info">Read White Papper</a>
                                 </div>
                             </div>
@@ -313,8 +311,7 @@
                                 </div>
                                 <div class="pl-4">
                                     <h5 class="title text-warning">FAQ</h5>
-                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every
-                                        summer, and that process will continue whatever.</p>
+                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
                                     <a href="javascript:void(0)" class="text-warning">Access FAQ</a>
                                 </div>
                             </div>
@@ -325,8 +322,7 @@
         </div>
         <!-- SVG separator -->
         <div class="separator separator-bottom separator-skew zindex-100">
-            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                xmlns="http://www.w3.org/2000/svg">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
                 <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
             </svg>
         </div>
@@ -338,9 +334,7 @@
                     <h2 class="display-3">Do you like this
                         <span class="text-success">Defi DAPP?</span>
                     </h2>
-                    <p class="lead">Cause if you do, it can be yours for FREE. Hit the button below to navigate to
-                        Creative Tim where you can find the Design System in Angular. Start a new project or give an old
-                        Angular project a new look!
+                    <p class="lead">Cause if you do, it can be yours for FREE. Hit the button below to navigate to Creative Tim where you can find the Design System in Angular. Start a new project or give an old Angular project a new look!
                     </p>
                     <div class="btn-wrapper">
                         <a href="https://github.com/MatheusDaros/Uproot" class="btn btn-default mb-3 mb-sm-0">See Repo
@@ -350,8 +344,7 @@
                         <h4 class="display-4 mb-5 mt-5">Provided by these technologies</h4>
                         <div class="row justify-content-center">
                             <div class="col-lg-2 col-4">
-                                <a href="https://www.portis.io/" target="_blank" placement="bottom"
-                                    ngbTooltip="Portis - Ethereum Wallet Provider">
+                                <a href="https://www.portis.io/" target="_blank" placement="bottom" ngbTooltip="Portis - Ethereum Wallet Provider">
                                     <img src="https://www.portis.io/static/logo.png" class="img-fluid">
                                 </a>
                             </div>
@@ -370,8 +363,7 @@
                             <h3 class="text-center text-white">Register at University</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-white">Argon is a great free UI package based on
-                                        Angular that includes the most important components and features.</h2>
+                                    <h2 class="description text-white">Argon is a great free UI package based on Angular that includes the most important components and features.</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -381,8 +373,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                             </div>
-                                            <input id="_name" class="form-control" placeholder="Name" type="text"
-                                                (focus)="focus=true" (blur)="focus=false">
+                                            <input id="_name" class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
                                         </div>
                                     </div>
                                 </div>
@@ -392,8 +383,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-link"></i></span>
                                             </div>
-                                            <input class="form-control" placeholder="Address" value={{address}} type="text"
-                                                (focus)="focus1=true" (blur)="focus1=false">
+                                            <input class="form-control" placeholder="Address" value={{address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
                                         </div>
                                     </div>
                                 </div>
@@ -416,8 +406,7 @@
                             </div>
                         </div>
                         <div class="card-footer bg-gradient-default">
-                            <a (click)="closeModal('custom-modal-register'); txOff()"
-                                class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                            <a (click)="closeModal('custom-modal-register'); txOff()" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
@@ -440,10 +429,8 @@
                             <h3>{{selectedClassroom.title}}</h3>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="text-light">Start <span
-                                            class="text-default">{{selectedClassroom.startDate}}</span></h4>
-                                    <h4 class="text-light">Finish <span
-                                            class="text-default">{{selectedClassroom.finishDate}}</span></h4>
+                                    <h4 class="text-light">Start <span class="text-default">{{selectedClassroom.startDate}}</span></h4>
+                                    <h4 class="text-light">Finish <span class="text-default">{{selectedClassroom.finishDate}}</span></h4>
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
@@ -462,8 +449,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a (click)="closeModal('custom-modal-classroom')"
-                                class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                            <a (click)="closeModal('custom-modal-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>

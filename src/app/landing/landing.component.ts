@@ -38,6 +38,9 @@ export class LandingComponent implements OnInit {
   public _name = 'any';
   address: any;
 
+  //Finished loading classlist info
+  public classlistLoaded = false;
+
   public userIsUniversityAdmin: boolean;
   public mode = 'unconnected';
   public modeUniversityAdmin = 'unconnected';
