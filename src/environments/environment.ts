@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  universityAddress: "0x820BecAb0E7d77EaFc3dc007988A35547d77a768",
+  universityAddress: "0x77F93BD7b097e6D68a8Ab2375be7CeEd50A61675",
   infuraKey: "50d52dadc1054facbb36bd19254da96e",
   network: "ropsten"
 };

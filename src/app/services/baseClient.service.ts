@@ -149,6 +149,7 @@ export class baseClientService {
 			cutPrincipal,
 			cutPool,
 			isOpen,
+			isEmpty,
 			isActive,
 			isFinished,
 			addressChallenge,
@@ -174,9 +175,12 @@ export class baseClientService {
 		cutPrincipal = await classroomContractInstance.principalCut();
 		cutPool = await classroomContractInstance.poolCut();
 		isOpen = await classroomContractInstance.openForApplication();
+		isEmpty = await classroomContractInstance.isClassroomEmpty();
 		isActive = await classroomContractInstance.classroomActive();
 		isFinished = await classroomContractInstance.courseFinished();
 		duration = await classroomContractInstance.duration();
+		startDate = await classroomContractInstance.startDate();
+		finishDate = startDate > 0 ? startDate + duration : 0;
 		addressChallenge = await classroomContractInstance.challengeAddress();
 		owner = await classroomContractInstance.owner();
 		return [
@@ -190,6 +194,7 @@ export class baseClientService {
 			cutPrincipal,
 			cutPool,
 			isOpen,
+			isEmpty,
 			isActive,
 			isFinished,
 			addressChallenge,
