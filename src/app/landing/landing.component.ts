@@ -134,11 +134,11 @@ export class LandingComponent implements OnInit {
 
 	async updateClassrooms(service: PortisService | InfuraService) {
 		let classroomCount = await service.getClassroomCount();
-		classroomCount += CLASSROOMS.length; //remover junto com o mock
-		if (this.classrooms.length == classroomCount) return;
+		if (this.classrooms.length == (classroomCount + CLASSROOMS.length)) return;
+		this.classlistLoaded = false;
 		this.classrooms = new Array<Classroom>();
 		let index = 0;
-		while (index < classroomCount - CLASSROOMS.length) { //modificar ao remover o mock
+		while (index < classroomCount) {
 			const [
 				title,
 				smartcontract,

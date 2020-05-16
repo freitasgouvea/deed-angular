@@ -185,8 +185,8 @@
                                     <tbody *ngFor="let classroom of classrooms">
                                         <tr>
                                             <th scope="row">{{ classroom.title }}</th>
-                                            <td>{{ classroom.startDate }}</td>
-                                            <td>{{ classroom.finishDate }}</td>
+                                            <td>{{ classroom.startDate_StringDate }}</td>
+                                            <td>{{ classroom.finishDate_StringDate }}</td>
                                             <td>{{ classroom.price }}</td>
                                             <td><a [class.selected]="classroom === selectedClassroom" (click)="onSelect(classroom);openModal('custom-modal-classroom')" class="btn btn-sm btn-default text-white">Details</a></td>
                                         </tr>
@@ -426,7 +426,7 @@
         </form>
     </jw-modal>
     <jw-modal id="custom-modal-classroom">
-        <div id="clasroomInfo" *ngIf="selectedClassroom" class="container py-lg-md d-flex">
+        <div id="clasroomInfo" *ngIf="selectedClassroom" class="container py-lg-md">
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="card shadow border-0">
@@ -434,24 +434,24 @@
                             <h3>{{selectedClassroom.title}}</h3>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="text-light">Start <span class="text-default">{{selectedClassroom.startDate}}</span></h4>
-                                    <h4 class="text-light">Finish <span class="text-default">{{selectedClassroom.finishDate}}</span></h4>
-                                    <h4 *ngIf=selectedClassroom.isClassroomNotOpen() class="text-light">Status <span class="badge badge-pill badge-secondary">Not Open</span></h4>
-                                    <h4 *ngIf=selectedClassroom.isClassroomOpen() class="text-light">Status <span class="badge badge-pill badge-success">Open</span></h4>
-                                    <h4 *ngIf=selectedClassroom.isClassroomClosed() class="text-light">Status <span class="badge badge-pill badge-warning">Closed</span></h4>
-                                    <h4 *ngIf=selectedClassroom.isClassroomActive() class="text-light">Status <span class="badge badge-pill badge-primary">Ongoing</span></h4>
-                                    <h4 *ngIf=selectedClassroom.courseFinished class="text-light">Status <span class="badge badge-pill badge-dark">Finished</span></h4>
+                                    <h4 class="text-light">Start: <span *ngIf=!selectedClassroom.isClassroomNotOpen() class="text-default">{{selectedClassroom.startDate_String}}</span><span *ngIf=selectedClassroom.isClassroomNotOpen() class="text-default">To Be Defined</span></h4>
+                                    <h4 class="text-light">Finish: <span *ngIf=!selectedClassroom.isClassroomNotOpen() class="text-default">{{selectedClassroom.finishDate_String}}</span><span *ngIf=selectedClassroom.isClassroomNotOpen() class="text-default">To Be Defined</span></h4>
+                                    <h4 *ngIf=selectedClassroom.isClassroomNotOpen() class="text-light">Status: <span class="badge badge-pill badge-info">Not Open</span></h4>
+                                    <h4 *ngIf=selectedClassroom.isClassroomOpen() class="text-light">Status: <span class="badge badge-pill badge-success">Open</span></h4>
+                                    <h4 *ngIf=selectedClassroom.isClassroomClosed() class="text-light">Status: <span class="badge badge-pill badge-warning">Closed</span></h4>
+                                    <h4 *ngIf=selectedClassroom.isClassroomActive() class="text-light">Status: <span class="badge badge-pill badge-primary">Ongoing</span></h4>
+                                    <h4 *ngIf=selectedClassroom.courseFinished class="text-light">Status: <span class="badge badge-pill badge-dark">Finished</span></h4>
                                 </div>
                                 <div class="col-md-6">
-                                    <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
-                                    <h4 class="text-light">Cut from Principal <span class="text-default">{{selectedClassroom.cutPrincipal}} %</span></h4>
-                                    <h4 class="text-light">Cut from Success Pool <span class="text-default">{{selectedClassroom.cutPool}} %</span></h4>
+                                    <h4 class="text-light">Price: <span class="text-default">{{selectedClassroom.price}}</span></h4>
+                                    <h4 class="text-light">Cut from Principal: <span class="text-default">{{selectedClassroom.cutPrincipal}} %</span></h4>
+                                    <h4 class="text-light">Cut from Success Pool: <span class="text-default">{{selectedClassroom.cutPool}} %</span></h4>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h4 class="text-light">Address:<span class="text-default">{{selectedClassroom.smartcontract}}</span></h4>
-                                    <h4 class="text-light">Challenge:<span class="text-default">{{selectedClassroom.addressChallenge}}</span></h4>
+                                    <h4 class="text-light">Address: <span class="text-default">{{selectedClassroom.smartcontract}}</span></h4>
+                                    <h4 class="text-light">Challenge: <span class="text-default">{{selectedClassroom.addressChallenge}}</span></h4>
                                     <h4 class="text-light">Description:</h4>
                                     <h2 class="description mt-3">{{ensService.getTxDescription(ensService.getNodeFromAddress(selectedClassroom.smartcontract))}}</h2>
                                 </div>

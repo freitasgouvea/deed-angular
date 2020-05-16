@@ -1,10 +1,18 @@
 export class Classroom {
+	public startDate: Date;
+	public finishDate: Date;
+	public startDate_StringDate: string;
+	public finishDate_StringDate: string;
+	public startDate_String: string;
+	public finishDate_String: string;
+	dateStringOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+
     constructor(
         public id: Number,
         public title: String,
         public smartcontract: String,
-        public startDate: String,
-        public finishDate: String,
+        public startDateTimestamp: number,
+        public finishDateTimestamp: number,
         public duration: Number,
         public price: Number,
         public minScore: number,
@@ -16,7 +24,14 @@ export class Classroom {
         public courseFinished: Boolean,
 		public addressChallenge: String,
 		public owner: String
-	) {}
+	) {
+		this.startDate = new Date(this.startDateTimestamp * 1000);
+		this.finishDate = new Date(this.finishDateTimestamp * 1000);
+		this.startDate_StringDate = this.startDate.toLocaleDateString('en-US', this.dateStringOptions);
+		this.finishDate_StringDate = this.finishDate.toLocaleDateString('en-US', this.dateStringOptions);
+		this.startDate_String = this.startDate.toUTCString();
+		this.finishDate_String = this.finishDate.toUTCString();
+	}
 
 	public isClassroomActive(): Boolean{
 		return this.state() === 3;

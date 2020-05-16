@@ -179,6 +179,8 @@ export class baseClientService {
 		isActive = await classroomContractInstance.classroomActive();
 		isFinished = await classroomContractInstance.courseFinished();
 		duration = await classroomContractInstance.duration();
+		startDate = await classroomContractInstance.startDate();
+		finishDate = startDate > 0 ? startDate + duration : 0;
 		addressChallenge = await classroomContractInstance.challengeAddress();
 		owner = await classroomContractInstance.owner();
 		return [
