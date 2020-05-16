@@ -82,6 +82,9 @@ export class LandingComponent implements OnInit {
 	onSelect(classroom: Classroom): void {
 		this.selectedClassroom = classroom;
 	}
+  txOn() {
+    this.txMode= 'preTX';
+  }
 
 	txOn() {
 		this.txMode = 'portisAlert';
