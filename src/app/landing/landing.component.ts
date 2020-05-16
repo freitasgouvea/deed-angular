@@ -82,12 +82,9 @@ export class LandingComponent implements OnInit {
 	onSelect(classroom: Classroom): void {
 		this.selectedClassroom = classroom;
 	}
-  txOn() {
-    this.txMode= 'preTX';
-  }
 
 	txOn() {
-		this.txMode = 'portisAlert';
+		this.txMode = 'preTX';
 	}
 
 	txOff() {
@@ -151,7 +148,7 @@ export class LandingComponent implements OnInit {
 				isActive,
 				isFinished,
 				addressChallenge,
-				owner
+				owner,
 			] = await service.getClassroomInfo(index);
 			this.classrooms.push(
 				new Classroom(
@@ -235,24 +232,14 @@ export class LandingComponent implements OnInit {
 		this.getRoleMembers('GRANTS_MANAGER_ROLE').then((result) => {
 			this.roleMembersAdmin['GRANTS_MANAGER_ROLE'] = result;
 		});
-		this.getRoleMembers('UNIVERSITY_OVERSEER_ROLE').then(
-			(result) => {
-				this.roleMembersAdmin[
-					'UNIVERSITY_OVERSEER_ROLE'
-				] = result;
-			}
-		);
-		this.getRoleMembers('REGISTERED_SUPPLIER_ROLE').then(
-			(result) => {
-				this.roleMembersAdmin[
-					'REGISTERED_SUPPLIER_ROLE'
-				] = result;
-			}
-		);
+		this.getRoleMembers('UNIVERSITY_OVERSEER_ROLE').then((result) => {
+			this.roleMembersAdmin['UNIVERSITY_OVERSEER_ROLE'] = result;
+		});
+		this.getRoleMembers('REGISTERED_SUPPLIER_ROLE').then((result) => {
+			this.roleMembersAdmin['REGISTERED_SUPPLIER_ROLE'] = result;
+		});
 		this.getRoleMembers('READ_STUDENT_LIST_ROLE').then((result) => {
-			this.roleMembersAdmin[
-				'READ_STUDENT_LIST_ROLE'
-			] = result;
+			this.roleMembersAdmin['READ_STUDENT_LIST_ROLE'] = result;
 			this.modeUniversityAdmin = 'loaded';
 		});
 	}
@@ -267,15 +254,18 @@ export class LandingComponent implements OnInit {
 		_Duration,
 		_Challengeaddress
 	) {
-		this.portisService.createClassroom(_Owner,
-			_Name,
-			_Price,
-			_Cutfromprincipal,
-			_Cutfromsuccesspool,
-			_Minimumscore,
-			_Duration,
-			_Challengeaddress
-			).then(() => this.updateClassrooms(this.portisService));
+		this.portisService
+			.createClassroom(
+				_Owner,
+				_Name,
+				_Price,
+				_Cutfromprincipal,
+				_Cutfromsuccesspool,
+				_Minimumscore,
+				_Duration,
+				_Challengeaddress
+			)
+			.then(() => this.updateClassrooms(this.portisService));
 	}
 
 	async getRoleMembers(role: string) {
