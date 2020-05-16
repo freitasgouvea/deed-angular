@@ -96,6 +96,7 @@
         </section>
         <!-- 1st Hero Variation -->
     </div>
+    <!--TODO: fill page before loader-->
     <section *ngIf=!classlistLoaded id="classroom_loading">
         <div class="container">
             <div class="card shadow-lg border-0">
@@ -194,7 +195,7 @@
                             </div>
                         </div>
                     </div>
-                    <button *ngIf=userIsUniversityAdmin class="btn btn-neutral btn-icon mb-3 mb-sm-0"><span class="btn-inner--icon"></span><i class="fa fa-plus"></i></button>
+                    <button *ngIf=userIsUniversityAdmin (click)="openModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0"><span class="btn-inner--icon"></span><i class="fa fa-plus"></i></button>
                 </div>
             </div>
         </section>
@@ -434,8 +435,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
-                                    <h4 *ngIf=selectedClassroom.open class="text-light">Status <span class="badge badge-pill badge-success">Open</span></h4>
-                                    <h4 *ngIf=!selectedClassroom.open class="text-light">Status <span class="badge badge-pill badge-warning">Closed</span></h4>
+                                    <h4 *ngIf=selectedClassroom.openForApplication class="text-light">Status <span class="badge badge-pill badge-success">Open</span></h4>
+                                    <h4 *ngIf=!selectedClassroom.openForApplication class="text-light">Status <span class="badge badge-pill badge-warning">Closed</span></h4>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -673,6 +674,57 @@
                             <a href="#information" (click)="closeModal('custom-modal-university-admin')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
+    <jw-modal id="custom-modal-create-classroom">
+        <div id="UniversityInfo" class="container py-lg-md d-flex">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card shadow border-0">
+                        <div class="card-body py-5">
+                            <h3>Admin Create Classroom</h3>
+                            <h2 class="description mt-3">Use this page to create classrooms manually. The setup of Oracles and Services will use this university's standards</h2>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h6 class="UniversityAdmins mt-3">Classroom parameters</h6>
+                                        <label for="inputCreateClassroom_Owner" class="UniversityAdmins mt-3">Owner:</label> <input id="inputCreateClassroom_Owner" #inputCreateClassroom_Owner class="form-control" placeholder="Owner Address" type="text"
+                                            size=32>
+                                        <label for="inputCreateClassroom_Name" class="UniversityAdmins mt-3">Name:</label> <input id="inputCreateClassroom_Name" #inputCreateClassroom_Name class="form-control" placeholder="Name" type="text" size=32>
+                                        <label for="inputCreateClassroom_Price" class="UniversityAdmins mt-3">Price:</label> <input id="inputCreateClassroom_Price" #inputCreateClassroom_Price class="form-control" placeholder="Price" type="text" size=32>
+                                        <label for="inputCreateClassroom_Cutfromprincipal" class="UniversityAdmins mt-3">Cut from principal:</label> <input id="inputCreateClassroom_Cutfromprincipal" #inputCreateClassroom_Cutfromprincipal class="form-control"
+                                            placeholder="Cut (PPM)" type="text" size=32>
+                                        <label for="inputCreateClassroom_Cutfromsuccesspool" class="UniversityAdmins mt-3">Cut from success pool:</label> <input id="inputCreateClassroom_Cutfromsuccesspool" #inputCreateClassroom_Cutfromsuccesspool class="form-control"
+                                            placeholder="Cut (PPM)" type="text" size=32>
+                                        <label for="inputCreateClassroom_Minimumscore" class="UniversityAdmins mt-3">Minimum score:</label> <input id="inputCreateClassroom_Minimumscore" #inputCreateClassroom_Minimumscore class="form-control" placeholder="Int32"
+                                            type="text" size=32>
+                                        <label for="inputCreateClassroom_Duration" class="UniversityAdmins mt-3">Duration:</label> <input id="inputCreateClassroom_Duration" #inputCreateClassroom_Duration class="form-control" placeholder="Timestamps" type="text"
+                                            size=32>
+                                        <label for="inputCreateClassroom_Challengeaddress" class="UniversityAdmins mt-3">Challenge address:</label> <input id="inputCreateClassroom_Challengeaddress" #inputCreateClassroom_Challengeaddress class="form-control"
+                                            placeholder="Challenge Address" type="text" size=32>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" (click)="closeModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                <span class="btn-inner--text">Back</span>
+                            </a>
+                            <a href="#" (click)="createClassroom(
+                                inputCreateClassroom_Owner,
+                                inputCreateClassroom_Name,
+                                inputCreateClassroom_Price,
+                                inputCreateClassroom_Cutfromprincipal,
+                                inputCreateClassroom_Cutfromsuccesspool,
+                                inputCreateClassroom_Minimumscore,
+                                inputCreateClassroom_Duration,
+                                inputCreateClassroom_Challengeaddress);closeModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-check"></i></span>
+                                <span class="btn-inner--text">Create</span>
                             </a>
                         </div>
                     </div>

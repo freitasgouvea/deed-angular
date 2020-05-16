@@ -6,9 +6,14 @@ export class Classroom {
         public startDate: String,
         public finishDate: String,
         public price: Number,
-        public open: Boolean,
-        public close: Boolean,
-        public done: Boolean
+        public minScore: number,
+        public cutPrincipal: Number,
+        public cutPool: Number,
+        public openForApplication: Boolean,
+        public classroomActive: Boolean,
+        public courseFinished: Boolean,
+		public addressChallenge: String,
+		public owner: String
     ) {}
 
 }
