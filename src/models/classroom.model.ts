@@ -5,6 +5,7 @@ export class Classroom {
         public smartcontract: String,
         public startDate: String,
         public finishDate: String,
+        public duration: Number,
         public price: Number,
         public minScore: number,
         public cutPrincipal: Number,

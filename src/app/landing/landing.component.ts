@@ -140,6 +140,7 @@ export class LandingComponent implements OnInit {
 				smartcontract,
 				startDate,
 				finishDate,
+				duration,
 				price,
 				minScore,
 				cutPrincipal,
@@ -157,10 +158,11 @@ export class LandingComponent implements OnInit {
 					smartcontract,
 					startDate,
 					finishDate,
+					duration / (60 * 60 * 24),
 					price,
 					minScore,
-					cutPrincipal,
-					cutPool,
+					cutPrincipal / 1e4,
+					cutPool / 1e4,
 					isOpen,
 					isActive,
 					isFinished,
@@ -245,24 +247,24 @@ export class LandingComponent implements OnInit {
 	}
 
 	public createClassroom(
-		_Owner,
-		_Name,
-		_Price,
-		_Cutfromprincipal,
-		_Cutfromsuccesspool,
-		_Minimumscore,
-		_Duration,
-		_Challengeaddress
+		_Owner: string,
+		_Name: string,
+		_Price: string,
+		_Cutfromprincipal: string,
+		_Cutfromsuccesspool: string,
+		_Minimumscore: string,
+		_Duration: string,
+		_Challengeaddress: string
 	) {
 		this.portisService
 			.createClassroom(
 				_Owner,
 				_Name,
 				_Price,
-				_Cutfromprincipal,
-				_Cutfromsuccesspool,
-				_Minimumscore,
-				_Duration,
+				Number(_Cutfromprincipal),
+				Number(_Cutfromsuccesspool),
+				Number(_Minimumscore),
+				Number(_Duration),
 				_Challengeaddress
 			)
 			.then(() => this.updateClassrooms(this.portisService));
