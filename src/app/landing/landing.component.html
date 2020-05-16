@@ -1,436 +1,749 @@
 <main>
-  <div class="position-relative">
-    <!-- shape Hero -->
-    <section class="section section-lg section-shaped pb-250">
-      <div class="shape shape-style-0 shape-primary">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="container py-lg-md d-flex">
-        <div class="col px-0">
-          <div class="row">
-            <div class="col-lg-8 mb-4">
-              <h1 class="display-3  text-white">descentralized
-                <span>university</span>
-              </h1>
-              <p class="lead  text-white">The design system comes with four pre-built pages to help you get started
-                faster. You can change the text and images and you're good to go.</p>
-              <div class="btn-wrapper">
-                <a href="#clasrooms" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-                  <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
-                  <span class="btn-inner--text">Classroms</span>
-                </a>
-                <a href="#secretary" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-                  <span class="btn-inner--icon"><i class="fa fa-info-circle"></i></span>
-                  <span class="btn-inner--text">Secretary</span>
-                </a>
-              </div>
+    <div class="position-relative">
+        <!-- shape Hero -->
+        <section class="section section-lg section-shaped pb-250">
+            <div class="shape shape-style-0 shape-primary">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
-            <div class="col-lg-4" *ngIf="mode=='loadingPage'">
-              <div class="card card-lift--hover shadow border-0 text-center">
-                <div class="card-body py-5">
-                  <div class="icon icon-shape icon-shape-warning rounded-circle fa-3x mb-4">
-                    <i class="fa fa-wifi"></i>
-                  </div>
-                  <h6 class="text-warning text-uppercase">Connecting</h6>
-                  <p class="description mt-3">Connecting to your Wallet Provider and DeEd University.</p>
+            <div class="container py-lg-md d-flex">
+                <div class="col px-0">
+                    <div class="row">
+                        <div class="col-lg-8 mb-4">
+                            <h1 class="display-3  text-white">decentralized
+                                <span>university</span>
+                            </h1>
+                            <p class="lead  text-white">The design system comes with four pre-built pages to help you get started faster. You can change the text and images and you're good to go.</p>
+                            <div class="btn-wrapper">
+                                <a href="#clasrooms" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+                                    <span class="btn-inner--text">Classroms</span>
+                                </a>
+                                <a href="#Informations" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-info-circle"></i></span>
+                                    <span class="btn-inner--text">Informations</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" *ngIf="mode=='loadingPage'">
+                            <div class="card card-lift--hover shadow border-0 text-center">
+                                <div class="card-body py-5">
+                                    <div class="icon icon-shape icon-shape-warning rounded-circle fa-3x mb-4">
+                                        <i class="fa fa-wifi"></i>
+                                    </div>
+                                    <h6 class="text-warning text-uppercase">Connecting</h6>
+                                    <p class="description mt-3">Connecting to your Wallet Provider and DeEd University.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" *ngIf="mode=='unconnected'">
+                            <div class="card card-lift--hover shadow border-0 text-center">
+                                <div class="card-body py-5">
+                                    <div class="icon icon-shape icon-shape-info rounded-circle mb-4">
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <h6 class="text-info text-uppercase">Welcome to DeEd</h6>
+                                    <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.
+                                    </p>
+                                    <button class="btn btn-info mt-4" (click)="conectPortis()">Conect Portis</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" *ngIf="mode=='connected'">
+                            <div class="card card-lift--hover shadow border-0 text-center">
+                                <div class="card-body py-5">
+                                    <div class="icon icon-shape icon-shape-primary rounded-circle mb-4">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <h6 class="text-primary text-uppercase">Register Your Account</h6>
+                                    <p class="description mt-3">To use to DeEd you need to register at University.</p>
+                                    <div #onLoginPlaceholder1></div>
+                                    <button class="btn btn-primary mt-4" (click)="openModal('custom-modal-register'); txOn();">Register DeEd</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" *ngIf="mode=='registered'">
+                            <div class="card card-lift--hover shadow border-0 text-center">
+                                <div class="card-body py-5">
+                                    <div class="icon icon-shape icon-shape-success rounded-circle mb-4">
+                                        <i class="fa fa-wallet"></i>
+                                    </div>
+                                    <h6 class="text-success text-uppercase">Your Account</h6>
+                                    <p class="description mt-3">Address: {{address}} </p>
+                                    <p class="description mt-3">Amount: 400 DAI</p>
+                                    <p class="description mt-3">Status: 300 Points</p>
+                                    <button class="btn btn-success mt-4">See Account</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-            <div class="col-lg-4" *ngIf="mode=='unconnected'">
-              <div class="card card-lift--hover shadow border-0 text-center">
-                <div class="card-body py-5">
-                  <div class="icon icon-shape icon-shape-info rounded-circle mb-4">
-                    <i class="fa fa-star"></i>
-                  </div>
-                  <h6 class="text-info text-uppercase">Welcome to DeEd</h6>
-                  <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                  <button class="btn btn-info mt-4" (click)="conectPortis()">Conect Portis</button>
+            <!-- SVG separator -->
+            <div class="separator separator-bottom separator-skew">
+                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+                </svg>
+            </div>
+        </section>
+        <!-- 1st Hero Variation -->
+    </div>
+    <!--TODO: fill page before loader-->
+    <section *ngIf=!classlistLoaded id="classroom_loading">
+        <div class="container">
+            <div class="card shadow-lg border-0">
+                <div class="p-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-12">
+                            <h2 class="display-3">Loading...</h2>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-            <div class="col-lg-4" *ngIf="mode=='connected'">
-              <div class="card card-lift--hover shadow border-0 text-center">
-                <div class="card-body py-5">
-                  <div class="icon icon-shape icon-shape-primary rounded-circle mb-4">
-                    <i class="fa fa-user"></i>
-                  </div>
-                  <h6 class="text-primary text-uppercase">Register Your Account</h6>
-                  <p class="description mt-3">To use to DeEd you need to register at University.</p>
-                  <div #onLoginPlaceholder1></div>
-                  <button class="btn btn-primary mt-4" (click)="openModal('custom-modal-1')">Register DeEd</button>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4" *ngIf="mode=='registered'">
-              <div class="card card-lift--hover shadow border-0 text-center">
-                <div class="card-body py-5">
-                  <div class="icon icon-shape icon-shape-success rounded-circle mb-4">
-                    <i class="fa fa-wallet"></i>
-                  </div>
-                  <h6 class="text-success text-uppercase">Your Account</h6>
-                  <p class="description mt-3">Address: usdhfusdgfuisdhidshfiodshfhdsiofjhdiofjdio</p>
-                  <p class="description mt-3">Amount: 400 DAI</p>
-                  <p class="description mt-3">Status: 300 Points</p>
-                  <div #onLoginPlaceholder1></div>
-                  <button class="btn btn-success mt-4" (click)="conectPortis()">Register DeEd</button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-      <!-- SVG separator -->
-      <div class="separator separator-bottom separator-skew">
-        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-          xmlns="http://www.w3.org/2000/svg">
-          <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
-        </svg>
-      </div>
     </section>
-    <!-- 1st Hero Variation -->
-  </div>
-  <section id="clasrooms" class="section section-lg">
-    <div class="container">
-      <div class="row justify-content-left mb-4">
-        <div class="col-lg-8">
-          <h2 class="display-3">classrooms</h2>
-          <p class="lead text-default">Here you can see and access the classrooms of the university.</p>
+    <section *ngIf=classlistLoaded id="classroom_section">
+        <section id="clasrooms" class="section section-lg">
+            <div class="container">
+                <div class="row justify-content-left mb-4">
+                    <div class="col-lg-8">
+                        <h2 class="display-3">classrooms</h2>
+                        <p class="lead text-default">Here you can see and access the classrooms of the university.</p>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="row row-grid">
+                            <div class="col-lg-4">
+                                <div class="card card-lift--hover shadow border-0">
+                                    <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46" alt="Card image cap">
+                                    <div class="card-body py-5">
+                                        <h4 class="text-default text-uppercase">Learn Solidity</h4>
+                                        <div>
+                                            <span class="badge badge-pill badge-success">26th May 2020</span>
+                                        </div>
+                                        <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.</p>
+                                        <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card card-lift--hover shadow border-0">
+                                    <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46" alt="Card image cap">
+                                    <div class="card-body py-5">
+                                        <h4 class="text-default text-uppercase">Learn Dapp</h4>
+                                        <div>
+                                            <span class="badge badge-pill badge-success">23th July 2020</span>
+                                        </div>
+                                        <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.</p>
+                                        <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card card-lift--hover shadow border-0">
+                                    <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46" alt="Card image cap">
+                                    <div class="card-body py-5">
+                                        <h4 class="text-default text-uppercase">Learn Solidity</h4>
+                                        <div>
+                                            <span class="badge badge-pill badge-success">1st June 2020</span>
+                                        </div>
+                                        <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.</p>
+                                        <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section section-lg pt-0">
+            <div class="container">
+                <div class="card shadow-lg border-0">
+                    <div class="p-5">
+                        <div class="row align-items-center">
+                            <div class="col-lg-12">
+                                <table class="table table-hover" responsive>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Classroom</th>
+                                            <th scope="col">Start</th>
+                                            <th scope="col">Finish</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngFor="let classroom of classrooms">
+                                        <tr>
+                                            <th scope="row">{{ classroom.title }}</th>
+                                            <td>{{ classroom.startDate_StringDate }}</td>
+                                            <td>{{ classroom.finishDate_StringDate }}</td>
+                                            <td>{{ classroom.price }}</td>
+                                            <td><a [class.selected]="classroom === selectedClassroom" (click)="onSelect(classroom);openModal('custom-modal-classroom')" class="btn btn-sm btn-default text-white">Details</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <button *ngIf=userIsUniversityAdmin (click)="openModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0"><span class="btn-inner--icon"></span><i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+        </section>
+    </section>
+    <section id="Informations" class="section pb-0 bg-gradient-default">
+        <div class="container">
+            <h1 class="display-3 text-white">Informations</h1>
+            <p class="lead text-white">Here you can see the informations of the University and how DeEd works.</p>
+            <div class="btn-wrapper">
+                <button href="#clasrooms" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                    <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+                    <span class="btn-inner--text">Classrooms</span>
+                </button>
+                <button *ngIf=userIsUniversityAdmin (click)="loadUniversityAdmin();openModal('custom-modal-university-admin')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                    <span class="btn-inner--icon"><i class="fa fa-cogs"></i></span>
+                    <span class="btn-inner--text">Admin</span>
+                </button>
+                <button *ngIf=connectedPortis href="#" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                  <span class="btn-inner--icon"><i class="fa fa-user"></i></span>
+                  <span class="btn-inner--text">My Student Profile</span>
+              </button>
+                <button href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                    <span class="btn-inner--icon"><i class="fa fa-gratipay"></i></span>
+                    <span class="btn-inner--text">Donate</span>
+                </button>
+            </div>
+            <div class="row row-grid align-items-center">
+                <div class="col-md-4 order-lg-2 ml-lg-auto">
+                    <div class="position-relative pl-md-5">
+                        <img src="./assets/img/ill/ill-2.svg" class="img-center img-fluid">
+                    </div>
+                </div>
+                <div class="col-lg-8 order-lg-1">
+                    <div class="card shadow shadow-lg--hover mt-5">
+                        <div class="card-body">
+                            <div class="d-flex px-3">
+                                <div>
+                                    <div class="icon icon-shape bg-gradient-primary rounded-circle text-white">
+                                        <i class="fa fa-link"></i>
+                                    </div>
+                                </div>
+                                <div class="pl-4">
+                                    <h5 class="title text-primary">University Status</h5>
+                                    <ul>
+                                        <li id="university.name">Name: <strong>{{universityName}}</strong></li>
+                                        <li id="university.cut">Cut: <strong>{{universityCut}}</strong>%</li>
+                                        <li id="university._studentGSNDeposit">Funds: <strong>{{universityFunds}}</strong> DAI</li>
+                                        <li id="university.operationalBudget">Budget: <strong>{{universityBudget}}</strong> DAI</li>
+                                        <li id="university.donationsReceived">Donations: <strong>{{universityDonations}}</strong> DAI</li>
+                                        <li id="university.revenueReceived">Revenue: <strong>{{universityRevenue}}</strong> DAI</li>
+                                        <li id="university.returnsReceived">Returns: <strong>{{universityReturns}}</strong> DAI</li>
+                                    </ul>
+                                    <a href="{{universityEtherscan}}" target="_blank" class="text-primary">See on
+                                        Etherscan</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow shadow-lg--hover mt-5">
+                        <div class="card-body">
+                            <div class="d-flex px-3">
+                                <div>
+                                    <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
+                                        <i class="fa fa-gratipay"></i>
+                                    </div>
+                                </div>
+                                <div class="pl-4">
+                                    <h5 class="title text-success">Make a Donation</h5>
+                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
+                                    <a href="javascript:void(0)" class="text-success">Support Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow shadow-lg--hover mt-5">
+                        <div class="card-body">
+                            <div class="d-flex px-3">
+                                <div>
+                                    <div class="icon icon-shape bg-gradient-danger rounded-circle text-white">
+                                        <i class="fa fa-code"></i>
+                                    </div>
+                                </div>
+                                <div class="pl-4">
+                                    <h5 class="title text-danger">Smart Contract</h5>
+                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
+                                    <a href="javascript:void(0)" class="text-danger">Show the Code</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow shadow-lg--hover mt-5">
+                        <div class="card-body">
+                            <div class="d-flex px-3">
+                                <div>
+                                    <div class="icon icon-shape bg-gradient-info rounded-circle text-white">
+                                        <i class="ni ni-active-40"></i>
+                                    </div>
+                                </div>
+                                <div class="pl-4">
+                                    <h5 class="title text-info">White Papper</h5>
+                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
+                                    <a href="javascript:void(0)" class="text-info">Read White Papper</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow shadow-lg--hover mt-5">
+                        <div class="card-body">
+                            <div class="d-flex px-3">
+                                <div>
+                                    <div class="icon icon-shape bg-gradient-warning rounded-circle text-white">
+                                        <i class="fa fa-question"></i>
+                                    </div>
+                                </div>
+                                <div class="pl-4">
+                                    <h5 class="title text-warning">FAQ</h5>
+                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
+                                    <a href="javascript:void(0)" class="text-warning">Access FAQ</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-lg-12">
-          <div class="row row-grid">
-            <div class="col-lg-4">
-              <div class="card card-lift--hover shadow border-0">
-                <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46"
-                  alt="Card image cap">
-                <div class="card-body py-5">
-                  <h4 class="text-default text-uppercase">Learn Solidity</h4>
-                  <div>
-                    <span class="badge badge-pill badge-success">26th May 2020</span>
-                  </div>
-                  <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most
-                    important components and features.</p>
-                  <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="card card-lift--hover shadow border-0">
-                <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46"
-                  alt="Card image cap">
-                <div class="card-body py-5">
-                  <h4 class="text-default text-uppercase">Learn Dapp</h4>
-                  <div>
-                    <span class="badge badge-pill badge-success">23th July 2020</span>
-                  </div>
-                  <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most
-                    important components and features.</p>
-                  <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="card card-lift--hover shadow border-0">
-                <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46"
-                  alt="Card image cap">
-                <div class="card-body py-5">
-                  <h4 class="text-default text-uppercase">Learn Solidity</h4>
-                  <div>
-                    <span class="badge badge-pill badge-success">1st June 2020</span>
-                  </div>
-                  <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most
-                    important components and features.</p>
-                  <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
-                </div>
-              </div>
-            </div>
-          </div>
+        <!-- SVG separator -->
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
         </div>
-      </div>
-    </div>
-  </section>
-  <section class="section section-lg pt-0">
-    <div class="container">
-      <div class="card shadow-lg border-0">
-        <div class="p-5">
-          <div class="row align-items-center">
-            <div class="col-lg-12">
-              <table class="table table-hover" responsive>
-                <thead>
-                  <tr>
-                    <th scope="col">Classroom</th>
-                    <th scope="col">Start</th>
-                    <th scope="col">Finish</th>
-                    <th scope="col">Price</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody *ngFor="let classroom of classrooms">
-                  <tr>
-                    <th scope="row">{{ classroom.title }}</th>
-                    <td>{{ classroom.startDate }}</td>
-                    <td>{{ classroom.finishDate }}</td>
-                    <td>{{ classroom.price }}</td>
-                    <td><a [class.selected]="classroom === selectedClassroom"
-                        (click)="onSelect(classroom);openModal('custom-modal-classroom')"
-                        class="btn btn-sm btn-default text-white">Details</a></td>
-                  </tr>
-                </tbody>
-              </table>
+    </section>
+    <section class="section section-lg">
+        <div class="container">
+            <div class="row row-grid justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="display-3">Do you like this
+                        <span class="text-success">Defi DAPP?</span>
+                    </h2>
+                    <p class="lead">Cause if you do, it can be yours for FREE. Hit the button below to navigate to Creative Tim where you can find the Design System in Angular. Start a new project or give an old Angular project a new look!
+                    </p>
+                    <div class="btn-wrapper">
+                        <a href="https://github.com/MatheusDaros/Uproot" class="btn btn-default mb-3 mb-sm-0">See Repo
+                            on Github</a>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="display-4 mb-5 mt-5">Provided by these technologies</h4>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-2 col-4">
+                                <a href="https://www.portis.io/" target="_blank" placement="bottom" ngbTooltip="Portis - Ethereum Wallet Provider">
+                                    <img src="https://www.portis.io/static/logo.png" class="img-fluid">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
-  <section id="secretary" class="section pb-0 bg-gradient-default">
-    <div class="container">
-      <h1 class="display-3 text-white">secretary</h1>
-      <p class="lead text-white">Here you can see the informations of the University and how DeEd works.</p>
-      <div class="btn-wrapper">
-        <a href="#clasrooms" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-          <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
-          <span class="btn-inner--text">Classrooms</span>
-        </a>
-        <a href="#" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-          <span class="btn-inner--icon"><i class="fa fa-cube"></i></span>
-          <span class="btn-inner--text">Admin</span>
-        </a>
-        <a href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
-          <span class="btn-inner--icon"><i class="fa fa-gratipay"></i></span>
-          <span class="btn-inner--text">Donate</span>
-        </a>
-      </div>
-      <div class="row row-grid align-items-center">
-        <div class="col-md-4 order-lg-2 ml-lg-auto">
-          <div class="position-relative pl-md-5">
-            <img src="./assets/img/ill/ill-2.svg" class="img-center img-fluid">
-          </div>
-        </div>
-        <div class="col-lg-8 order-lg-1">
-          <div class="card shadow shadow-lg--hover mt-5">
-            <div class="card-body">
-              <div class="d-flex px-3">
-                <div>
-                  <div class="icon icon-shape bg-gradient-primary rounded-circle text-white">
-                    <i class="fa fa-link"></i>
-                  </div>
-                </div>
-                <div class="pl-4">
-                  <h5 class="title text-primary">University Status</h5>
-                <ul>
-                  <li id="university.cut">Cut: <strong>51</strong></li>
-                  <li id="university._studentGSNDeposit">Funds: <strong>7000</strong> DAI</li>
-                  <li id="university.operationalBudget">Bugdet: <strong>15000</strong> DAI</li>
-                  <li id="university.donationsReceived">Donations: <strong>5000</strong> DAI</li>
-                  <li id="university.revenueReceived">Revenue: <strong>15000</strong> DAI</li>
-                  <li id="university.returnsReceived">Returns: <strong>3000</strong> DAI</li>
-                </ul>
-                  <a href="javascript:void(0)" class="text-primary">See on Etherscan</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card shadow shadow-lg--hover mt-5">
-            <div class="card-body">
-              <div class="d-flex px-3">
-                <div>
-                  <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
-                    <i class="fa fa-gratipay"></i>
-                  </div>
-                </div>
-                <div class="pl-4">
-                  <h5 class="title text-success">Make a Donnation</h5>
-                  <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that
-                    process will continue whatever.</p>
-                  <a href="javascript:void(0)" class="text-success">Support Now</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card shadow shadow-lg--hover mt-5">
-            <div class="card-body">
-              <div class="d-flex px-3">
-                <div>
-                  <div class="icon icon-shape bg-gradient-danger rounded-circle text-white">
-                    <i class="fa fa-code"></i>
-                  </div>
-                </div>
-                <div class="pl-4">
-                  <h5 class="title text-danger">Smart Contract</h5>
-                  <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that
-                    process will continue whatever.</p>
-                  <a href="javascript:void(0)" class="text-danger">Show the Code</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card shadow shadow-lg--hover mt-5">
-            <div class="card-body">
-              <div class="d-flex px-3">
-                <div>
-                  <div class="icon icon-shape bg-gradient-info rounded-circle text-white">
-                    <i class="ni ni-active-40"></i>
-                  </div>
-                </div>
-                <div class="pl-4">
-                  <h5 class="title text-info">White Papper</h5>
-                  <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that
-                    process will continue whatever.</p>
-                  <a href="javascript:void(0)" class="text-info">Read White Papper</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card shadow shadow-lg--hover mt-5">
-            <div class="card-body">
-              <div class="d-flex px-3">
-                <div>
-                  <div class="icon icon-shape bg-gradient-warning rounded-circle text-white">
-                    <i class="fa fa-question"></i>
-                  </div>
-                </div>
-                <div class="pl-4">
-                  <h5 class="title text-warning">FAQ</h5>
-                  <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that
-                    process will continue whatever.</p>
-                  <a href="javascript:void(0)" class="text-warning">Access FAQ</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- SVG separator -->
-    <div class="separator separator-bottom separator-skew zindex-100">
-      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-        xmlns="http://www.w3.org/2000/svg">
-        <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
-      </svg>
-    </div>
-  </section>
-  <section class="section section-lg">
-    <div class="container">
-      <div class="row row-grid justify-content-center">
-        <div class="col-lg-8 text-center">
-          <h2 class="display-3">Do you like this
-            <span class="text-success">Defi DAPP?</span>
-          </h2>
-          <p class="lead">Cause if you do, it can be yours for FREE. Hit the button below to navigate to Creative Tim
-            where you can find the Design System in Angular. Start a new project or give an old Angular project a new
-            look!</p>
-          <div class="btn-wrapper">
-            <a href="https://github.com/MatheusDaros/Uproot" class="btn btn-default mb-3 mb-sm-0">See Repo on Github</a>
-          </div>
-          <div class="text-center">
-            <h4 class="display-4 mb-5 mt-5">Provided by these technologies</h4>
+    </section>
+    <jw-modal id="custom-modal-register">
+        <form role="form">
             <div class="row justify-content-center">
-              <div class="col-lg-2 col-4">
-                <a href="https://www.portis.io/" target="_blank" placement="bottom"
-                  ngbTooltip="Portis - Ethereum Wallet Provider">
-                  <img src="https://www.portis.io/static/logo.png" class="img-fluid">
-                </a>
-              </div>
+                <div class="col-md-8">
+                    <div class="card shadow bg-gradient-default border-0">
+                        <div class="card-body py-5">
+                            <h3 class="text-center text-white">Register at University</h3>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h2 class="description text-white">Argon is a great free UI package based on Angular that includes the most important components and features.</h2>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                            </div>
+                                            <input id="_name" class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                            </div>
+                                            <input class="form-control" placeholder="Address" value={{address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div *ngIf="txMode=='preTX'" class="alert alert-neutral" role="alert">
+                                        <strong class="text-default">You Need Confirm Trasation on Portis Wallet!</strong>
+                                    </div>
+                                    <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
+                                        <strong>Wait!</strong> Registering at University...
+                                    </div>
+                                    <div *ngIf="txMode=='successTX'" class="alert alert-success" role="alert">
+                                        <strong>Success!</strong> This is a success alert—check it out!
+                                    </div>
+                                    <div *ngIf="txMode=='failedTX'" class="alert alert-danger" role="alert">
+                                        <strong>Failed!</strong> This is a danger alert—check it out!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-gradient-default">
+                            <a (click)="closeModal('custom-modal-register'); txOff()" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+                                <span class="btn-inner--text">Back</span>
+                            </a>
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="studentSelfRegister()" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
+                                <span class="btn-inner--text">Register</span>
+                            </a>
+                            <a (click)="closeModal('custom-modal-register'); txOff()" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+                                <span class="btn-inner--text">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <jw-modal id="custom-modal-1">
-    <form role="form">
-      <div class="modal-header">
-        <h3 class="modal-title">Register at University</h3>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group" [ngClass]="{'focused':focus===true}">
-              <div class="input-group input-group-alternative mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
-                </div>
-                <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group" [ngClass]="{'focused':focus1===true}">
-              <div class="input-group input-group-alternative mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="fa fa-link"></i></span>
-                </div>
-                <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true"
-                  (blur)="focus1=false">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
-        <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-1');">Close</button>
-      </div>
-    </form>
-  </jw-modal>
-  <jw-modal id="custom-modal-classroom">
-    <div id="clasroomInfo" *ngIf="selectedClassroom" class="container py-lg-md d-flex">
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="card shadow border-0">
-            <div class="card-body py-5">
-              <h3>{{selectedClassroom.title | uppercase}} <span class="badge badge-pill badge-success">open</span></h3>
-              <div class="row">
-                <div class="col-md-6">
-                  <h4 class="text-light">Start <span class="text-default">{{selectedClassroom.startDate}}</span></h4>
-                  <h4 class="text-light">Finish <span class="text-default">{{selectedClassroom.finishDate}}</span></h4>
-                </div>
-                <div class="col-md-6">
-                  <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
-                  <h4 class="text-light">Price <span class="text-default">{{selectedClassroom.price}}</span></h4>
-                </div>
-              </div>
-              <div class="row">
+        </form>
+    </jw-modal>
+    <jw-modal id="custom-modal-classroom">
+        <div id="clasroomInfo" *ngIf="selectedClassroom" class="container py-lg-md">
+            <div class="row justify-content-center">
                 <div class="col-md-12">
-                  <h2 class="description mt-3">Argon is a great free UI package based on Angular that includes the most
-                    important components and features.Argon is a great free UI package based on Angular that includes
-                    the most
-                    important components and features.Argon is a great free UI package based on Angular that includes
-                    the most
-                    important components and features.</h2>
-                  <h2 class="description mt-3">Argon is a great free UI package based on Angular that includes the most
-                    important components and features.Argon is a great free UI package based on Angular that includes
-                    the most
-                    important components and features.Argon is a great free UI package based on Angular that includes
-                    the most
-                    important components and features.</h2>
+                    <div class="card shadow border-0">
+                        <div class="card-body py-5">
+                            <h3>{{selectedClassroom.title}}</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 class="text-light">Start: <span *ngIf=!selectedClassroom.isClassroomNotOpen() class="text-default">{{selectedClassroom.startDate_String}}</span><span *ngIf=selectedClassroom.isClassroomNotOpen() class="text-default">To Be Defined</span></h4>
+                                    <h4 class="text-light">Finish: <span *ngIf=!selectedClassroom.isClassroomNotOpen() class="text-default">{{selectedClassroom.finishDate_String}}</span><span *ngIf=selectedClassroom.isClassroomNotOpen() class="text-default">To Be Defined</span></h4>
+                                    <h4 *ngIf=selectedClassroom.isClassroomNotOpen() class="text-light">Status: <span class="badge badge-pill badge-info">Not Open</span></h4>
+                                    <h4 *ngIf=selectedClassroom.isClassroomOpen() class="text-light">Status: <span class="badge badge-pill badge-success">Open</span></h4>
+                                    <h4 *ngIf=selectedClassroom.isClassroomClosed() class="text-light">Status: <span class="badge badge-pill badge-warning">Closed</span></h4>
+                                    <h4 *ngIf=selectedClassroom.isClassroomActive() class="text-light">Status: <span class="badge badge-pill badge-primary">Ongoing</span></h4>
+                                    <h4 *ngIf=selectedClassroom.courseFinished class="text-light">Status: <span class="badge badge-pill badge-dark">Finished</span></h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 class="text-light">Price: <span class="text-default">{{selectedClassroom.price}}</span></h4>
+                                    <h4 class="text-light">Cut from Principal: <span class="text-default">{{selectedClassroom.cutPrincipal}} %</span></h4>
+                                    <h4 class="text-light">Cut from Success Pool: <span class="text-default">{{selectedClassroom.cutPool}} %</span></h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h4 class="text-light">Address: <span class="text-default">{{selectedClassroom.smartcontract}}</span></h4>
+                                    <h4 class="text-light">Challenge: <span class="text-default">{{selectedClassroom.addressChallenge}}</span></h4>
+                                    <h4 class="text-light">Description:</h4>
+                                    <h2 class="description mt-3">{{ensService.getTxDescription(ensService.getNodeFromAddress(selectedClassroom.smartcontract))}}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a (click)="closeModal('custom-modal-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                <span class="btn-inner--text">Back</span>
+                            </a>
+                            <a class="btn btn-success btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
+                                <span class="btn-inner--text">Go to Classroom</span>
+                            </a>
+                            <a *ngIf=userIsUniversityAdmin class="btn btn-danger btn-icon mb-3 mb-sm-0" (click)="revokeRole('CLASSROOM_PROFESSOR_ROLE',selectedClassroom.smartcontract.toString())">
+                                <span class="btn-inner--icon"><i class="fa fa-minus"></i></span>
+                                <span class="btn-inner--text">Delete Classroom</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-            <div class="card-footer">
-              <a href="#clasrooms" (click)="closeModal('custom-modal-classroom')"
-                class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-                <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
-                <span class="btn-inner--text">Back</span>
-              </a>
-              <a href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
-                <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
-                <span class="btn-inner--text">Go to Classroom</span>
-              </a>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </jw-modal>
+    </jw-modal>
+    <jw-modal id="custom-modal-university-admin">
+        <div *ngIf="modeUniversityAdmin=='unconnected'">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow border-0">
+                        <div class="card-body py-5">
+                            <h3>University Admin<span class="badge badge-pill badge-warning">loading...</span></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="UniversityInfo" *ngIf="modeUniversityAdmin=='loaded'" class="container py-lg-md d-flex">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow border-0">
+                        <div class="card-body py-5">
+                            <h3>University Admin <span class="badge badge-pill badge-success">ready</span></h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2 class="description mt-3">View here a list of every address listed under each role. Add new addresses using the input field. Remove address by clicking the delete button in the list.</h2>
+                                    <h4 class="UniversityAdmins mt-3">University Admins:</h4>
+                                    <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['DEFAULT_ADMIN_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('DEFAULT_ADMIN_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                                </div>
+                                                <input #inputUniversityAdmins class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('DEFAULT_ADMIN_ROLE',inputUniversityAdmins.value)">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="classroomListAdmins mt-3">Student List Admins:</h4>
+                                    <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['READ_STUDENT_LIST_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('READ_STUDENT_LIST_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                                </div>
+                                                <input #inputUniversityAdminStudentListAdmins class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('READ_STUDENT_LIST_ROLE',inputUniversityAdminStudentListAdmins.value)">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="GrantsManagers mt-3">Funds Managers:</h4>
+                                    <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['FUNDS_MANAGER_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('FUNDS_MANAGER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                                </div>
+                                                <input #inputUniversityAdminFundsManagers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('FUNDS_MANAGER_ROLE',inputUniversityAdminFundsManagers.value)">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="FundsManagers mt-3">Classlist Managers:</h4>
+                                    <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['CLASSLIST_ADMIN_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('CLASSLIST_ADMIN_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                                </div>
+                                                <input #inputUniversityAdminClasslistManagers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('CLASSLIST_ADMIN_ROLE',inputUniversityAdminClasslistManagers.value)">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="Overseers mt-3">Grants Managers:</h4>
+                                    <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['GRANTS_MANAGER_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('GRANTS_MANAGER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                                </div>
+                                                <input #inputUniversityAdminGrantsManagers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('GRANTS_MANAGER_ROLE',inputUniversityAdminGrantsManagers.value)">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="RegisteredProviders mt-3">University Overseers:</h4>
+                                    <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['UNIVERSITY_OVERSEER_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('UNIVERSITY_OVERSEER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                                </div>
+                                                <input #inputUniversityAdminUniversityOverseers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('UNIVERSITY_OVERSEER_ROLE',inputUniversityAdminUniversityOverseers.value)">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="ReadStudentList mt-3">University Registered Suplier:</h4>
+                                    <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['REGISTERED_SUPPLIER_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('REGISTERED_SUPPLIER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                            <div class="input-group input-group-alternative mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                                </div>
+                                                <input #inputUniversityAdminRegisteredSuplier class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('REGISTERED_SUPPLIER_ROLE',inputUniversityAdminRegisteredSuplier.value)">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#information" (click)="closeModal('custom-modal-university-admin')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                <span class="btn-inner--text">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
+    <jw-modal id="custom-modal-create-classroom">
+        <div id="UniversityInfo" class="container py-lg-md d-flex">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card shadow border-0">
+                        <div class="card-body py-5">
+                            <h3>Admin Create Classroom</h3>
+                            <h2 class="description mt-3">Use this page to create classrooms manually. The setup of Oracles and Services will use this university's standards</h2>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h6 class="UniversityAdmins mt-3">Classroom parameters</h6>
+                                        <label for="inputObjCreateClassroom_Owner" class="UniversityAdmins mt-3">Owner:</label>
+                                        <input id="inputObjCreateClassroom_Owner" #inputCreateClassroom_Owner class="form-control" placeholder="Owner Address" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Name" class="UniversityAdmins mt-3">Name:</label>
+                                        <input id="inputObjCreateClassroom_Name" #inputCreateClassroom_Name class="form-control" placeholder="Name" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Price" class="UniversityAdmins mt-3">Price:</label>
+                                        <input id="inputObjCreateClassroom_Price" #inputCreateClassroom_Price class="form-control" placeholder="Price (in DAI)" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Cutfromprincipal" class="UniversityAdmins mt-3">Cut from principal:</label>
+                                        <input id="inputObjCreateClassroom_Cutfromprincipal" #inputCreateClassroom_Cutfromprincipal class="form-control" placeholder="Cut (%)" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Cutfromsuccesspool" class="UniversityAdmins mt-3">Cut from success pool:</label>
+                                        <input id="inputObjCreateClassroom_Cutfromsuccesspool" #inputCreateClassroom_Cutfromsuccesspool class="form-control" placeholder="Cut (%)" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Minimumscore" class="UniversityAdmins mt-3">Minimum score:</label>
+                                        <input id="inputObjCreateClassroom_Minimumscore" #inputCreateClassroom_Minimumscore class="form-control" placeholder="Int32" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Duration" class="UniversityAdmins mt-3">Duration:</label>
+                                        <input id="inputObjCreateClassroom_Duration" #inputCreateClassroom_Duration class="form-control" placeholder="Days" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Challengeaddress" class="UniversityAdmins mt-3">Challenge address:</label>
+                                        <input id="inputObjCreateClassroom_Challengeaddress" #inputCreateClassroom_Challengeaddress class="form-control" placeholder="Challenge Address" type="text" size=32>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" (click)="closeModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                <span class="btn-inner--text">Back</span>
+                            </a>
+                            <a href="#" (click)="createClassroom(
+                                inputCreateClassroom_Owner.value,
+                                inputCreateClassroom_Name.value,
+                                inputCreateClassroom_Price.value,
+                                inputCreateClassroom_Cutfromprincipal.value,
+                                inputCreateClassroom_Cutfromsuccesspool.value,
+                                inputCreateClassroom_Minimumscore.value,
+                                inputCreateClassroom_Duration.value,
+                                inputCreateClassroom_Challengeaddress.value);closeModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-check"></i></span>
+                                <span class="btn-inner--text">Create</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
 </main>

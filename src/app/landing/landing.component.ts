@@ -1,74 +1,285 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	ElementRef,
+	ViewChild,
+	CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Classroom } from 'src/models/classroom.model';
+import { GenericUser } from 'src/models/genericUser.model';
 import { CLASSROOMS } from 'src/models/mock-classroom';
 import { Student } from 'src/models/student.model';
 import { ModalService } from '../_modal';
 
 import { PortisService } from '../services/portis.service';
+import { InfuraService } from '../services/infura.service';
+import { ENSService } from '../services/ens.service';
 import Web3 from 'web3';
+import { environment } from 'src/environments/environment';
+import { ResourceLoader } from '@angular/compiler';
 
 @Component({
-  selector: 'app-landing',
-  templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.scss']
+	selector: 'app-landing',
+	templateUrl: './landing.component.html',
+	styleUrls: ['./landing.component.css'],
 })
-
 export class LandingComponent implements OnInit {
-  focus: any;
-  focus1: any;
-  page = 2;
-  page1 = 3;
+	focus: any;
+	focus1: any;
+	page = 2;
+	page1 = 3;
 
-  public mode = 'unconnected';
+	universityEtherscan =
+		'https://' +
+		environment.network +
+		'.etherscan.io/address/' +
+		environment.universityAddress;
+	universityName: any;
+	universityCut: any;
+	universityFunds: any;
+	universityBudget: any;
+	universityDonations: any;
+	universityRevenue: any;
+	universityReturns: any;
+	universityAdmin: any;
 
-  @ViewChild('onLoginPlaceholder1') onLoginPlaceholder1: ElementRef;
-  public form: FormGroup;
-  classrooms = CLASSROOMS;
-  selectedClassroom: Classroom;
+	//StudentSelfRegister
+	public _name = 'any';
+	address: any;
 
-  constructor(private modalService: ModalService, private portisService: PortisService) { }
+	//Finished loading classlist info
+	public classlistLoaded = false;
 
-  ngOnInit() {
+	public userIsUniversityAdmin: boolean;
+	public mode = 'unconnected';
+	public modeUniversityAdmin = 'unconnected';
+	public txMode = 'off';
+	public receipt: any;
+	public connectedPortis = false;
+	public form: FormGroup;
+	public students: Student[] = [];
+	public classrooms = new Array<Classroom>();
+	selectedClassroom: Classroom;
 
-  }
+	constructor(
+		private modalService: ModalService,
+		public portisService: PortisService,
+		public infuraService: InfuraService,
+		public ensService: ENSService
+	) {}
 
-  openModal(id: string) {
-    this.modalService.open(id);
-  }
-  closeModal(id: string) {
-    this.modalService.close(id);
-  }
+	ngOnInit() {
+		this.refreshUniversityInfo();
+	}
 
-  onSelect(classroom: Classroom): void {
-    this.selectedClassroom = classroom;
-  }
+	openModal(id: string) {
+		this.modalService.open(id);
+	}
+	closeModal(id: string) {
+		this.modalService.close(id);
+	}
 
-  clear() {
-    this.form.reset();
-  }
+	onSelect(classroom: Classroom): void {
+		this.selectedClassroom = classroom;
+	}
 
-  private async conectPortis(): Promise<any> {
-    this.mode = 'loadingPage';
-    const resposta = await this.portisService.initPortis();
-    if (resposta == true) {
-      this.mode = 'connected';
-    } 
-    else {
-      this.mode = 'unconnected';
-    }
-  }
+	txOn() {
+		this.txMode = 'preTX';
+	}
 
-  getClassrooms(id: Number) {
-    const data = localStorage.getItem('classrooms');
-    console.log(data)
-    if (data) {
-      this.classrooms = JSON.parse(data);
-    } else {
-      this.classrooms = [];
-    }
+	txOff() {
+		this.txMode = 'off';
+	}
 
-  }
+	clear() {
+		this.form.reset();
+	}
 
+	async conectPortis(): Promise<any> {
+		this.mode = 'loadingPage';
+		const answer = await this.portisService.initPortis();
+		if (!answer) {
+			this.mode = 'unconnected';
+			return;
+		}
+		this.address = await this.portisService.getAddress();
+		const connectUniversity = await this.portisService.conectUniversity();
+		this.mode = 'connected';
+		this.connectedPortis = true;
+		await this.refreshUniversityInfo();
+		const adminAddress = await this.portisService.getUniversityOwner();
+		this.userIsUniversityAdmin = this.address === adminAddress;
+		//TODO: Student Address and Student Smart Contract Address
+		//const adminAddress = await this.portisService.getUniversityOwner();
+		//this.userIsUniversityAdmin = (this.address === adminAddress);
+	}
+
+	async refreshUniversityInfo(): Promise<any> {
+		const service = this.connectedPortis
+			? this.portisService
+			: this.infuraService;
+		this.universityName = await service.getUniversityName();
+		this.universityCut = await service.getUniversityCut();
+		this.universityDonations = await service.getUniversityDonations();
+		this.universityFunds = await service.getUniversityFunds();
+		this.universityBudget = await service.getUniversityBudget();
+		this.universityRevenue = await service.getUniversityRevenue();
+		this.universityReturns = await service.getUniversityReturns();
+		this.updateClassrooms(service).then(
+			() => (this.classlistLoaded = true)
+		);
+	}
+
+	async updateClassrooms(service: PortisService | InfuraService) {
+		let classroomCount = await service.getClassroomCount();
+		if (this.classrooms.length == (classroomCount + CLASSROOMS.length)) return;
+		this.classlistLoaded = false;
+		this.classrooms = new Array<Classroom>();
+		let index = 0;
+		while (index < classroomCount) {
+			const [
+				title,
+				smartcontract,
+				startDate,
+				finishDate,
+				duration,
+				price,
+				minScore,
+				cutPrincipal,
+				cutPool,
+				isOpen,
+				isEmpty,
+				isActive,
+				isFinished,
+				addressChallenge,
+				owner,
+			] = await service.getClassroomInfo(index);
+			this.classrooms.push(
+				new Classroom(
+					index,
+					title,
+					smartcontract,
+					startDate,
+					finishDate,
+					duration / (60 * 60 * 24),
+					price,
+					minScore,
+					cutPrincipal / 1e4,
+					cutPool / 1e4,
+					isOpen,
+					isEmpty,
+					isActive,
+					isFinished,
+					addressChallenge,
+					owner
+				)
+			);
+			index++;
+		}
+		CLASSROOMS.forEach(element => {
+			this.classrooms.push(element);
+		});
+	}
+
+	async refreshAccountInfo(): Promise<any> {
+		this.address = await this.portisService.getAddress();
+		//TODO: call student smart contract
+	}
+
+	async studentSelfRegister(): Promise<any> {
+		this.txOn();
+		if (this._name == '') {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'processingTX';
+			const selfRegister = await this.portisService.studentSelfRegister(
+				this._name
+			);
+			if (!selfRegister) {
+				this.txMode = 'failedTX';
+			} else {
+				this.txMode = 'successTX';
+			}
+		}
+	}
+
+	getClassrooms(id: Number) {
+		const data = localStorage.getItem('classrooms');
+		console.log(data);
+		if (data) {
+			this.classrooms = JSON.parse(data);
+		} else {
+			this.classrooms = [];
+		}
+	}
+
+	revokeRole(role: string, address: string) {
+		this.portisService
+			.revokeRole(role, address)
+			.then(() => this.loadUniversityAdmin());
+	}
+
+	grantRole(role: string, address: string) {
+		this.portisService
+			.grantRole(role, address)
+			.then(() => this.loadUniversityAdmin());
+	}
+
+	roleMembersAdmin: Map<string, Array<GenericUser>>;
+
+	loadUniversityAdmin() {
+		this.roleMembersAdmin = new Map<string, Array<GenericUser>>();
+		this.getRoleMembers('DEFAULT_ADMIN_ROLE').then((result) => {
+			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'] = result;
+		});
+		this.getRoleMembers('FUNDS_MANAGER_ROLE').then((result) => {
+			this.roleMembersAdmin['FUNDS_MANAGER_ROLE'] = result;
+		});
+		this.getRoleMembers('CLASSLIST_ADMIN_ROLE').then((result) => {
+			this.roleMembersAdmin['CLASSLIST_ADMIN_ROLE'] = result;
+		});
+		this.getRoleMembers('GRANTS_MANAGER_ROLE').then((result) => {
+			this.roleMembersAdmin['GRANTS_MANAGER_ROLE'] = result;
+		});
+		this.getRoleMembers('UNIVERSITY_OVERSEER_ROLE').then((result) => {
+			this.roleMembersAdmin['UNIVERSITY_OVERSEER_ROLE'] = result;
+		});
+		this.getRoleMembers('REGISTERED_SUPPLIER_ROLE').then((result) => {
+			this.roleMembersAdmin['REGISTERED_SUPPLIER_ROLE'] = result;
+		});
+		this.getRoleMembers('READ_STUDENT_LIST_ROLE').then((result) => {
+			this.roleMembersAdmin['READ_STUDENT_LIST_ROLE'] = result;
+			this.modeUniversityAdmin = 'loaded';
+		});
+	}
+
+	public createClassroom(
+		_Owner: string,
+		_Name: string,
+		_Price: string,
+		_Cutfromprincipal: string,
+		_Cutfromsuccesspool: string,
+		_Minimumscore: string,
+		_Duration: string,
+		_Challengeaddress: string
+	) {
+		this.portisService
+			.createClassroom(
+				_Owner,
+				_Name,
+				_Price,
+				Number(_Cutfromprincipal),
+				Number(_Cutfromsuccesspool),
+				Number(_Minimumscore),
+				Number(_Duration),
+				_Challengeaddress
+			)
+			.then(() => this.updateClassrooms(this.portisService));
+	}
+
+	async getRoleMembers(role: string) {
+		return await this.portisService.listRoles(role);
+	}
 }
