@@ -15,6 +15,7 @@ import { ModalService } from '../_modal';
 
 import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
+import { ENSService } from '../services/ens.service';
 import Web3 from 'web3';
 import { environment } from 'src/environments/environment';
 import { ResourceLoader } from '@angular/compiler';
@@ -59,13 +60,14 @@ export class LandingComponent implements OnInit {
 	public connectedPortis = false;
 	public form: FormGroup;
 	public students: Student[] = [];
-	classrooms = CLASSROOMS;
+	public classrooms = new Array<Classroom>();
 	selectedClassroom: Classroom;
 
 	constructor(
 		private modalService: ModalService,
 		public portisService: PortisService,
-		public infuraService: InfuraService
+		public infuraService: InfuraService,
+		public ensService: ENSService
 	) {}
 
 	ngOnInit() {
@@ -131,10 +133,12 @@ export class LandingComponent implements OnInit {
 	}
 
 	async updateClassrooms(service: PortisService | InfuraService) {
-		const classroomCount = await service.getClassroomCount();
-		this.classrooms = CLASSROOMS;
+		let classroomCount = await service.getClassroomCount();
+		classroomCount += CLASSROOMS.length; //remover junto com o mock
+		if (this.classrooms.length == classroomCount) return;
+		this.classrooms = new Array<Classroom>();
 		let index = 0;
-		while (index < classroomCount) {
+		while (index < classroomCount - CLASSROOMS.length) { //modificar ao remover o mock
 			const [
 				title,
 				smartcontract,
@@ -146,6 +150,7 @@ export class LandingComponent implements OnInit {
 				cutPrincipal,
 				cutPool,
 				isOpen,
+				isEmpty,
 				isActive,
 				isFinished,
 				addressChallenge,
@@ -164,6 +169,7 @@ export class LandingComponent implements OnInit {
 					cutPrincipal / 1e4,
 					cutPool / 1e4,
 					isOpen,
+					isEmpty,
 					isActive,
 					isFinished,
 					addressChallenge,
@@ -172,6 +178,9 @@ export class LandingComponent implements OnInit {
 			);
 			index++;
 		}
+		CLASSROOMS.forEach(element => {
+			this.classrooms.push(element);
+		});
 	}
 
 	async refreshAccountInfo(): Promise<any> {
