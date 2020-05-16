@@ -100,10 +100,11 @@ export class baseClientService {
 	async revokeRole(role: string, address: string) {
 		if (role == 'DEFAULT_ADMIN_ROLE') return;
 		const roleBytes = ethers.utils.solidityKeccak256(['string'], [role]);
-		const transaction = await this.universityContractInstance.revokeRole(roleBytes, address);
-		console.log(transaction);
+		const transaction = await this.universityContractInstance.revokeRole(
+			roleBytes,
+			address
+		);
 		await transaction.wait();
-		console.log(transaction);
 	}
 
 	async grantRole(role: string, address: string) {
@@ -111,10 +112,11 @@ export class baseClientService {
 			role == 'DEFAULT_ADMIN_ROLE'
 				? ethers.utils.formatBytes32String('')
 				: ethers.utils.solidityKeccak256(['string'], [role]);
-		const transaction = await this.universityContractInstance.grantRole(roleBytes, address);
-		console.log(transaction);
+		const transaction = await this.universityContractInstance.grantRole(
+			roleBytes,
+			address
+		);
 		await transaction.wait();
-		console.log(transaction);
 	}
 
 	public async studentSelfRegister(_name: string) {
@@ -122,7 +124,7 @@ export class baseClientService {
 		const register = await this.universityContractInstance.studentSelfRegister(
 			name
 		);
-		console.log(register);
+		await register.wait();
 		return register;
 	}
 
@@ -141,6 +143,7 @@ export class baseClientService {
 			smartcontract,
 			startDate,
 			finishDate,
+			duration,
 			price,
 			minScore,
 			cutPrincipal,
@@ -165,13 +168,15 @@ export class baseClientService {
 		);
 		const answer = await classroomContractInstance.name();
 		title = ethers.utils.parseBytes32String(answer);
-		price = await classroomContractInstance.price();
+		const priceWei = await classroomContractInstance.entryPrice();
+		price = ethers.utils.formatEther(priceWei);
 		minScore = await classroomContractInstance.minScore();
 		cutPrincipal = await classroomContractInstance.principalCut();
 		cutPool = await classroomContractInstance.poolCut();
 		isOpen = await classroomContractInstance.openForApplication();
 		isActive = await classroomContractInstance.classroomActive();
 		isFinished = await classroomContractInstance.courseFinished();
+		duration = await classroomContractInstance.duration();
 		addressChallenge = await classroomContractInstance.challengeAddress();
 		owner = await classroomContractInstance.owner();
 		return [
@@ -179,6 +184,7 @@ export class baseClientService {
 			smartcontract,
 			startDate,
 			finishDate,
+			duration,
 			price,
 			minScore,
 			cutPrincipal,
@@ -187,28 +193,28 @@ export class baseClientService {
 			isActive,
 			isFinished,
 			addressChallenge,
-			owner
+			owner,
 		];
 	}
 
 	async createClassroom(
-		_Owner,
-		_Name,
-		_Price,
-		_Cutfromprincipal,
-		_Cutfromsuccesspool,
-		_Minimumscore,
-		_Duration,
-		_Challengeaddress
+		_Owner: string,
+		_Name: string,
+		_Price: string,
+		_Cutfromprincipal: number,
+		_Cutfromsuccesspool: number,
+		_Minimumscore: number,
+		_Duration: number,
+		_Challengeaddress: string
 	) {
 		await this.universityContractInstance.newClassRoom(
 			_Owner,
-			_Name,
-			_Cutfromprincipal,
-			_Cutfromsuccesspool,
-			_Minimumscore,
-			_Price,
-			_Duration,
+			ethers.utils.formatBytes32String(_Name),
+			Math.round(_Cutfromprincipal * 1e4),
+			Math.round(_Cutfromsuccesspool * 1e4),
+			Math.round(_Minimumscore),
+			ethers.utils.parseEther(_Price),
+			Math.round(_Duration * 60 * 60 * 24),
 			_Challengeaddress
 		);
 	}

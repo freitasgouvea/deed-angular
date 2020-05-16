@@ -415,11 +415,10 @@
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Register</span>
                             </a>
-                            <a (click)="closeModal('custom-modal-register'); txOff()"
-                            class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-                            <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
-                            <span class="btn-inner--text">Back</span>
-                        </a>
+                            <a (click)="closeModal('custom-modal-register'); txOff()" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+                                <span class="btn-inner--text">Back</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -698,20 +697,22 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h6 class="UniversityAdmins mt-3">Classroom parameters</h6>
-                                        <label for="inputCreateClassroom_Owner" class="UniversityAdmins mt-3">Owner:</label> <input id="inputCreateClassroom_Owner" #inputCreateClassroom_Owner class="form-control" placeholder="Owner Address" type="text"
-                                            size=32>
-                                        <label for="inputCreateClassroom_Name" class="UniversityAdmins mt-3">Name:</label> <input id="inputCreateClassroom_Name" #inputCreateClassroom_Name class="form-control" placeholder="Name" type="text" size=32>
-                                        <label for="inputCreateClassroom_Price" class="UniversityAdmins mt-3">Price:</label> <input id="inputCreateClassroom_Price" #inputCreateClassroom_Price class="form-control" placeholder="Price" type="text" size=32>
-                                        <label for="inputCreateClassroom_Cutfromprincipal" class="UniversityAdmins mt-3">Cut from principal:</label> <input id="inputCreateClassroom_Cutfromprincipal" #inputCreateClassroom_Cutfromprincipal class="form-control"
-                                            placeholder="Cut (PPM)" type="text" size=32>
-                                        <label for="inputCreateClassroom_Cutfromsuccesspool" class="UniversityAdmins mt-3">Cut from success pool:</label> <input id="inputCreateClassroom_Cutfromsuccesspool" #inputCreateClassroom_Cutfromsuccesspool class="form-control"
-                                            placeholder="Cut (PPM)" type="text" size=32>
-                                        <label for="inputCreateClassroom_Minimumscore" class="UniversityAdmins mt-3">Minimum score:</label> <input id="inputCreateClassroom_Minimumscore" #inputCreateClassroom_Minimumscore class="form-control" placeholder="Int32"
-                                            type="text" size=32>
-                                        <label for="inputCreateClassroom_Duration" class="UniversityAdmins mt-3">Duration:</label> <input id="inputCreateClassroom_Duration" #inputCreateClassroom_Duration class="form-control" placeholder="Timestamps" type="text"
-                                            size=32>
-                                        <label for="inputCreateClassroom_Challengeaddress" class="UniversityAdmins mt-3">Challenge address:</label> <input id="inputCreateClassroom_Challengeaddress" #inputCreateClassroom_Challengeaddress class="form-control"
-                                            placeholder="Challenge Address" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Owner" class="UniversityAdmins mt-3">Owner:</label>
+                                        <input id="inputObjCreateClassroom_Owner" #inputCreateClassroom_Owner class="form-control" placeholder="Owner Address" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Name" class="UniversityAdmins mt-3">Name:</label>
+                                        <input id="inputObjCreateClassroom_Name" #inputCreateClassroom_Name class="form-control" placeholder="Name" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Price" class="UniversityAdmins mt-3">Price:</label>
+                                        <input id="inputObjCreateClassroom_Price" #inputCreateClassroom_Price class="form-control" placeholder="Price (in DAI)" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Cutfromprincipal" class="UniversityAdmins mt-3">Cut from principal:</label>
+                                        <input id="inputObjCreateClassroom_Cutfromprincipal" #inputCreateClassroom_Cutfromprincipal class="form-control" placeholder="Cut (%)" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Cutfromsuccesspool" class="UniversityAdmins mt-3">Cut from success pool:</label>
+                                        <input id="inputObjCreateClassroom_Cutfromsuccesspool" #inputCreateClassroom_Cutfromsuccesspool class="form-control" placeholder="Cut (%)" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Minimumscore" class="UniversityAdmins mt-3">Minimum score:</label>
+                                        <input id="inputObjCreateClassroom_Minimumscore" #inputCreateClassroom_Minimumscore class="form-control" placeholder="Int32" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Duration" class="UniversityAdmins mt-3">Duration:</label>
+                                        <input id="inputObjCreateClassroom_Duration" #inputCreateClassroom_Duration class="form-control" placeholder="Days" type="text" size=32>
+                                        <label for="inputObjCreateClassroom_Challengeaddress" class="UniversityAdmins mt-3">Challenge address:</label>
+                                        <input id="inputObjCreateClassroom_Challengeaddress" #inputCreateClassroom_Challengeaddress class="form-control" placeholder="Challenge Address" type="text" size=32>
                                     </div>
                                 </div>
                             </div>
@@ -720,14 +721,14 @@
                                 <span class="btn-inner--text">Back</span>
                             </a>
                             <a href="#" (click)="createClassroom(
-                                inputCreateClassroom_Owner,
-                                inputCreateClassroom_Name,
-                                inputCreateClassroom_Price,
-                                inputCreateClassroom_Cutfromprincipal,
-                                inputCreateClassroom_Cutfromsuccesspool,
-                                inputCreateClassroom_Minimumscore,
-                                inputCreateClassroom_Duration,
-                                inputCreateClassroom_Challengeaddress);closeModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                inputCreateClassroom_Owner.value,
+                                inputCreateClassroom_Name.value,
+                                inputCreateClassroom_Price.value,
+                                inputCreateClassroom_Cutfromprincipal.value,
+                                inputCreateClassroom_Cutfromsuccesspool.value,
+                                inputCreateClassroom_Minimumscore.value,
+                                inputCreateClassroom_Duration.value,
+                                inputCreateClassroom_Challengeaddress.value);closeModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-check"></i></span>
                                 <span class="btn-inner--text">Create</span>
                             </a>
