@@ -9,22 +9,22 @@ export class Classroom {
 	public metadata = {email: '', url: '', avatar: '', description: '', notice: '', keywords: ['']}
 
     constructor(
-        public id: Number,
-        public title: String,
-        public smartcontract: String,
+        public id: number,
+        public title: string,
+        public smartcontract: string,
         public startDateTimestamp: number,
         public finishDateTimestamp: number,
-        public duration: Number,
-        public price: Number,
+        public duration: number,
+        public price: number,
         public minScore: number,
-        public cutPrincipal: Number,
-        public cutPool: Number,
+        public cutPrincipal: number,
+        public cutPool: number,
 		public openForApplication: Boolean,
 		public courseEmpty: Boolean,
         public classroomActive: Boolean,
         public courseFinished: Boolean,
-		public addressChallenge: String,
-		public owner: String
+		public addressChallenge: string,
+		public owner: string
 	) {
 		this.startDate = new Date(this.startDateTimestamp * 1000);
 		this.finishDate = new Date(this.finishDateTimestamp * 1000);
@@ -50,7 +50,7 @@ export class Classroom {
 		return this.state() === 0;
 	}
 
-	public state(): Number {
+	public state(): number {
 		if (this.courseFinished) return 4;
 		if (this.classroomActive) return 3;
 		if (!this.openForApplication && !this.courseEmpty) return 2;

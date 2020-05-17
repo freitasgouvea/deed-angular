@@ -4,6 +4,9 @@ import * as ethers from 'ethers';
 import { environment } from '../../environments/environment';
 import { baseClientService } from './baseClient.service';
 
+import * as University from '../../../build/contracts/University.json';
+import * as Classroom from '../../../build/contracts/Classroom.json';
+
 declare let window: any;
 declare let ethereum: any;
 
@@ -20,6 +23,18 @@ export class InfuraService extends baseClientService {
 			environment.infuraKey
 		);
 		this.setupProvider(provider);
-		this.connectContracts(this.provider);
+		this.universityContractInstance = new ethers.Contract(
+			environment.universityAddress,
+			University.abi,
+			this.provider
+		);
+	}
+
+	public connectClassroom(address: string){
+		this.classroomContractInstance = new ethers.Contract(
+			address,
+			Classroom.abi,
+			this.provider
+		);
 	}
 }
