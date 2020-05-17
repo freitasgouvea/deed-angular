@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { ModalModule } from './_modal';
+import { Globals } from './app.globals'
 
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
@@ -25,7 +26,7 @@ import { FooterComponent } from './footer/footer.component';
     ModalModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [Globals],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

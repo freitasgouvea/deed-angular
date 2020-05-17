@@ -1,10 +1,4 @@
-import {
-	Component,
-	OnInit,
-	ElementRef,
-	ViewChild,
-	CUSTOM_ELEMENTS_SCHEMA,
-} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Classroom } from 'src/models/classroom.model';
@@ -12,17 +6,17 @@ import { GenericUser } from 'src/models/genericUser.model';
 import { CLASSROOMS } from 'src/models/mock-classroom';
 import { Student } from 'src/models/student.model';
 import { ModalService } from '../_modal';
+import { Globals } from '../app.globals';
 
 import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
 import { ENSService } from '../services/ens.service';
 import { environment } from 'src/environments/environment';
-import { ResourceLoader } from '@angular/compiler';
 
 @Component({
 	selector: 'app-landing',
 	templateUrl: './landing.component.html',
-	styleUrls: ['./landing.component.css'],
+	styleUrls: ['./landing.component.css']
 })
 export class LandingComponent implements OnInit {
 	focus: any;
@@ -59,19 +53,16 @@ export class LandingComponent implements OnInit {
 	//Finished loading classlist info
 	public classlistLoaded = false;
 
-	public userIsUniversityAdmin: boolean;
-	public mode = 'unconnected';
 	public modeUniversityAdmin = 'unconnected';
 	public txMode = 'off';
 	public receipt: any;
-	public connectedPortis = false;
 	public form: FormGroup;
 	public students: Student[] = [];
 	public classrooms = new Array<Classroom>();
 	selectedClassroom: Classroom;
-	service: PortisService | InfuraService;
 
 	constructor(
+		public globals: Globals,
 		private modalService: ModalService,
 		public portisService: PortisService,
 		public infuraService: InfuraService,
@@ -79,9 +70,16 @@ export class LandingComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.service = this.infuraService;
+		if (!this.globals.service) {
+			this.globals.service = this.infuraService;
+			this.ensService.configureProvider(
+				this.infuraService.provider,
+				false
+			);
+			console.log("Connected to infura");
+		}
 		this.ensService
-			.configureProvider(this.infuraService.provider, false)
+			.configureProvider(this.globals.service.provider, false)
 			.then(() => this.refreshUniversityInfo());
 	}
 
@@ -114,21 +112,20 @@ export class LandingComponent implements OnInit {
 	}
 
 	async conectPortis(): Promise<any> {
-		this.mode = 'loadingPage';
+		this.globals.mode = 'loadingPage';
 		const answer = await this.portisService.initPortis();
 		if (!answer) {
-			this.mode = 'unconnected';
+			this.globals.mode = 'unconnected';
 			return;
 		}
 		this.address = await this.portisService.getAddress();
 		const connectUniversity = await this.portisService.conectUniversity();
-		this.mode = 'connected';
-		this.connectedPortis = true;
-		this.service = this.portisService;
+		this.globals.mode = 'connected';
+		this.globals.service = this.portisService;
 		this.ensService.configureProvider(this.portisService.provider);
 		await this.refreshUniversityInfo();
 		const adminAddress = await this.portisService.getUniversityOwner();
-		this.userIsUniversityAdmin = this.address === adminAddress;
+		this.globals.userIsUniversityAdmin = this.address === adminAddress;
 		//TODO: Student Address and Student Smart Contract Address
 		//const adminAddress = await this.portisService.getUniversityOwner();
 		//this.userIsUniversityAdmin = (this.address === adminAddress);
@@ -148,23 +145,23 @@ export class LandingComponent implements OnInit {
 		this.universityENSDescription = await this.ensService.getTxDescription();
 		this.universityENSNotice = await this.ensService.getTxNotice();
 		this.universityENSHasNotice = this.universityENSNotice.length > 0;
-		this.universityName = await this.service.getUniversityName();
-		this.universityCut = await this.service.getUniversityCut();
-		this.universityDonations = await this.service.getUniversityDonations();
-		this.universityFunds = await this.service.getUniversityFunds();
-		this.universityBudget = await this.service.getUniversityBudget();
-		this.universityRevenue = await this.service.getUniversityRevenue();
-		this.universityReturns = await this.service.getUniversityReturns();
-		this.universityParams = await this.service.getUniversityParams();
+		this.universityName = await this.globals.service.getUniversityName();
+		this.universityCut = await this.globals.service.getUniversityCut();
+		this.universityDonations = await this.globals.service.getUniversityDonations();
+		this.universityFunds = await this.globals.service.getUniversityFunds();
+		this.universityBudget = await this.globals.service.getUniversityBudget();
+		this.universityRevenue = await this.globals.service.getUniversityRevenue();
+		this.universityReturns = await this.globals.service.getUniversityReturns();
+		this.universityParams = await this.globals.service.getUniversityParams();
 	}
 
 	async updateENSNotice(text: string) {
-		await this.service.setTxRecord(this.ensService.node, 'notice', text);
+		await this.globals.service.setTxRecord(this.ensService.node, 'notice', text);
 		await this.refreshUniversityMetadata();
 	}
 
 	async updateENSDescription(text: string) {
-		await this.service.setTxRecord(
+		await this.globals.service.setTxRecord(
 			this.ensService.node,
 			'description',
 			text
@@ -175,15 +172,15 @@ export class LandingComponent implements OnInit {
 	async setupUniversityENS() {
 		const normalName = this.universityName.toLowerCase().replace(/\s/g, '');
 		if (!this.universityENSNameRecord)
-			await this.service.registerInRegistrar(normalName);
+			await this.globals.service.registerInRegistrar(normalName);
 		const node = this.ensService.node;
-		await this.service.setResolver(node);
-		await this.service.setAddr(node, environment.universityAddress);
-		await this.service.setReverse(normalName + environment.ENSDomain);
+		await this.globals.service.setResolver(node);
+		await this.globals.service.setAddr(node, environment.universityAddress);
+		await this.globals.service.setReverse(normalName + environment.ENSDomain);
 	}
 
 	async updateClassrooms() {
-		let classroomCount = await this.service.getClassroomCount();
+		let classroomCount = await this.globals.service.getClassroomCount();
 		if (this.classrooms.length == classroomCount + CLASSROOMS.length)
 			return;
 		this.classlistLoaded = false;
@@ -206,7 +203,7 @@ export class LandingComponent implements OnInit {
 				isFinished,
 				addressChallenge,
 				owner,
-			] = await this.service.getClassroomInfo(index);
+			] = await this.globals.service.getClassroomInfo(index);
 			const newClassroom = new Classroom(
 				index,
 				title,
@@ -252,7 +249,7 @@ export class LandingComponent implements OnInit {
 	}
 
 	async refreshAccountInfo(): Promise<any> {
-		this.address = await this.service.getAddress();
+		this.address = await this.globals.service.getAddress();
 		//TODO: call student smart contract
 	}
 
@@ -262,7 +259,7 @@ export class LandingComponent implements OnInit {
 			this.txMode = 'failedTX';
 		} else {
 			this.txMode = 'processingTX';
-			const selfRegister = await this.service.studentSelfRegister(
+			const selfRegister = await this.globals.service.studentSelfRegister(
 				this._name
 			);
 			if (!selfRegister) {
@@ -285,13 +282,13 @@ export class LandingComponent implements OnInit {
 	}
 
 	revokeRole(role: string, address: string) {
-		this.service
+		this.globals.service
 			.revokeRole(role, address)
 			.then(() => this.loadUniversityAdmin());
 	}
 
 	grantRole(role: string, address: string) {
-		this.service
+		this.globals.service
 			.grantRole(role, address)
 			.then(() => this.loadUniversityAdmin());
 	}
@@ -343,7 +340,7 @@ export class LandingComponent implements OnInit {
 		_Duration: string,
 		_Challengeaddress: string
 	) {
-		this.service
+		this.globals.service
 			.createClassroom(
 				_Owner,
 				_Name,
@@ -357,19 +354,29 @@ export class LandingComponent implements OnInit {
 			.then(() => this.updateClassrooms());
 	}
 
-	async teacherClaimSubnode(label, owner, classroom){
+	async teacherClaimSubnode(label, owner, classroom) {
 		const node = this.ensService.node;
 		const normalName = label.toLowerCase().replace(/\s/g, '');
-		await this.service.claimSubnodeClassroom(node, normalName, owner, classroom);
+		await this.globals.service.claimSubnodeClassroom(
+			node,
+			normalName,
+			owner,
+			classroom
+		);
 	}
 
-	async studentClaimSubnode(label, owner, classroom){
+	async studentClaimSubnode(label, owner, classroom) {
 		const node = this.ensService.node;
 		const normalName = label.toLowerCase().replace(/\s/g, '');
-		await this.service.claimSubnodeStudent(node, normalName, owner, classroom);
+		await this.globals.service.claimSubnodeStudent(
+			node,
+			normalName,
+			owner,
+			classroom
+		);
 	}
 
 	async getRoleMembers(role: string) {
-		return await this.service.listRoles(role);
+		return await this.globals.service.listRoles(role);
 	}
 }

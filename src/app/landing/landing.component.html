@@ -21,7 +21,7 @@
                                 <span>university</span>
                             </h1>
                             <p class="lead  text-white">{{universityENSDescription}}</p>
-                            <div *ngIf=universityENSHasNotice&&universityDisplayNotice #universityNotice class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <div *ngIf=universityENSHasNotice&&universityDisplayNotice #universityNotice class="alert alert-info alert-dismissible fade show" role="alert">
                                 <button type="button" class="close" aria-label="Close" (click)="closeUniversityNotice()">
 								  <span aria-hidden="true">&times;</span>
 								</button>
@@ -38,7 +38,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-lg-4" *ngIf="mode=='loadingPage'">
+                        <div class="col-lg-4" *ngIf="globals.mode=='loadingPage'">
                             <div class="card card-lift--hover shadow border-0 text-center">
                                 <div class="card-body py-5">
                                     <div class="icon icon-shape icon-shape-warning rounded-circle fa-3x mb-4">
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4" *ngIf="mode=='unconnected'">
+                        <div class="col-lg-4" *ngIf="globals.mode=='unconnected'">
                             <div class="card card-lift--hover shadow border-0 text-center">
                                 <div class="card-body py-5">
                                     <div class="icon icon-shape icon-shape-info rounded-circle mb-4">
@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4" *ngIf="mode=='connected'">
+                        <div class="col-lg-4" *ngIf="globals.mode=='connected'">
                             <div class="card card-lift--hover shadow border-0 text-center">
                                 <div class="card-body py-5">
                                     <div class="icon icon-shape icon-shape-primary rounded-circle mb-4">
@@ -76,7 +76,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4" *ngIf="mode=='registered'">
+                        <div class="col-lg-4" *ngIf="globals.mode=='registered'">
                             <div class="card card-lift--hover shadow border-0 text-center">
                                 <div class="card-body py-5">
                                     <div class="icon icon-shape icon-shape-success rounded-circle mb-4">
@@ -201,7 +201,7 @@
                             </div>
                         </div>
                     </div>
-                    <button *ngIf=userIsUniversityAdmin (click)="openModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0"><span class="btn-inner--icon"></span><i class="fa fa-plus"></i></button>
+                    <button *ngIf=globals.userIsUniversityAdmin (click)="openModal('custom-modal-create-classroom')" class="btn btn-neutral btn-icon mb-3 mb-sm-0"><span class="btn-inner--icon"></span><i class="fa fa-plus"></i></button>
                 </div>
             </div>
         </section>
@@ -215,11 +215,11 @@
                     <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
                     <span class="btn-inner--text">Classrooms</span>
                 </button>
-                <button *ngIf=userIsUniversityAdmin (click)="loadUniversityAdmin();openModal('custom-modal-university-admin')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                <button *ngIf=globals.userIsUniversityAdmin (click)="loadUniversityAdmin();openModal('custom-modal-university-admin')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                     <span class="btn-inner--icon"><i class="fa fa-cogs"></i></span>
                     <span class="btn-inner--text">Admin</span>
                 </button>
-                <button *ngIf=connectedPortis href="#" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                <button *ngIf=globals.userIsStudent href="#" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                   <span class="btn-inner--icon"><i class="fa fa-user"></i></span>
                   <span class="btn-inner--text">My Student Profile</span>
               </button>
@@ -475,7 +475,7 @@
                                 <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
                                 <span class="btn-inner--text">Go to Classroom</span>
                             </a>
-                            <a *ngIf=userIsUniversityAdmin class="btn btn-danger btn-icon mb-3 mb-sm-0" (click)="revokeRole('CLASSROOM_PROFESSOR_ROLE',selectedClassroom.smartcontract.toString())">
+                            <a *ngIf=globals.userIsUniversityAdmin class="btn btn-danger btn-icon mb-3 mb-sm-0" (click)="revokeRole('CLASSROOM_PROFESSOR_ROLE',selectedClassroom.smartcontract.toString())">
                                 <span class="btn-inner--icon"><i class="fa fa-minus"></i></span>
                                 <span class="btn-inner--text">Delete Classroom</span>
                             </a>

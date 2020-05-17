@@ -12,6 +12,7 @@ import { GenericUser } from '../../models/genericUser.model';
 })
 export class baseClientService {
 	public universityContractInstance: any;
+	public classroomContractInstance: any;
 	public provider: any;
 	public networkName: any;
 
@@ -26,14 +27,6 @@ export class baseClientService {
 		return addresses[0];
 	}
 
-	public connectContracts(providerOrSigner) {
-		this.universityContractInstance = new ethers.Contract(
-			environment.universityAddress,
-			University.abi,
-			providerOrSigner
-		);
-	}
-
 	async conectUniversity() {
 		if (!environment.universityAddress)
 			throw new Error('invalid contract address!');
@@ -42,13 +35,42 @@ export class baseClientService {
 				'invalid contract json, try to run truffle compile!'
 			);
 		if (this.provider) {
-			this.connectContracts(this.provider.getSigner());
+			this.universityContractInstance = new ethers.Contract(
+				environment.universityAddress,
+				University.abi,
+				this.provider.getSigner()
+			);
 		} else {
 			console.warn('try to connect with portis!');
 			this.provider = new ethers.providers.JsonRpcProvider(
 				'http://localhost:8545'
 			);
 		}
+	}
+
+	async conectClassroom(address: string) {
+		if (!address)
+			throw new Error('invalid contract address!');
+		if (!Classroom || !Classroom.abi)
+			throw new Error(
+				'invalid contract json, try to run truffle compile!'
+			);
+		if (this.provider) {
+			this.classroomContractInstance = new ethers.Contract(
+				address,
+				Classroom.abi,
+				this.provider.getSigner()
+			);
+		} else {
+			console.warn('try to connect with portis!');
+			this.provider = new ethers.providers.JsonRpcProvider(
+				'http://localhost:8545'
+			);
+		}
+	}
+
+	public async getClassroomOwner() {
+		const answer = await this.classroomContractInstance.owner();
 	}
 
 	public async getUniversityOwner() {
