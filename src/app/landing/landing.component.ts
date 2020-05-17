@@ -120,15 +120,19 @@ export class LandingComponent implements OnInit {
 		}
 		this.address = await this.portisService.getAddress();
 		const connectUniversity = await this.portisService.conectUniversity();
-		this.globals.mode = 'connected';
 		this.globals.service = this.portisService;
 		this.ensService.configureProvider(this.portisService.provider);
 		await this.refreshUniversityInfo();
 		const adminAddress = await this.portisService.getUniversityOwner();
 		this.globals.userIsUniversityAdmin = this.address === adminAddress;
-		//TODO: Student Address and Student Smart Contract Address
-		//const adminAddress = await this.portisService.getUniversityOwner();
-		//this.userIsUniversityAdmin = (this.address === adminAddress);
+		const isRegistered = await this.globals.service.getUniversityOwner();
+		if (!isRegistered) {
+			this.globals.mode = 'connected';
+			return;
+		} else {
+			this.globals.mode = 'registered';
+			return;
+		}
 	}
 
 	async refreshUniversityInfo(): Promise<any> {
