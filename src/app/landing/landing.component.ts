@@ -130,6 +130,7 @@ export class LandingComponent implements OnInit {
 			this.globals.mode = 'connected';
 			return;
 		} else {
+			this.globals.userIsStudent = true;
 			this.globals.mode = 'registered';
 			return;
 		}
