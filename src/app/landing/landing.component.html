@@ -241,6 +241,7 @@
                                     <h5 class="title text-primary">University Status</h5>
                                     <ul>
                                         <li id="university.name">Name: <strong>{{universityName}}</strong></li>
+                                        <li id="university.name">ENS Name: <strong>{{universityENSName}}</strong></li>
                                         <li id="university.cut">Cut: <strong>{{universityCut}}</strong>%</li>
                                         <li id="university._studentGSNDeposit">Funds: <strong>{{universityFunds}}</strong> DAI</li>
                                         <li id="university.operationalBudget">Budget: <strong>{{universityBudget}}</strong> DAI</li>
@@ -453,7 +454,9 @@
                                     <h4 class="text-light">Address: <span class="text-default">{{selectedClassroom.smartcontract}}</span></h4>
                                     <h4 class="text-light">Challenge: <span class="text-default">{{selectedClassroom.addressChallenge}}</span></h4>
                                     <h4 class="text-light">Description:</h4>
-                                    <h2 class="description mt-3">{{ensService.getTxDescription(ensService.getNodeFromAddress(selectedClassroom.smartcontract))}}</h2>
+                                    <h2 class="description mt-3">{{selectedClassroom.metadata.description}}</h2>
+                                    <h4 class="text-light">Notice:</h4>
+                                    <h2 class="description mt-3">{{selectedClassroom.metadata.notice}}</h2>
                                 </div>
                             </div>
                         </div>
@@ -490,7 +493,7 @@
         </div>
         <div id="UniversityInfo" *ngIf="modeUniversityAdmin=='loaded'" class="container py-lg-md d-flex">
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="card shadow border-0">
                         <div class="card-body py-5">
                             <h3>University Admin <span class="badge badge-pill badge-success">ready</span></h3>
@@ -679,6 +682,10 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <h4 class="UniversityAdmins mt-3">ENS Name: <span class="text-default">{{universityENSName}}</span> </h4>
+                                    <h4 class="UniversityAdmins mt-3">Description: <span class="text-default">{{universityENSDescription}}</span> </h4>
+                                    <h4 class="UniversityAdmins mt-3">Notice: <span class="text-default">{{universityENSNotice}}</span> </h4>
+                                    <input #inputUniversityAdminENSNotice class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="updateENSNotice(inputUniversityAdminENSNotice.value)">Update</button>
                                 </div>
                             </div>
                         </div>

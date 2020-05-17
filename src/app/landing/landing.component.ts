@@ -37,6 +37,9 @@ export class LandingComponent implements OnInit {
 		'.etherscan.io/address/' +
 		environment.universityAddress;
 	universityName: any;
+	universityENSName: any;
+	universityENSDescription: any;
+	universityENSNotice: any;
 	universityCut: any;
 	universityFunds: any;
 	universityBudget: any;
@@ -62,6 +65,7 @@ export class LandingComponent implements OnInit {
 	public students: Student[] = [];
 	public classrooms = new Array<Classroom>();
 	selectedClassroom: Classroom;
+	service: PortisService | InfuraService;
 
 	constructor(
 		private modalService: ModalService,
@@ -71,7 +75,10 @@ export class LandingComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.refreshUniversityInfo();
+		this.service = this.infuraService;
+		this.ensService
+			.configureProvider(this.infuraService.provider, false)
+			.then(() => this.refreshUniversityInfo());
 	}
 
 	openModal(id: string) {
@@ -108,6 +115,8 @@ export class LandingComponent implements OnInit {
 		const connectUniversity = await this.portisService.conectUniversity();
 		this.mode = 'connected';
 		this.connectedPortis = true;
+		this.service = this.portisService;
+		this.ensService.configureProvider(this.portisService.provider);
 		await this.refreshUniversityInfo();
 		const adminAddress = await this.portisService.getUniversityOwner();
 		this.userIsUniversityAdmin = this.address === adminAddress;
@@ -117,24 +126,36 @@ export class LandingComponent implements OnInit {
 	}
 
 	async refreshUniversityInfo(): Promise<any> {
-		const service = this.connectedPortis
-			? this.portisService
-			: this.infuraService;
-		this.universityName = await service.getUniversityName();
-		this.universityCut = await service.getUniversityCut();
-		this.universityDonations = await service.getUniversityDonations();
-		this.universityFunds = await service.getUniversityFunds();
-		this.universityBudget = await service.getUniversityBudget();
-		this.universityRevenue = await service.getUniversityRevenue();
-		this.universityReturns = await service.getUniversityReturns();
-		this.updateClassrooms(service).then(
-			() => (this.classlistLoaded = true)
-		);
+		this.universityName = await this.service.getUniversityName();
+		this.universityCut = await this.service.getUniversityCut();
+		this.universityDonations = await this.service.getUniversityDonations();
+		this.universityFunds = await this.service.getUniversityFunds();
+		this.universityBudget = await this.service.getUniversityBudget();
+		this.universityRevenue = await this.service.getUniversityRevenue();
+		this.universityReturns = await this.service.getUniversityReturns();
+		this.refreshUniversityMetadata();
+		this.updateClassrooms().then(() => (this.classlistLoaded = true));
 	}
 
-	async updateClassrooms(service: PortisService | InfuraService) {
-		let classroomCount = await service.getClassroomCount();
-		if (this.classrooms.length == (classroomCount + CLASSROOMS.length)) return;
+	async refreshUniversityMetadata() {
+		this.universityENSName = await this.ensService.lookupAddress(
+			environment.universityAddress
+		);
+		this.universityENSDescription = await this.ensService.getTxDescription();
+		this.universityENSNotice = await this.ensService.getTxNotice();
+
+	}
+
+	async updateENSNotice(text: string) {
+		const tx = await this.ensService.setTxRecord('notice', text);
+		await tx.wait();
+		await this.refreshUniversityMetadata();
+	}
+
+	async updateClassrooms() {
+		let classroomCount = await this.service.getClassroomCount();
+		if (this.classrooms.length == classroomCount + CLASSROOMS.length)
+			return;
 		this.classlistLoaded = false;
 		this.classrooms = new Array<Classroom>();
 		let index = 0;
@@ -155,32 +176,47 @@ export class LandingComponent implements OnInit {
 				isFinished,
 				addressChallenge,
 				owner,
-			] = await service.getClassroomInfo(index);
-			this.classrooms.push(
-				new Classroom(
-					index,
-					title,
-					smartcontract,
-					startDate,
-					finishDate,
-					duration / (60 * 60 * 24),
-					price,
-					minScore,
-					cutPrincipal / 1e4,
-					cutPool / 1e4,
-					isOpen,
-					isEmpty,
-					isActive,
-					isFinished,
-					addressChallenge,
-					owner
-				)
+			] = await this.service.getClassroomInfo(index);
+			const newClassroom = new Classroom(
+				index,
+				title,
+				smartcontract,
+				startDate,
+				finishDate,
+				duration / (60 * 60 * 24),
+				price,
+				minScore,
+				cutPrincipal / 1e4,
+				cutPool / 1e4,
+				isOpen,
+				isEmpty,
+				isActive,
+				isFinished,
+				addressChallenge,
+				owner
 			);
+			this.classrooms.push(newClassroom);
+			this.refreshClassroomMetadata(newClassroom);
 			index++;
 		}
-		CLASSROOMS.forEach(element => {
+		CLASSROOMS.forEach((element) => {
 			this.classrooms.push(element);
 		});
+	}
+
+	async refreshClassroomMetadata(
+		classroom: Classroom
+	) {
+		const normalName = classroom.title.toLowerCase().replace(/\s/g, "");
+		const node = this.ensService.getSubNode(normalName);
+		const record = await this.ensService.hasRecord(node);
+		if (!record) return;
+		classroom.metadata.email = await this.ensService.getTxEmail(node);
+		classroom.metadata.url = await this.ensService.getTxURL(node);
+		classroom.metadata.avatar = await this.ensService.getTxAvatar(node);
+		classroom.metadata.description = await this.ensService.getTxDescription(node);
+		classroom.metadata.notice = await this.ensService.getTxNotice(node);
+		classroom.metadata.keywords = await this.ensService.getTxKeywordsArray(node);
 	}
 
 	async refreshAccountInfo(): Promise<any> {
@@ -276,7 +312,8 @@ export class LandingComponent implements OnInit {
 				Number(_Duration),
 				_Challengeaddress
 			)
-			.then(() => this.updateClassrooms(this.portisService));
+			.then(() => this.updateClassrooms());
+		this.ensService.setSubnodeRecord(_Name.toLocaleLowerCase().replace(/\s/g, ""), _Owner);
 	}
 
 	async getRoleMembers(role: string) {

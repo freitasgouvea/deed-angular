@@ -6,6 +6,7 @@ export class Classroom {
 	public startDate_String: string;
 	public finishDate_String: string;
 	dateStringOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+	public metadata = {email: '', url: '', avatar: '', description: '', notice: '', keywords: ['']}
 
     constructor(
         public id: Number,
