@@ -16,7 +16,6 @@ import { ModalService } from '../_modal';
 import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
 import { ENSService } from '../services/ens.service';
-import Web3 from 'web3';
 import { environment } from 'src/environments/environment';
 import { ResourceLoader } from '@angular/compiler';
 
@@ -38,8 +37,12 @@ export class LandingComponent implements OnInit {
 		environment.universityAddress;
 	universityName: any;
 	universityENSName: any;
-	universityENSDescription: any;
+	universityENSNameRecord = false;
+	universityENSTTL: any;
+	universityENSDescription = 'Loading...';
 	universityENSNotice: any;
+	universityENSHasNotice = false;
+	universityDisplayNotice = true;
 	universityCut: any;
 	universityFunds: any;
 	universityBudget: any;
@@ -47,6 +50,7 @@ export class LandingComponent implements OnInit {
 	universityRevenue: any;
 	universityReturns: any;
 	universityAdmin: any;
+	universityParams: any;
 
 	//StudentSelfRegister
 	public _name = 'any';
@@ -84,8 +88,13 @@ export class LandingComponent implements OnInit {
 	openModal(id: string) {
 		this.modalService.open(id);
 	}
+
 	closeModal(id: string) {
 		this.modalService.close(id);
+	}
+
+	closeUniversityNotice() {
+		this.universityDisplayNotice = false;
 	}
 
 	onSelect(classroom: Classroom): void {
@@ -126,13 +135,6 @@ export class LandingComponent implements OnInit {
 	}
 
 	async refreshUniversityInfo(): Promise<any> {
-		this.universityName = await this.service.getUniversityName();
-		this.universityCut = await this.service.getUniversityCut();
-		this.universityDonations = await this.service.getUniversityDonations();
-		this.universityFunds = await this.service.getUniversityFunds();
-		this.universityBudget = await this.service.getUniversityBudget();
-		this.universityRevenue = await this.service.getUniversityRevenue();
-		this.universityReturns = await this.service.getUniversityReturns();
 		this.refreshUniversityMetadata();
 		this.updateClassrooms().then(() => (this.classlistLoaded = true));
 	}
@@ -141,15 +143,43 @@ export class LandingComponent implements OnInit {
 		this.universityENSName = await this.ensService.lookupAddress(
 			environment.universityAddress
 		);
+		this.universityENSNameRecord = await this.ensService.checkENSRecord();
+		this.universityENSTTL = await this.ensService.getTTL();
 		this.universityENSDescription = await this.ensService.getTxDescription();
 		this.universityENSNotice = await this.ensService.getTxNotice();
-
+		this.universityENSHasNotice = this.universityENSNotice.length > 0;
+		this.universityName = await this.service.getUniversityName();
+		this.universityCut = await this.service.getUniversityCut();
+		this.universityDonations = await this.service.getUniversityDonations();
+		this.universityFunds = await this.service.getUniversityFunds();
+		this.universityBudget = await this.service.getUniversityBudget();
+		this.universityRevenue = await this.service.getUniversityRevenue();
+		this.universityReturns = await this.service.getUniversityReturns();
+		this.universityParams = await this.service.getUniversityParams();
 	}
 
 	async updateENSNotice(text: string) {
-		const tx = await this.ensService.setTxRecord('notice', text);
-		await tx.wait();
+		await this.service.setTxRecord(this.ensService.node, 'notice', text);
 		await this.refreshUniversityMetadata();
+	}
+
+	async updateENSDescription(text: string) {
+		await this.service.setTxRecord(
+			this.ensService.node,
+			'description',
+			text
+		);
+		await this.refreshUniversityMetadata();
+	}
+
+	async setupUniversityENS() {
+		const normalName = this.universityName.toLowerCase().replace(/\s/g, '');
+		if (!this.universityENSNameRecord)
+			await this.service.registerInRegistrar(normalName);
+		const node = this.ensService.node;
+		await this.service.setResolver(node);
+		await this.service.setAddr(node, environment.universityAddress);
+		await this.service.setReverse(normalName + environment.ENSDomain);
 	}
 
 	async updateClassrooms() {
@@ -204,23 +234,25 @@ export class LandingComponent implements OnInit {
 		});
 	}
 
-	async refreshClassroomMetadata(
-		classroom: Classroom
-	) {
-		const normalName = classroom.title.toLowerCase().replace(/\s/g, "");
+	async refreshClassroomMetadata(classroom: Classroom) {
+		const normalName = classroom.title.toLowerCase().replace(/\s/g, '');
 		const node = this.ensService.getSubNode(normalName);
 		const record = await this.ensService.hasRecord(node);
 		if (!record) return;
 		classroom.metadata.email = await this.ensService.getTxEmail(node);
 		classroom.metadata.url = await this.ensService.getTxURL(node);
 		classroom.metadata.avatar = await this.ensService.getTxAvatar(node);
-		classroom.metadata.description = await this.ensService.getTxDescription(node);
+		classroom.metadata.description = await this.ensService.getTxDescription(
+			node
+		);
 		classroom.metadata.notice = await this.ensService.getTxNotice(node);
-		classroom.metadata.keywords = await this.ensService.getTxKeywordsArray(node);
+		classroom.metadata.keywords = await this.ensService.getTxKeywordsArray(
+			node
+		);
 	}
 
 	async refreshAccountInfo(): Promise<any> {
-		this.address = await this.portisService.getAddress();
+		this.address = await this.service.getAddress();
 		//TODO: call student smart contract
 	}
 
@@ -230,7 +262,7 @@ export class LandingComponent implements OnInit {
 			this.txMode = 'failedTX';
 		} else {
 			this.txMode = 'processingTX';
-			const selfRegister = await this.portisService.studentSelfRegister(
+			const selfRegister = await this.service.studentSelfRegister(
 				this._name
 			);
 			if (!selfRegister) {
@@ -239,6 +271,7 @@ export class LandingComponent implements OnInit {
 				this.txMode = 'successTX';
 			}
 		}
+		//TODO: claim university ENS record
 	}
 
 	getClassrooms(id: Number) {
@@ -252,13 +285,13 @@ export class LandingComponent implements OnInit {
 	}
 
 	revokeRole(role: string, address: string) {
-		this.portisService
+		this.service
 			.revokeRole(role, address)
 			.then(() => this.loadUniversityAdmin());
 	}
 
 	grantRole(role: string, address: string) {
-		this.portisService
+		this.service
 			.grantRole(role, address)
 			.then(() => this.loadUniversityAdmin());
 	}
@@ -266,6 +299,7 @@ export class LandingComponent implements OnInit {
 	roleMembersAdmin: Map<string, Array<GenericUser>>;
 
 	loadUniversityAdmin() {
+		this.modeUniversityAdmin = 'unconnected';
 		this.roleMembersAdmin = new Map<string, Array<GenericUser>>();
 		this.getRoleMembers('DEFAULT_ADMIN_ROLE').then((result) => {
 			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'] = result;
@@ -291,6 +325,14 @@ export class LandingComponent implements OnInit {
 		});
 	}
 
+	public async setUniversityOwner(param) {}
+
+	public async setUniversityName(param) {}
+
+	public async setUniversityCut(param) {}
+
+	public async setUniversityParams(param) {}
+
 	public createClassroom(
 		_Owner: string,
 		_Name: string,
@@ -301,7 +343,7 @@ export class LandingComponent implements OnInit {
 		_Duration: string,
 		_Challengeaddress: string
 	) {
-		this.portisService
+		this.service
 			.createClassroom(
 				_Owner,
 				_Name,
@@ -313,10 +355,21 @@ export class LandingComponent implements OnInit {
 				_Challengeaddress
 			)
 			.then(() => this.updateClassrooms());
-		this.ensService.setSubnodeRecord(_Name.toLocaleLowerCase().replace(/\s/g, ""), _Owner);
+	}
+
+	async teacherClaimSubnode(label, owner, classroom){
+		const node = this.ensService.node;
+		const normalName = label.toLowerCase().replace(/\s/g, '');
+		await this.service.claimSubnodeClassroom(node, normalName, owner, classroom);
+	}
+
+	async studentClaimSubnode(label, owner, classroom){
+		const node = this.ensService.node;
+		const normalName = label.toLowerCase().replace(/\s/g, '');
+		await this.service.claimSubnodeStudent(node, normalName, owner, classroom);
 	}
 
 	async getRoleMembers(role: string) {
-		return await this.portisService.listRoles(role);
+		return await this.service.listRoles(role);
 	}
 }

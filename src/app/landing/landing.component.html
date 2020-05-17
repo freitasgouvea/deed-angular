@@ -20,7 +20,13 @@
                             <h1 class="display-3  text-white">decentralized
                                 <span>university</span>
                             </h1>
-                            <p class="lead  text-white">The design system comes with four pre-built pages to help you get started faster. You can change the text and images and you're good to go.</p>
+                            <p class="lead  text-white">{{universityENSDescription}}</p>
+                            <div *ngIf=universityENSHasNotice&&universityDisplayNotice #universityNotice class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" aria-label="Close" (click)="closeUniversityNotice()">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+                                <strong>University Notice: </strong> {{universityENSNotice}}
+                            </div>
                             <div class="btn-wrapper">
                                 <a href="#clasrooms" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                     <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
@@ -499,8 +505,28 @@
                             <h3>University Admin <span class="badge badge-pill badge-success">ready</span></h3>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h2 class="description mt-3">View here a list of every address listed under each role. Add new addresses using the input field. Remove address by clicking the delete button in the list.</h2>
                                     <h4 class="UniversityAdmins mt-3">University Admins:</h4>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h6 class="UniversityAdmins mt-3">University parameters</h6>
+                                                <label for="inputObjUpdateUniversity_Owner" class="UniversityAdmins mt-3">Owner: <span class="text-default">{{universityAdmin}}</span></label>
+                                                <input id="inputObjUpdateUniversity_Owner" #inputUniversity_Owner class="form-control" type="text" size=32>
+                                                <button type="button" (click)="setUniversityOwner(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button><br>
+                                                <label for="inputObjUpdateUniversity_Name" class="UniversityAdmins mt-3">Name: <span class="text-default">{{universityName}}</span></label>
+                                                <input id="inputObjUpdateUniversity_Name" #inputUniversity_Name class="form-control" type="text" size=32>
+                                                <button type="button" (click)="setUniversityName(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button><br>
+                                                <label for="inputObjUpdateUniversity_Cut" class="UniversityAdmins mt-3">Cut: <span class="text-default">{{universityCut}}</span></label>
+                                                <input id="inputObjUpdateUniversity_Cut" #inputUniversity_Cut class="form-control" type="text" size=32>
+                                                <button type="button" (click)="setUniversityCut(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button><br>
+                                                <label for="inputObjUpdateUniversity_ConfigAddress" class="UniversityAdmins mt-3">Config address:</label>
+                                                <br><textarea class="form-control" rows="10" wrap="hard">{{universityParams}}</textarea>
+                                                <input id="inputObjUpdateUniversity_ConfigAddress" #inputUniversity_Configaddress class="form-control" type="text" size=32 rows="10">
+                                                <button type="button" (click)="setUniversityParams(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button><br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="UniversityAdmins mt-3">University Roles:</h4>
                                     <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
                                         <thead>
                                             <tr>
@@ -682,10 +708,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <h4 class="UniversityAdmins mt-3">ENS Name: <span class="text-default">{{universityENSName}}</span> </h4>
+                                    <h4 class="UniversityAdmins mt-3">University ENS Admin</h4>
+                                    <h4 class="UniversityAdmins mt-3">ENS Name: <span class="text-default">{{universityENSName}}</span> <span *ngIf=universityENSNameRecord class="badge badge-pill badge-success">Recorded</span><span *ngIf=!universityENSNameRecord class="badge badge-pill badge-warning">Not Recorded</span></h4>
+                                    <h4 class="UniversityAdmins mt-3">ENS TTL: <span class="text-default">{{universityENSTTL}}</span> </h4>
                                     <h4 class="UniversityAdmins mt-3">Description: <span class="text-default">{{universityENSDescription}}</span> </h4>
+                                    <input #inputUniversityAdminENSDescription class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="updateENSDescription(inputUniversityAdminENSDescription.value)">Update</button>
                                     <h4 class="UniversityAdmins mt-3">Notice: <span class="text-default">{{universityENSNotice}}</span> </h4>
                                     <input #inputUniversityAdminENSNotice class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="updateENSNotice(inputUniversityAdminENSNotice.value)">Update</button>
+                                    <button *ngIf=!universityENSNameRecord type="button" class="btn btn-warning" (click)="setupUniversityENS()">Setup ENS</button>
                                 </div>
                             </div>
                         </div>

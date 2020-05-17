@@ -16,6 +16,7 @@ export class ENSService {
 	name = environment.ENSUniversityName;
 	registrarContract: any;
 	reverseRegistrarContract: any;
+	reverseResolverContract: any;
 	resolverContract: any;
 	address: any;
 	node = ethers.utils.namehash(this.name + this.domain);
@@ -45,6 +46,13 @@ export class ENSService {
 		this.reverseRegistrarContract = new ethers.Contract(
 			environment.ENSReverseRegistrarAddress,
 			ENSReverseRegistrar.abi,
+			setupAccount ? this.provider.getSigner() : this.provider
+		);
+		await this.reverseRegistrarContract.deployed();
+		const reverseResolverAddress = await this.reverseRegistrarContract.defaultResolver();
+		this.reverseResolverContract = new ethers.Contract(
+			reverseResolverAddress,
+			ENSPublicResolver.abi,
 			setupAccount ? this.provider.getSigner() : this.provider
 		);
 		this.resolverContract = new ethers.Contract(
@@ -85,9 +93,10 @@ export class ENSService {
 		return await this.ens.recordExists(node);
 	}
 
-	public async lookupAddress(node: string): Promise<string> {
-		//TODO: do reverse lookup using call from university smartcontract
-		return this.name + this.domain;
+	public async lookupAddress(address: string): Promise<string> {
+		const node = await this.reverseRegistrarContract.node(address);
+		const name = await this.reverseResolverContract.name(node);
+		return name;
 	}
 
 	public async lookupAddressNode(address: string): Promise<string> {
@@ -143,5 +152,14 @@ export class ENSService {
 	public async getTxKeywordsArray(_node = this.node): Promise<Array<string>> {
 		const val = await this.getTxKeywordsString(_node);
 		return val.split(',');
+	}
+
+	public async checkENSRecord(_node = this.node): Promise<boolean> {
+		return await this.ens.recordExists(_node);
+	}
+
+	public async getTTL() {
+		return '';
+		//TODO:
 	}
 }

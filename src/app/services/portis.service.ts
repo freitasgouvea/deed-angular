@@ -46,27 +46,4 @@ export class PortisService extends baseClientService {
 			return true;
 		}
 	}
-
-	async getAddress() {
-		const addresses = await this.provider.listAccounts();
-		return addresses[0];
-	}
-
-	async conectUniversity() {
-		if (!environment.universityAddress)
-			throw new Error('invalid contract address!');
-		if (!University || !University.abi)
-			throw new Error(
-				'invalid contract json, try to run truffle compile!'
-			);
-		if (this.portis.provider) {
-			this.connectContracts(this.provider.getSigner());
-			this.universityName = await this.universityContractInstance.name();
-		} else {
-			console.warn('try to connect with portis!');
-			this.provider = new ethers.providers.JsonRpcProvider(
-				'http://localhost:8545'
-			);
-		}
-	}
 }
