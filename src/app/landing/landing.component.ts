@@ -95,7 +95,7 @@ export class LandingComponent implements OnInit {
 			return;
 		}
 		this.address = await this.portisService.getAddress();
-		const connectUniversity = await this.portisService.conectUniversity();
+		const connectUniversity = await this.portisService.connectUniversity();
 		this.globals.service = this.portisService;
 		this.globals.ensService.configureProvider(this.portisService.provider);
 		await this.refreshUniversityInfo();
