@@ -137,18 +137,12 @@ export class baseClientService {
 		return studentSmartContract;
 	}
 
-<<<<<<< HEAD
 	public async getStudentName() {
 		const answer = await this.studentContractInstance.name();
 		const val = ethers.utils.parseBytes32String(answer);
 		return val;
 	}
 	
-=======
-
-	// View Classroom info
-
->>>>>>> develop
 	public async getClassroomOwner() {
 		const answer = await this.classroomContractInstance.owner();
 	}

@@ -49,6 +49,7 @@ export class LandingComponent implements OnInit {
 	async ngOnInit() {
 		if (!this.globals.service) {
 			this.globals.service = new InfuraService();
+			console.log(this.globals.ensService)
 			await this.globals.ensService.configureProvider(
 				this.globals.service.provider,
 				false
