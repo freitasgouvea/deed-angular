@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 
 import * as University from '../../../build/contracts/University.json';
 import * as Classroom from '../../../build/contracts/Classroom.json';
+import * as Student from '../../../build/contracts/Student.json';
 import { GenericUser } from '../../models/genericUser.model';
 
 @Injectable({
@@ -69,6 +70,12 @@ export class baseClientService {
 		}
 	}
 
+	public async isStudentRegistred() {
+		const studentAdress = await this.getAddress();
+		const check = await this.universityContractInstance.studentIsRegistered(studentAdress);
+		return check 
+	}
+	
 	public async getClassroomOwner() {
 		const answer = await this.classroomContractInstance.owner();
 	}
