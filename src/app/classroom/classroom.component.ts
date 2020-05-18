@@ -20,8 +20,6 @@ export class ClassroomComponent implements OnInit {
 	public form: FormGroup;
 	userIsClassroomAdmin = false;
 
-	address: any;
-
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
@@ -50,7 +48,7 @@ export class ClassroomComponent implements OnInit {
 			.then(
 				(adminAddress) =>
 					(this.globals.userIsClassroomAdmin =
-						this.address === adminAddress)
+						(this.globals.address == adminAddress))
 			);
 		this.globals.service
 			.getDAIBalance(this.globals.selectedClassroom.smartcontract)
@@ -66,7 +64,7 @@ export class ClassroomComponent implements OnInit {
 			this.globals.mode = 'unconnected';
 			return;
 		}
-		this.address = await this.portisService.getAddress();
+		this.globals.address = await this.portisService.getAddress();
 		await this.portisService.connectClassroom(
 			this.globals.selectedClassroom.smartcontract
 		);
@@ -74,7 +72,7 @@ export class ClassroomComponent implements OnInit {
 		this.globals.service = this.portisService;
 		this.globals.ensService.configureProvider(this.portisService.provider);
 		const adminAddress = await this.portisService.getClassroomOwner();
-		this.globals.userIsClassroomAdmin = this.address === adminAddress;
+		this.globals.userIsClassroomAdmin = (this.globals.address == adminAddress);
 	}
 
 	openModal(id: string) {

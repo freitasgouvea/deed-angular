@@ -26,7 +26,6 @@ export class LandingComponent implements OnInit {
 
 	//StudentSelfRegister
 	public _name = 'any';
-	address: any;
 
 	universityEtherscan =
 		'https://' +
@@ -100,11 +99,11 @@ export class LandingComponent implements OnInit {
 			this.globals.mode = 'unconnected';
 			return;
 		}
-		this.address = await this.portisService.getAddress();
+		this.globals.address = await this.portisService.getAddress();
 		this.globals.service = this.portisService;
 		this.globals.ensService.configureProvider(this.portisService.provider);
 		const adminAddress = await this.portisService.getUniversityOwner();
-		this.globals.userIsUniversityAdmin = this.address === adminAddress;
+		this.globals.userIsUniversityAdmin = this.globals.address === adminAddress;
 		const isRegistered = await this.globals.service.getUniversityOwner();
 		if (!isRegistered) {
 			this.globals.mode = 'connected';
@@ -241,7 +240,7 @@ export class LandingComponent implements OnInit {
 	}
 
 	async refreshAccountInfo(): Promise<any> {
-		this.address = await this.globals.service.getAddress();
+		this.globals.address = await this.globals.service.getAddress();
 		//TODO: call student smart contract
 	}
 
