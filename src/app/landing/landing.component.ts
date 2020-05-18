@@ -113,9 +113,15 @@ export class LandingComponent implements OnInit {
 	}
 
 	async refreshUniversityInfo(): Promise<any> {
+		if (this.globals.pageParalelRefreshLock) return;
+		this.globals.pageParalelRefreshLock = true;
 		this.refreshUniversityMetadata();
-		this.updateClassrooms().then(() => (this.globals.classlistLoaded = true));
-		this.globals.universityInfoNeedsRefresh = false;
+		this.updateClassrooms().then(() =>
+			{
+				this.globals.classlistLoaded = true;
+				this.globals.universityInfoNeedsRefresh = false;
+				this.globals.pageParalelRefreshLock = false;
+			});
 	}
 
 	async refreshUniversityMetadata() {

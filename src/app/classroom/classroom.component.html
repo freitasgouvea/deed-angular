@@ -81,7 +81,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-4">
+                <div *ngIf=!globals.userIsClassroomAdmin class="row mb-4">
                     <div class="col-lg-4 mt-4">
                         <div class="card card-lift--hover shadow border-0 text-center">
                             <div class="card-body py-5">
@@ -185,6 +185,30 @@
             </div>
         </div>
     </section>
+    <div *ngIf=globals.userIsClassroomAdmin class="container">
+        <br><br><br>
+        <div class="card card-profile shadow mt--300">
+            <div class="px-4">
+                <div class="row justify-content-center">
+                    <br>
+                    <button class="btn btn-md btn-info width:120px">Metadata</button><button class="btn btn-md btn-default width:120px">Params</button><button class="btn btn-md btn-warning width:120px">Configs</button><button class="btn btn-md btn-warning width:120px">Transfer</button>
+                </div>
+                <div class="text-center mt-5">
+                    <h4 *ngIf=globals.selectedClassroom.isClassroomNotOpen() class="text-light">Status: <span class="badge badge-pill badge-info">Not Open</span></h4>
+                    <h4 *ngIf=globals.selectedClassroom.isClassroomOpen() class="text-light">Status: <span class="badge badge-pill badge-success">Open</span></h4>
+                    <h4 *ngIf=globals.selectedClassroom.isClassroomClosed() class="text-light">Status: <span class="badge badge-pill badge-warning">Closed</span></h4>
+                    <h4 *ngIf=globals.selectedClassroom.isClassroomActive() class="text-light">Status: <span class="badge badge-pill badge-primary">Ongoing</span></h4>
+                    <h4 *ngIf=globals.selectedClassroom.courseFinished class="text-light">Status: <span class="badge badge-pill badge-dark">Finished</span></h4>
+                </div>
+                <div class="mt-5 py-5 border-top text-center">
+                    <h4>Classroom Management</h4>
+                </div>
+                <div class="mt-5 py-5 text-left">
+                    <h2>Test text</h2>
+                </div>
+            </div>
+        </div>
+    </div>
     <jw-modal id="custom-modal-register">
         <form role="form">
             <div class="row justify-content-center">
