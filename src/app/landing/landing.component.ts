@@ -24,63 +24,38 @@ export class LandingComponent implements OnInit {
 	page = 2;
 	page1 = 3;
 
+	//StudentSelfRegister
+	public _name = 'any';
+	address: any;
+
 	universityEtherscan =
 		'https://' +
 		environment.network +
 		'.etherscan.io/address/' +
 		environment.universityAddress;
-	universityName: any;
-	universityENSName: any;
-	universityENSNameRecord = false;
-	universityENSTTL: any;
-	universityENSDescription = 'Loading...';
-	universityENSNotice: any;
-	universityENSHasNotice = false;
-	universityDisplayNotice = true;
-	universityCut: any;
-	universityFunds: any;
-	universityBudget: any;
-	universityDonations: any;
-	universityRevenue: any;
-	universityReturns: any;
-	universityAdmin: any;
-	universityParams: any;
-
-	//StudentSelfRegister
-	public _name = 'any';
-	address: any;
-
-	//Finished loading classlist info
-	public classlistLoaded = false;
 
 	public modeUniversityAdmin = 'unconnected';
 	public txMode = 'off';
 	public receipt: any;
 	public form: FormGroup;
 	public students: Student[] = [];
-	public classrooms = new Array<Classroom>();
-	selectedClassroom: Classroom;
 
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
 		public portisService: PortisService,
-		public infuraService: InfuraService,
-		public ensService: ENSService
 	) {}
 
-	ngOnInit() {
+	async ngOnInit() {
 		if (!this.globals.service) {
-			this.globals.service = this.infuraService;
-			this.ensService.configureProvider(
-				this.infuraService.provider,
+			this.globals.service = new InfuraService();
+			await this.globals.ensService.configureProvider(
+				this.globals.service.provider,
 				false
 			);
 			console.log("Connected to infura");
 		}
-		this.ensService
-			.configureProvider(this.globals.service.provider, false)
-			.then(() => this.refreshUniversityInfo());
+		if (this.globals.universityInfoNeedsRefresh) this.refreshUniversityInfo()
 	}
 
 	openModal(id: string) {
@@ -92,11 +67,12 @@ export class LandingComponent implements OnInit {
 	}
 
 	closeUniversityNotice() {
-		this.universityDisplayNotice = false;
+		this.globals.universityDisplayNotice = false;
 	}
 
-	onSelect(classroom: Classroom): void {
-		this.selectedClassroom = classroom;
+	onSelect(classroom: Classroom | void): void {
+		if (classroom) this.globals.selectedClassroom = classroom;
+		else this.globals.selectedClassroom = null;
 	}
 
 	txOn() {
@@ -119,9 +95,9 @@ export class LandingComponent implements OnInit {
 			return;
 		}
 		this.address = await this.portisService.getAddress();
-		const connectUniversity = await this.portisService.conectUniversity();
+		const connectUniversity = await this.portisService.connectUniversity();
 		this.globals.service = this.portisService;
-		this.ensService.configureProvider(this.portisService.provider);
+		this.globals.ensService.configureProvider(this.portisService.provider);
 		await this.refreshUniversityInfo();
 		const adminAddress = await this.portisService.getUniversityOwner();
 		this.globals.userIsUniversityAdmin = this.address === adminAddress;
@@ -138,36 +114,37 @@ export class LandingComponent implements OnInit {
 
 	async refreshUniversityInfo(): Promise<any> {
 		this.refreshUniversityMetadata();
-		this.updateClassrooms().then(() => (this.classlistLoaded = true));
+		this.updateClassrooms().then(() => (this.globals.classlistLoaded = true));
+		this.globals.universityInfoNeedsRefresh = false;
 	}
 
 	async refreshUniversityMetadata() {
-		this.universityENSName = await this.ensService.lookupAddress(
+		this.globals.universityENSName = await this.globals.ensService.lookupAddress(
 			environment.universityAddress
 		);
-		this.universityENSNameRecord = await this.ensService.checkENSRecord();
-		this.universityENSTTL = await this.ensService.getTTL();
-		this.universityENSDescription = await this.ensService.getTxDescription();
-		this.universityENSNotice = await this.ensService.getTxNotice();
-		this.universityENSHasNotice = this.universityENSNotice.length > 0;
-		this.universityName = await this.globals.service.getUniversityName();
-		this.universityCut = await this.globals.service.getUniversityCut();
-		this.universityDonations = await this.globals.service.getUniversityDonations();
-		this.universityFunds = await this.globals.service.getUniversityFunds();
-		this.universityBudget = await this.globals.service.getUniversityBudget();
-		this.universityRevenue = await this.globals.service.getUniversityRevenue();
-		this.universityReturns = await this.globals.service.getUniversityReturns();
-		this.universityParams = await this.globals.service.getUniversityParams();
+		this.globals.universityENSNameRecord = await this.globals.ensService.checkENSRecord();
+		this.globals.universityENSTTL = await this.globals.ensService.getTTL();
+		this.globals.universityENSDescription = await this.globals.ensService.getTxDescription();
+		this.globals.universityENSNotice = await this.globals.ensService.getTxNotice();
+		this.globals.universityENSHasNotice = this.globals.universityENSNotice.length > 0;
+		this.globals.universityName = await this.globals.service.getUniversityName();
+		this.globals.universityCut = await this.globals.service.getUniversityCut();
+		this.globals.universityDonations = await this.globals.service.getUniversityDonations();
+		this.globals.universityFunds = await this.globals.service.getUniversityFunds();
+		this.globals.universityBudget = await this.globals.service.getUniversityBudget();
+		this.globals.universityRevenue = await this.globals.service.getUniversityRevenue();
+		this.globals.universityReturns = await this.globals.service.getUniversityReturns();
+		this.globals.universityParams = await this.globals.service.getUniversityParams();
 	}
 
 	async updateENSNotice(text: string) {
-		await this.globals.service.setTxRecord(this.ensService.node, 'notice', text);
+		await this.globals.service.setTxRecord(this.globals.ensService.node, 'notice', text);
 		await this.refreshUniversityMetadata();
 	}
 
 	async updateENSDescription(text: string) {
 		await this.globals.service.setTxRecord(
-			this.ensService.node,
+			this.globals.ensService.node,
 			'description',
 			text
 		);
@@ -175,10 +152,10 @@ export class LandingComponent implements OnInit {
 	}
 
 	async setupUniversityENS() {
-		const normalName = this.universityName.toLowerCase().replace(/\s/g, '');
-		if (!this.universityENSNameRecord)
+		const normalName = this.globals.universityName.toLowerCase().replace(/\s/g, '');
+		if (!this.globals.universityENSNameRecord)
 			await this.globals.service.registerInRegistrar(normalName);
-		const node = this.ensService.node;
+		const node = this.globals.ensService.node;
 		await this.globals.service.setResolver(node);
 		await this.globals.service.setAddr(node, environment.universityAddress);
 		await this.globals.service.setReverse(normalName + environment.ENSDomain);
@@ -186,10 +163,10 @@ export class LandingComponent implements OnInit {
 
 	async updateClassrooms() {
 		let classroomCount = await this.globals.service.getClassroomCount();
-		if (this.classrooms.length == classroomCount + CLASSROOMS.length)
+		if (this.globals.classrooms.length == classroomCount + CLASSROOMS.length)
 			return;
-		this.classlistLoaded = false;
-		this.classrooms = new Array<Classroom>();
+		this.globals.classlistLoaded = false;
+		this.globals.classrooms = new Array<Classroom>();
 		let index = 0;
 		while (index < classroomCount) {
 			const [
@@ -227,28 +204,28 @@ export class LandingComponent implements OnInit {
 				addressChallenge,
 				owner
 			);
-			this.classrooms.push(newClassroom);
+			this.globals.classrooms.push(newClassroom);
 			this.refreshClassroomMetadata(newClassroom);
 			index++;
 		}
 		CLASSROOMS.forEach((element) => {
-			this.classrooms.push(element);
+			this.globals.classrooms.push(element);
 		});
 	}
 
 	async refreshClassroomMetadata(classroom: Classroom) {
 		const normalName = classroom.title.toLowerCase().replace(/\s/g, '');
-		const node = this.ensService.getSubNode(normalName);
-		const record = await this.ensService.hasRecord(node);
+		const node = this.globals.ensService.getSubNode(normalName);
+		const record = await this.globals.ensService.hasRecord(node);
 		if (!record) return;
-		classroom.metadata.email = await this.ensService.getTxEmail(node);
-		classroom.metadata.url = await this.ensService.getTxURL(node);
-		classroom.metadata.avatar = await this.ensService.getTxAvatar(node);
-		classroom.metadata.description = await this.ensService.getTxDescription(
+		classroom.metadata.email = await this.globals.ensService.getTxEmail(node);
+		classroom.metadata.url = await this.globals.ensService.getTxURL(node);
+		classroom.metadata.avatar = await this.globals.ensService.getTxAvatar(node);
+		classroom.metadata.description = await this.globals.ensService.getTxDescription(
 			node
 		);
-		classroom.metadata.notice = await this.ensService.getTxNotice(node);
-		classroom.metadata.keywords = await this.ensService.getTxKeywordsArray(
+		classroom.metadata.notice = await this.globals.ensService.getTxNotice(node);
+		classroom.metadata.keywords = await this.globals.ensService.getTxKeywordsArray(
 			node
 		);
 	}
@@ -280,9 +257,9 @@ export class LandingComponent implements OnInit {
 		const data = localStorage.getItem('classrooms');
 		console.log(data);
 		if (data) {
-			this.classrooms = JSON.parse(data);
+			this.globals.classrooms = JSON.parse(data);
 		} else {
-			this.classrooms = [];
+			this.globals.classrooms = [];
 		}
 	}
 
@@ -360,7 +337,7 @@ export class LandingComponent implements OnInit {
 	}
 
 	async teacherClaimSubnode(label, owner, classroom) {
-		const node = this.ensService.node;
+		const node = this.globals.ensService.node;
 		const normalName = label.toLowerCase().replace(/\s/g, '');
 		await this.globals.service.claimSubnodeClassroom(
 			node,
@@ -371,7 +348,7 @@ export class LandingComponent implements OnInit {
 	}
 
 	async studentClaimSubnode(label, owner, classroom) {
-		const node = this.ensService.node;
+		const node = this.globals.ensService.node;
 		const normalName = label.toLowerCase().replace(/\s/g, '');
 		await this.globals.service.claimSubnodeStudent(
 			node,

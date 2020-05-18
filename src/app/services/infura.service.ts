@@ -30,7 +30,7 @@ export class InfuraService extends baseClientService {
 		);
 	}
 
-	public connectClassroom(address: string){
+	public async connectClassroom(address: string){
 		this.classroomContractInstance = new ethers.Contract(
 			address,
 			Classroom.abi,
