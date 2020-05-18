@@ -18,6 +18,7 @@ export class Globals {
 	public universityENSNameRecord = false;
 	public universityENSHasNotice = false;
 	public universityDisplayNotice = true;
+	public pageParalelRefreshLock = false;
 	public classlistLoaded = false;
 	public universityENSDescription = 'Loading...';
 

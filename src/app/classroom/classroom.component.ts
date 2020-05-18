@@ -12,7 +12,7 @@ import { ENSService } from '../services/ens.service';
 @Component({
 	selector: 'app-classroom',
 	templateUrl: './classroom.component.html',
-	styleUrls: ['./classroom.component.css']
+	styleUrls: ['./classroom.component.css'],
 })
 export class ClassroomComponent implements OnInit {
 	focus;
@@ -20,11 +20,13 @@ export class ClassroomComponent implements OnInit {
 	public form: FormGroup;
 	userIsClassroomAdmin = false;
 
+	address: any;
+
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
 		public portisService: PortisService,
-		public infuraService: InfuraService,
+		public infuraService: InfuraService
 	) {}
 
 	async ngOnInit() {
@@ -34,15 +36,28 @@ export class ClassroomComponent implements OnInit {
 				this.infuraService.provider,
 				false
 			);
-			console.log("Connected to infura");
+			console.log('Connected to infura');
 		}
 		if (!this.globals.selectedClassroom) return;
-		this.globals.service.connectClassroom(
-			this.globals.selectedClassroom.smartcontract
-		);
+		this.globals.service
+			.connectClassroom(this.globals.selectedClassroom.smartcontract)
+			.then(() => this.refreshClassroomInfo());
 	}
 
-	address: any;
+	public refreshClassroomInfo() {
+		this.globals.service
+			.getClassroomOwner()
+			.then(
+				(adminAddress) =>
+					(this.globals.userIsClassroomAdmin =
+						this.address === adminAddress)
+			);
+		this.globals.service
+			.getDAIBalance(this.globals.selectedClassroom.smartcontract)
+			.then(
+				(val) => (this.globals.selectedClassroom.classdata.funds = val)
+			);
+	}
 
 	async conectPortis(): Promise<any> {
 		this.globals.mode = 'loadingPage';
@@ -52,15 +67,15 @@ export class ClassroomComponent implements OnInit {
 			return;
 		}
 		this.address = await this.portisService.getAddress();
-		await this.portisService.connectClassroom(this.globals.selectedClassroom.smartcontract);
+		await this.portisService.connectClassroom(
+			this.globals.selectedClassroom.smartcontract
+		);
 		this.globals.mode = 'connected';
 		this.globals.service = this.portisService;
 		this.globals.ensService.configureProvider(this.portisService.provider);
 		const adminAddress = await this.portisService.getClassroomOwner();
 		this.globals.userIsClassroomAdmin = this.address === adminAddress;
 	}
-
-	async refreshClassroomInfo() {}
 
 	openModal(id: string) {
 		this.modalService.open(id);

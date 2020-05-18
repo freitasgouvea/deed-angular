@@ -95,10 +95,8 @@ export class LandingComponent implements OnInit {
 			return;
 		}
 		this.address = await this.portisService.getAddress();
-		const connectUniversity = await this.portisService.connectUniversity();
 		this.globals.service = this.portisService;
 		this.globals.ensService.configureProvider(this.portisService.provider);
-		await this.refreshUniversityInfo();
 		const adminAddress = await this.portisService.getUniversityOwner();
 		this.globals.userIsUniversityAdmin = this.address === adminAddress;
 		const isRegistered = await this.globals.service.getUniversityOwner();
@@ -113,9 +111,15 @@ export class LandingComponent implements OnInit {
 	}
 
 	async refreshUniversityInfo(): Promise<any> {
+		if (this.globals.pageParalelRefreshLock) return;
+		this.globals.pageParalelRefreshLock = true;
 		this.refreshUniversityMetadata();
-		this.updateClassrooms().then(() => (this.globals.classlistLoaded = true));
-		this.globals.universityInfoNeedsRefresh = false;
+		this.updateClassrooms().then(() =>
+			{
+				this.globals.classlistLoaded = true;
+				this.globals.universityInfoNeedsRefresh = false;
+				this.globals.pageParalelRefreshLock = false;
+			});
 	}
 
 	async refreshUniversityMetadata() {

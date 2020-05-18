@@ -28,6 +28,7 @@ export class PortisService extends baseClientService {
 
 	constructor() {
 		super();
+		this.useSigner = true;
 	}
 
 	async initPortis() {
@@ -35,7 +36,7 @@ export class PortisService extends baseClientService {
 			this.portis.provider
 		);
 		await this.portis.provider.enable();
-		this.setupProvider(provider);
+		await this.setupProvider(provider);
 		this.networkName = await this.provider.getNetwork();
 		const address = await this.getAddress();
 		if (address === '') {
