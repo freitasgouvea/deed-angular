@@ -52,7 +52,6 @@ export class LandingComponent implements OnInit {
 
 	//Finished loading classlist info
 	public classlistLoaded = false;
-
 	public modeUniversityAdmin = 'unconnected';
 	public txMode = 'off';
 	public receipt: any;
