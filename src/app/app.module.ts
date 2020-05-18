@@ -10,6 +10,7 @@ import { LandingComponent } from './landing/landing.component';
 import { ClassroomComponent } from './classroom/classroom.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
+import { StudentComponent } from './student/student.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { FooterComponent } from './footer/footer.component';
     LandingComponent,
     ClassroomComponent,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    StudentComponent
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,7 @@ import { GenericUser } from '../../models/genericUser.model';
 export class baseClientService {
 	public universityContractInstance: any;
 	public classroomContractInstance: any;
+	public studentContractInstance: any;
 	public DAIContract: any;
 	public CDAIContract: any;
 	public ADAIContract: any;
@@ -111,13 +112,40 @@ export class baseClientService {
 
 	// View Student info
 
+	async conectStudent() {
+		const smartContractAddress = await this.getStudentSmartContract();
+		if (!smartContractAddress)
+			throw new Error('invalid contract smartContractAddress!');
+		if (!Student || !Student.abi)
+			throw new Error(
+				'invalid contract json, try to run truffle compile!'
+			);
+		if (this.provider) {
+			this.studentContractInstance = new ethers.Contract(
+				smartContractAddress,
+				Student.abi,
+				this.provider.getSigner()
+			);
+		} else {
+			console.warn('try to connect with portis!');
+			this.provider = new ethers.providers.JsonRpcProvider(
+				'http://localhost:8545'
+			);
+		}
+	}
+
 	public async isStudentRegistred() {
 		const studentAdress = await this.getAddress();
-		const check = await this.universityContractInstance.studentIsRegistered(
-			studentAdress
-		);
+		const check = await this.universityContractInstance.studentIsRegistered(studentAdress);
 		return check;
 	}
+
+	public async getStudentSmartContract() {
+		const studentSmartContract = await this.universityContractInstance.myStudentAddress();
+		console.log(studentSmartContract);
+		return studentSmartContract;
+	}
+	
 
 	// View Classroom info
 
