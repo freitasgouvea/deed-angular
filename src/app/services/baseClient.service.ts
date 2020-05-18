@@ -27,7 +27,7 @@ export class baseClientService {
 		return addresses[0];
 	}
 
-	async conectUniversity() {
+	async connectUniversity() {
 		if (!environment.universityAddress)
 			throw new Error('invalid contract address!');
 		if (!University || !University.abi)
@@ -48,8 +48,8 @@ export class baseClientService {
 		}
 	}
 
-	async conectClassroom(address: string) {
-		if (!address)
+	async connectClassroom(address: string) {
+		if (!address || address.length < 40)
 			throw new Error('invalid contract address!');
 		if (!Classroom || !Classroom.abi)
 			throw new Error(

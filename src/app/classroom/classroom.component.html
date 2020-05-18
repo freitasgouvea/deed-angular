@@ -12,7 +12,7 @@
         </div>
         <div class="container py-lg-md d-flex">
             <div class="col">
-                <div *ngIf=selectedClassroom class="row mb-4">
+                <div *ngIf=globals.selectedClassroom class="row mb-4">
                     <div class="col-lg-8 mb-4">
                         <h1 class="display-3  text-white">classroom
                             <span>Learn Solidity</span>
@@ -24,13 +24,13 @@
                                 <span class="btn-inner--icon"><i class="fa fa-search"></i></span>
                                 <span class="btn-inner--text">Details</span>
                             </a>
-                            <a href="#clasrooms" class="btn btn-white btn-icon mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
+                            <a href="#classrooms" class="btn btn-white btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-4" *ngIf="mode=='loadingPage'">
+                    <div class="col-lg-4" *ngIf="globals.mode=='loadingPage'">
                         <div class="card card-lift--hover shadow border-0 text-center">
                             <div class="card-body py-5">
                                 <div class="icon icon-shape icon-shape-warning rounded-circle fa-3x mb-4">
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4" *ngIf="mode=='unconnected'">
+                    <div class="col-lg-4" *ngIf="globals.mode=='unconnected'">
                         <div class="card card-lift--hover shadow border-0 text-center">
                             <div class="card-body py-5">
                                 <div class="icon icon-shape icon-shape-info rounded-circle mb-4">
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4" *ngIf="mode=='connected'">
+                    <div class="col-lg-4" *ngIf="globals.mode=='connected'">
                         <div class="card card-lift--hover shadow border-0 text-center">
                             <div class="card-body py-5">
                                 <div class="icon icon-shape icon-shape-primary rounded-circle mb-4">
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4" *ngIf="mode=='registered'">
+                    <div class="col-lg-4" *ngIf="globals.mode=='registered'">
                         <div class="card card-lift--hover shadow border-0 text-center">
                             <div class="card-body py-5">
                                 <div class="icon icon-shape icon-shape-success rounded-circle mb-4">
@@ -90,7 +90,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Apply For Course</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=selectedClassroom (click)="openModal('custom-modal-1')" class="btn btn-default mt-4 text-white">Apply</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-1')" class="btn btn-default mt-4 text-white">Apply</a>
                             </div>
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Call for a Grant</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=selectedClassroom (click)="openModal('custom-modal-2')" class="btn btn-default mt-4 text-white">Call</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-2')" class="btn btn-default mt-4 text-white">Call</a>
                             </div>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Start Application</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=selectedClassroom (click)="openModal('custom-modal-3')" class="btn btn-default mt-4 text-white">Deposit</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-3')" class="btn btn-default mt-4 text-white">Deposit</a>
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Access Material</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=selectedClassroom (click)="openModal('custom-modal-4')" class="btn btn-default mt-4 text-white">Recieve</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-4')" class="btn btn-default mt-4 text-white">Recieve</a>
                             </div>
                         </div>
                     </div>
@@ -138,20 +138,47 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Submit Your Answer</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=selectedClassroom (click)="openModal('custom-modal-5')" class="btn btn-default mt-4 text-white">Submit</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-5')" class="btn btn-default mt-4 text-white">Submit</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12 mt-4">
+                    <div class="col-lg-8 mt-4">
                         <div class="card card-lift--hover shadow border-0 text-center">
-                            <div class="card-body py-5 bg-success">
+                            <div class="card-body py-5">
                                 <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
                                     6
                                 </div>
                                 <h6 class="text-default text-uppercase">Claim Your Reward</h6>
-                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=selectedClassroom (click)="openModal('custom-modal-6')" class="btn btn-default mt-4 text-white">Claim</a>
+                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p><br>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-6')" class="btn btn-default mt-4 text-white">Claim</a>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-4">
+                        <div class="card card-lift--hover shadow border-0 text-center">
+                            <div class="card-body py-5">
+                                <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
+                                    7
+                                </div>
+                                <h6 class="text-default text-uppercase">Start your own classroom</h6>
+                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-7')" class="btn btn-default mt-4 text-white">Claim</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf=!globals.selectedClassroom class="row mb-4">
+            <div class="container">
+                <div class="card bg-gradient-success shadow-lg border-0">
+                    <div class="p-5">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8">
+                                <h4 class="text-white">Start by choosing the perfect classroom for you.</h4>
+                                <p class="lead text-white mt-3">You will need to connect to a wallet service in order to interact with this dApp.</p>
+                            </div>
+                            <div class="col-lg-3 ml-lg-auto"><a [routerLink]="['/']" fragment=classrooms class="btn btn-lg btn-block btn-white">SELECT CLASSROOM</a></div>
                         </div>
                     </div>
                 </div>
@@ -411,6 +438,8 @@
             </div>
         </form>
     </jw-modal>
+    <jw-modal id="custom-modal-6"></jw-modal>
+    <jw-modal id="custom-modal-7"></jw-modal>
     <jw-modal id="custom-modal-details">
         <form role="form">
             <div class="modal-header">

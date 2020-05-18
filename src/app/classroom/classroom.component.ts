@@ -17,9 +17,6 @@ import { ENSService } from '../services/ens.service';
 export class ClassroomComponent implements OnInit {
 	focus;
 	focus1;
-
-	public mode = 'unconnected';
-	selectedClassroom: Classroom;
 	public form: FormGroup;
 	userIsClassroomAdmin = false;
 
@@ -28,46 +25,39 @@ export class ClassroomComponent implements OnInit {
 		private modalService: ModalService,
 		public portisService: PortisService,
 		public infuraService: InfuraService,
-		public ensService: ENSService
 	) {}
 
 	async ngOnInit() {
 		if (!this.globals.service) {
 			this.globals.service = this.infuraService;
-			this.ensService.configureProvider(
+			this.globals.ensService.configureProvider(
 				this.infuraService.provider,
 				false
 			);
 			console.log("Connected to infura");
 		}
-		if (!this.selectedClassroom) return;
-		this.infuraService.connectClassroom(
-			this.selectedClassroom.smartcontract
+		if (!this.globals.selectedClassroom) return;
+		this.globals.service.connectClassroom(
+			this.globals.selectedClassroom.smartcontract
 		);
 	}
 
 	address: any;
 
 	async conectPortis(): Promise<any> {
-		this.mode = 'loadingPage';
+		this.globals.mode = 'loadingPage';
 		const answer = await this.portisService.initPortis();
 		if (!answer) {
-			this.mode = 'unconnected';
+			this.globals.mode = 'unconnected';
 			return;
 		}
 		this.address = await this.portisService.getAddress();
-		await this.portisService.conectClassroom(
-			this.selectedClassroom.smartcontract
-		);
-		this.mode = 'connected';
+		await this.portisService.connectClassroom(this.globals.selectedClassroom.smartcontract);
+		this.globals.mode = 'connected';
 		this.globals.service = this.portisService;
-		this.ensService.configureProvider(this.portisService.provider);
-		await this.refreshClassroomInfo();
+		this.globals.ensService.configureProvider(this.portisService.provider);
 		const adminAddress = await this.portisService.getClassroomOwner();
-		this.userIsClassroomAdmin = this.address === adminAddress;
-		//TODO: Student Address and Student Smart Contract Address
-		//const adminAddress = await this.portisService.getUniversityOwner();
-		//this.userIsUniversityAdmin = (this.address === adminAddress);
+		this.globals.userIsClassroomAdmin = this.address === adminAddress;
 	}
 
 	async refreshClassroomInfo() {}
