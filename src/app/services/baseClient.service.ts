@@ -6,6 +6,9 @@ import { environment } from '../../environments/environment';
 import * as University from '../../../build/contracts/University.json';
 import * as Classroom from '../../../build/contracts/Classroom.json';
 import * as Student from '../../../build/contracts/Student.json';
+import * as DAI from '../../../build/contracts/ERC20.json';
+import * as CDAI from '../../../build/contracts/CERC20.json';
+import * as ADAI from '../../../build/contracts/aToken.json';
 import { GenericUser } from '../../models/genericUser.model';
 
 @Injectable({
@@ -14,13 +17,42 @@ import { GenericUser } from '../../models/genericUser.model';
 export class baseClientService {
 	public universityContractInstance: any;
 	public classroomContractInstance: any;
+	public DAIContract: any;
+	public CDAIContract: any;
+	public ADAIContract: any;
 	public provider: any;
 	public networkName: any;
+	public useSigner = false;
 
 	constructor() {}
 
-	public setupProvider(_provider) {
+	public async setupProvider(_provider) {
 		this.provider = _provider;
+		this.setupPublicTokens();
+		await this.connectUniversity();
+	}
+
+	// Contracts setup
+
+	public setupPublicTokens() {
+		const providerOrSigner = this.useSigner
+			? this.provider.getSigner()
+			: this.provider;
+		this.DAIContract = new ethers.Contract(
+			environment.DAIAddress,
+			DAI.abi,
+			providerOrSigner
+		);
+		this.CDAIContract = new ethers.Contract(
+			environment.CompoundDAIAddress,
+			CDAI.abi,
+			providerOrSigner
+		);
+		this.ADAIContract = new ethers.Contract(
+			environment.AaveDAIAddress,
+			ADAI.abi,
+			providerOrSigner
+		);
 	}
 
 	async getAddress() {
@@ -29,56 +61,71 @@ export class baseClientService {
 	}
 
 	async connectUniversity() {
-		if (!environment.universityAddress)
-			throw new Error('invalid contract address!');
-		if (!University || !University.abi)
-			throw new Error(
-				'invalid contract json, try to run truffle compile!'
-			);
-		if (this.provider) {
+		const providerOrSigner = this.useSigner
+			? this.provider.getSigner()
+			: this.provider;
+		if (this.checkContractInfo(environment.universityAddress, University))
 			this.universityContractInstance = new ethers.Contract(
 				environment.universityAddress,
 				University.abi,
-				this.provider.getSigner()
+				providerOrSigner
 			);
-		} else {
-			console.warn('try to connect with portis!');
-			this.provider = new ethers.providers.JsonRpcProvider(
-				'http://localhost:8545'
-			);
-		}
+		await this.universityContractInstance.deployed();
 	}
 
 	async connectClassroom(address: string) {
+		const providerOrSigner = this.useSigner
+			? this.provider.getSigner()
+			: this.provider;
+		if (this.checkContractInfo(address, Classroom))
+			this.classroomContractInstance = new ethers.Contract(
+				address,
+				Classroom.abi,
+				providerOrSigner
+			);
+	}
+
+	public checkContractInfo(address: string, file: any): boolean {
 		if (!address || address.length < 40)
 			throw new Error('invalid contract address!');
 		if (!Classroom || !Classroom.abi)
 			throw new Error(
 				'invalid contract json, try to run truffle compile!'
 			);
-		if (this.provider) {
-			this.classroomContractInstance = new ethers.Contract(
-				address,
-				Classroom.abi,
-				this.provider.getSigner()
-			);
-		} else {
+		if (this.provider) return true;
+		else {
 			console.warn('try to connect with portis!');
 			this.provider = new ethers.providers.JsonRpcProvider(
 				'http://localhost:8545'
 			);
 		}
+		return false;
 	}
+
+	// View Token info
+
+	public async getDAIBalance(address: string) {
+		const val = await this.DAIContract.balanceOf(address);
+		return val;
+	}
+
+	// View Student info
 
 	public async isStudentRegistred() {
 		const studentAdress = await this.getAddress();
-		const check = await this.universityContractInstance.studentIsRegistered(studentAdress);
-		return check 
+		const check = await this.universityContractInstance.studentIsRegistered(
+			studentAdress
+		);
+		return check;
 	}
-	
+
+	// View Classroom info
+
 	public async getClassroomOwner() {
 		const answer = await this.classroomContractInstance.owner();
 	}
+
+	// View University info
 
 	public async getUniversityOwner() {
 		const answer = await this.universityContractInstance.owner();
@@ -129,22 +176,35 @@ export class baseClientService {
 
 	public async getUniversityParams() {
 		let text = '';
-		text = text + await this.universityContractInstance.daiToken() + ',';
-		text = text + await this.universityContractInstance.cDAI() + ',';
-		text = text + await this.universityContractInstance.relayHub() + ',';
-		text = text + await this.universityContractInstance.classroomFactory() + ',';
-		text = text + await this.universityContractInstance.studentFactory() + ',';
-		text = text + await this.universityContractInstance.studentApplicationFactory() + ',';
-		text = text + await this.universityContractInstance.ensContract() + ',';
-		text = text + await this.universityContractInstance.ensTestRegistrar() + ',';
-		text = text + await this.universityContractInstance.ensPublicResolver() + ',';
-		text = text + await this.universityContractInstance.ensReverseRegistrar();
+		text = text + (await this.universityContractInstance.daiToken()) + ',';
+		text = text + (await this.universityContractInstance.cDAI()) + ',';
+		text = text + (await this.universityContractInstance.relayHub()) + ',';
+		text =
+			text +
+			(await this.universityContractInstance.classroomFactory()) +
+			',';
+		text =
+			text +
+			(await this.universityContractInstance.studentFactory()) +
+			',';
+		text =
+			text +
+			(await this.universityContractInstance.studentApplicationFactory()) +
+			',';
+		text =
+			text + (await this.universityContractInstance.ensContract()) + ',';
+		text =
+			text +
+			(await this.universityContractInstance.ensTestRegistrar()) +
+			',';
+		text =
+			text +
+			(await this.universityContractInstance.ensPublicResolver()) +
+			',';
+		text =
+			text +
+			(await this.universityContractInstance.ensReverseRegistrar());
 		return text;
-	}
-
-	public async setUniversityParams(params: string) {
-		const paramsArray = params.split(',');
-		await this.universityContractInstance.updateAddresses(...paramsArray);
 	}
 
 	public async listRoles(role: string) {
@@ -166,37 +226,6 @@ export class baseClientService {
 			index++;
 		}
 		return list;
-	}
-
-	async revokeRole(role: string, address: string) {
-		if (role == 'DEFAULT_ADMIN_ROLE') return;
-		const roleBytes = ethers.utils.solidityKeccak256(['string'], [role]);
-		const transaction = await this.universityContractInstance.revokeRole(
-			roleBytes,
-			address
-		);
-		await transaction.wait();
-	}
-
-	async grantRole(role: string, address: string) {
-		const roleBytes =
-			role == 'DEFAULT_ADMIN_ROLE'
-				? ethers.utils.formatBytes32String('')
-				: ethers.utils.solidityKeccak256(['string'], [role]);
-		const transaction = await this.universityContractInstance.grantRole(
-			roleBytes,
-			address
-		);
-		await transaction.wait();
-	}
-
-	public async studentSelfRegister(_name: string) {
-		const name = ethers.utils.formatBytes32String(_name);
-		const register = await this.universityContractInstance.studentSelfRegister(
-			name
-		);
-		await register.wait();
-		return register;
 	}
 
 	async getClassroomCount() {
@@ -273,6 +302,44 @@ export class baseClientService {
 		];
 	}
 
+	// Signed interactions with University contract
+
+	public async setUniversityParams(params: string) {
+		const paramsArray = params.split(',');
+		await this.universityContractInstance.updateAddresses(...paramsArray);
+	}
+
+	async revokeRole(role: string, address: string) {
+		if (role == 'DEFAULT_ADMIN_ROLE') return;
+		const roleBytes = ethers.utils.solidityKeccak256(['string'], [role]);
+		const transaction = await this.universityContractInstance.revokeRole(
+			roleBytes,
+			address
+		);
+		await transaction.wait();
+	}
+
+	async grantRole(role: string, address: string) {
+		const roleBytes =
+			role == 'DEFAULT_ADMIN_ROLE'
+				? ethers.utils.formatBytes32String('')
+				: ethers.utils.solidityKeccak256(['string'], [role]);
+		const transaction = await this.universityContractInstance.grantRole(
+			roleBytes,
+			address
+		);
+		await transaction.wait();
+	}
+
+	public async studentSelfRegister(_name: string) {
+		const name = ethers.utils.formatBytes32String(_name);
+		const register = await this.universityContractInstance.studentSelfRegister(
+			name
+		);
+		await register.wait();
+		return register;
+	}
+
 	async createClassroom(
 		_Owner: string,
 		_Name: string,
@@ -295,38 +362,70 @@ export class baseClientService {
 		);
 	}
 
-	async registerInRegistrar(label: string){
-		const tx = await this.universityContractInstance.registerInRegistrar(ethers.utils.solidityKeccak256(['string'], [label]), environment.universityAddress);
+	// ENS Signed actions
+
+	async registerInRegistrar(label: string) {
+		const tx = await this.universityContractInstance.registerInRegistrar(
+			ethers.utils.solidityKeccak256(['string'], [label]),
+			environment.universityAddress
+		);
 		await tx.wait();
 	}
 
-	async setResolver(node: string){
-		const tx = await this.universityContractInstance.setResolver(node, environment.ENSPulbicResolverAddress);
+	async setResolver(node: string) {
+		const tx = await this.universityContractInstance.setResolver(
+			node,
+			environment.ENSPulbicResolverAddress
+		);
 		await tx.wait();
 	}
 
-	async setAddr(node: string, address: string){
-		const tx = await this.universityContractInstance.setAddressInResolver(node, address);
+	async setAddr(node: string, address: string) {
+		const tx = await this.universityContractInstance.setAddressInResolver(
+			node,
+			address
+		);
 		await tx.wait();
 	}
 
-	async setReverse(name: string){
-		const tx = await this.universityContractInstance.registerInReverseRegistrar(name);
+	async setReverse(name: string) {
+		const tx = await this.universityContractInstance.registerInReverseRegistrar(
+			name
+		);
 		await tx.wait();
 	}
 
 	public async setTxRecord(_node, key, text) {
-		const tx = await this.universityContractInstance.setTextInResolver(_node, key, text, environment.ENSPulbicResolverAddress);
+		const tx = await this.universityContractInstance.setTextInResolver(
+			_node,
+			key,
+			text,
+			environment.ENSPulbicResolverAddress
+		);
 		await tx.wait();
 	}
 
 	public async claimSubnodeClassroom(_node, label, owner, classroom) {
-		const tx = await this.universityContractInstance.claimSubnodeClassroom(_node, ethers.utils.solidityKeccak256(['string'], [label]), owner, environment.ENSPulbicResolverAddress, 0, classroom);
+		const tx = await this.universityContractInstance.claimSubnodeClassroom(
+			_node,
+			ethers.utils.solidityKeccak256(['string'], [label]),
+			owner,
+			environment.ENSPulbicResolverAddress,
+			0,
+			classroom
+		);
 		await tx.wait();
 	}
 
 	public async claimSubnodeStudent(_node, label, owner, student) {
-		const tx = await this.universityContractInstance.claimSubnodeStudent(_node, ethers.utils.solidityKeccak256(['string'], [label]), owner, environment.ENSPulbicResolverAddress, 0, student);
+		const tx = await this.universityContractInstance.claimSubnodeStudent(
+			_node,
+			ethers.utils.solidityKeccak256(['string'], [label]),
+			owner,
+			environment.ENSPulbicResolverAddress,
+			0,
+			student
+		);
 		await tx.wait();
 	}
 }

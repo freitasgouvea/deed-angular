@@ -200,7 +200,7 @@
         <section class="section section-lg pt-0">
             <div class="container">
                 <div class="card shadow-lg border-0">
-                    <div class="p-5">
+                    <div class="p-2">
                         <div class="row align-items-center">
                             <div class="col-md-12">
                                 <table class="table table-hover" responsive>
@@ -215,7 +215,13 @@
                                     <tbody *ngFor="let classroom of globals.classrooms">
                                         <tr>
                                             <th scope="row">{{ classroom.title }}</th>
-                                            <td>{{ classroom.state() }}</td>
+                                            <td>
+                                                <p><span *ngIf=classroom.isClassroomNotOpen() class="badge badge-pill badge-info">Not Open</span>
+                                                    <span *ngIf=classroom.isClassroomOpen() class="badge badge-pill badge-success">Open</span>
+                                                    <span *ngIf=classroom.isClassroomClosed() class="badge badge-pill badge-warning">Closed</span>
+                                                    <span *ngIf=classroom.isClassroomActive() class="badge badge-pill badge-primary">Ongoing</span>
+                                                    <span *ngIf=classroom.courseFinished class="badge badge-pill badge-dark">Finished</span></p>
+                                            </td>
                                             <td>{{ classroom.price }}</td>
                                             <td><a [class.selected]="classroom === globals.selectedClassroom" (click)="onSelect(classroom);openModal('custom-modal-classroom')" class="btn btn-sm btn-default text-white">Details</a></td>
                                         </tr>

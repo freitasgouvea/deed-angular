@@ -23,18 +23,5 @@ export class InfuraService extends baseClientService {
 			environment.infuraKey
 		);
 		this.setupProvider(provider);
-		this.universityContractInstance = new ethers.Contract(
-			environment.universityAddress,
-			University.abi,
-			this.provider
-		);
-	}
-
-	public async connectClassroom(address: string){
-		this.classroomContractInstance = new ethers.Contract(
-			address,
-			Classroom.abi,
-			this.provider
-		);
 	}
 }
