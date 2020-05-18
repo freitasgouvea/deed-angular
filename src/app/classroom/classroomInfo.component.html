@@ -1,0 +1,47 @@
+<div id="clasroomInfo" *ngIf="globals.selectedClassroom" class="container py-lg-md">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card shadow border-0">
+                <div class="card-body py-5">
+                    <h3>{{globals.selectedClassroom.title}}</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="text-light">Start: <span *ngIf=!globals.selectedClassroom.isClassroomNotOpen() class="text-default">{{globals.selectedClassroom.startDate_String}}</span><span *ngIf=globals.selectedClassroom.isClassroomNotOpen() class="text-default">To Be Defined</span></h4>
+                            <h4 class="text-light">Finish: <span *ngIf=!globals.selectedClassroom.isClassroomNotOpen() class="text-default">{{globals.selectedClassroom.finishDate_String}}</span><span *ngIf=globals.selectedClassroom.isClassroomNotOpen() class="text-default">To Be Defined</span></h4>
+                            <h4 *ngIf=globals.selectedClassroom.isClassroomNotOpen() class="text-light">Status: <span class="badge badge-pill badge-info">Not Open</span></h4>
+                            <h4 *ngIf=globals.selectedClassroom.isClassroomOpen() class="text-light">Status: <span class="badge badge-pill badge-success">Open</span></h4>
+                            <h4 *ngIf=globals.selectedClassroom.isClassroomClosed() class="text-light">Status: <span class="badge badge-pill badge-warning">Closed</span></h4>
+                            <h4 *ngIf=globals.selectedClassroom.isClassroomActive() class="text-light">Status: <span class="badge badge-pill badge-primary">Ongoing</span></h4>
+                            <h4 *ngIf=globals.selectedClassroom.courseFinished class="text-light">Status: <span class="badge badge-pill badge-dark">Finished</span></h4>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="text-light">Price: <span class="text-default">{{globals.selectedClassroom.price}}</span></h4>
+                            <h4 class="text-light">Cut from Principal: <span class="text-default">{{globals.selectedClassroom.cutPrincipal}} %</span></h4>
+                            <h4 class="text-light">Cut from Success Pool: <span class="text-default">{{globals.selectedClassroom.cutPool}} %</span></h4>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <h4 class="text-light">Address: <span class="text-default">{{globals.selectedClassroom.smartcontract}}</span></h4>
+                            <h4 class="text-light">Challenge: <span class="text-default">{{globals.selectedClassroom.addressChallenge}}</span></h4>
+                            <h4 class="text-light">Description:</h4>
+                            <h2 class="description mt-3">{{globals.selectedClassroom.metadata.description}}</h2>
+                            <h4 class="text-light">Notice:</h4>
+                            <h2 class="description mt-3">{{globals.selectedClassroom.metadata.notice}}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a (click)="closeModal('custom-modal-classroomInfo')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                        <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                        <span class="btn-inner--text">Back</span>
+                    </a>
+                    <a (click)="closeModal('custom-modal-classroomInfo')" [routerLink]="['/classroom']" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                        <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
+                        <span class="btn-inner--text">Go to Classroom</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

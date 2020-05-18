@@ -19,19 +19,30 @@ export class ClassroomComponent implements OnInit {
 	focus1;
 	public form: FormGroup;
 	userIsClassroomAdmin = false;
+	displayNotice = true;
 
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
-		public portisService: PortisService,
-		public infuraService: InfuraService
+		public portisService: PortisService
 	) {}
+
+	openModal(id: string) {
+		this.modalService.open(id);
+	}
+	closeModal(id: string) {
+		this.modalService.close(id);
+	}
+
+	closeNotice() {
+		this.displayNotice = false;
+	}
 
 	async ngOnInit() {
 		if (!this.globals.service) {
-			this.globals.service = this.infuraService;
+			this.globals.service = new InfuraService();
 			this.globals.ensService.configureProvider(
-				this.infuraService.provider,
+				this.globals.service.provider,
 				false
 			);
 			console.log('Connected to infura');
@@ -48,13 +59,14 @@ export class ClassroomComponent implements OnInit {
 			.then(
 				(adminAddress) =>
 					(this.globals.userIsClassroomAdmin =
-						(this.globals.address == adminAddress))
+						this.globals.address == adminAddress)
 			);
 		this.globals.service
 			.getDAIBalance(this.globals.selectedClassroom.smartcontract)
 			.then(
 				(val) => (this.globals.selectedClassroom.classdata.funds = val)
 			);
+		this.refreshClassroomMetadata(this.globals.selectedClassroom);
 	}
 
 	async conectPortis(): Promise<any> {
@@ -65,20 +77,66 @@ export class ClassroomComponent implements OnInit {
 			return;
 		}
 		this.globals.address = await this.portisService.getAddress();
-		await this.portisService.connectClassroom(
-			this.globals.selectedClassroom.smartcontract
-		);
-		this.globals.mode = 'connected';
 		this.globals.service = this.portisService;
 		this.globals.ensService.configureProvider(this.portisService.provider);
-		const adminAddress = await this.portisService.getClassroomOwner();
-		this.globals.userIsClassroomAdmin = (this.globals.address == adminAddress);
+		if (this.globals.selectedClassroom) {
+			await this.portisService.connectClassroom(
+				this.globals.selectedClassroom.smartcontract
+			);
+			const adminAddress = await this.portisService.getClassroomOwner();
+			this.globals.userIsClassroomAdmin =
+				this.globals.address == adminAddress;
+		}
+		const isRegistered = await this.globals.service.isStudentRegistred();
+		if (!isRegistered) {
+			this.globals.mode = 'connected';
+			return;
+		} else {
+			this.globals.userIsStudent = true;
+			this.globals.mode = 'registered';
+			return;
+		}
 	}
 
-	openModal(id: string) {
-		this.modalService.open(id);
+	async registerENSRecord() {
+		const normalName = this.globals.selectedClassroom.title.toLowerCase().replace(/\s/g, '');
+		await this.teacherClaimSubnode(normalName, this.globals.address, this.globals.selectedClassroom.smartcontract);
 	}
-	closeModal(id: string) {
-		this.modalService.close(id);
+
+	async teacherClaimSubnode(label, owner, classroom) {
+		const node = this.globals.ensService.node;
+		const normalName = label.toLowerCase().replace(/\s/g, '');
+		await this.globals.service.claimSubnodeClassroom(
+			node,
+			normalName,
+			owner,
+			classroom
+		);
+	}
+
+	async refreshClassroomMetadata(classroom: Classroom) {
+		const normalName = classroom.title.toLowerCase().replace(/\s/g, '');
+		const node = this.globals.ensService.getSubNode(normalName);
+		const record = await this.globals.ensService.hasRecord(node);
+		if (!record) return;
+		classroom.metadata.ENSName = await this.globals.ensService.lookupAddress(
+			classroom.smartcontract
+		);
+		classroom.metadata.email = await this.globals.ensService.getTxEmail(
+			node
+		);
+		classroom.metadata.url = await this.globals.ensService.getTxURL(node);
+		classroom.metadata.avatar = await this.globals.ensService.getTxAvatar(
+			node
+		);
+		classroom.metadata.description = await this.globals.ensService.getTxDescription(
+			node
+		);
+		classroom.metadata.notice = await this.globals.ensService.getTxNotice(
+			node
+		);
+		classroom.metadata.keywords = await this.globals.ensService.getTxKeywordsArray(
+			node
+		);
 	}
 }
