@@ -104,6 +104,12 @@ export class baseClientService {
 		console.log(studentSmartContract);
 		return studentSmartContract;
 	}
+
+	public async getStudentName() {
+		const answer = await this.studentContractInstance.name();
+		const val = ethers.utils.parseBytes32String(answer);
+		return val;
+	}
 	
 	public async getClassroomOwner() {
 		const answer = await this.classroomContractInstance.owner();

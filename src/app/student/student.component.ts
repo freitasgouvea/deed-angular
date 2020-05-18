@@ -22,12 +22,11 @@ export class StudentComponent implements OnInit {
 	selectedClassroom: Classroom;
 	public form: FormGroup;
 	userIsClassroomAdmin = false;
+	userIsStudent = true;
 	public txMode = 'off';
-
-
-	//StudentSelfRegister
-	public _name = 'any';
+	name: any;
 	address: any;
+	studentSmartContract: any;
 
 	constructor(
 		public globals: Globals,
@@ -46,13 +45,8 @@ export class StudentComponent implements OnInit {
 			);
 			console.log("Connected to infura");
 		}
-		if (!this.selectedClassroom) return;
-		this.infuraService.connectClassroom(
-			this.selectedClassroom.smartcontract
-		);
+		this.refreshAccountInfo();
 	}
-
-	//async refreshClassroomInfo() {}
 
 	openModal(id: string) {
 		this.modalService.open(id);
@@ -69,52 +63,10 @@ export class StudentComponent implements OnInit {
 		this.txMode = 'off';
 	}
 
-	async conectPortis(): Promise<any> {
-		this.globals.mode = 'loadingPage';
-		const answer = await this.portisService.initPortis();
-		if (!answer) {
-			this.globals.mode = 'unconnected';
-			return;
-		}
-		this.address = await this.portisService.getAddress();
-		const connectUniversity = await this.portisService.conectUniversity();
-		this.globals.service = this.portisService;
-		this.ensService.configureProvider(this.portisService.provider);
-		await this.refreshAccountInfo();
-		const adminAddress = await this.portisService.getUniversityOwner();
-		this.globals.userIsUniversityAdmin = this.address === adminAddress;
-		const isRegistered = await this.globals.service.getUniversityOwner();
-		if (!isRegistered) {
-			this.globals.mode = 'connected';
-			return;
-		} else {
-			this.globals.userIsStudent = true;
-			this.globals.mode = 'registered';
-			return;
-		}
-	}
-
 	async refreshAccountInfo(): Promise<any> {
 		this.address = await this.globals.service.getAddress();
-		//TODO: call student smart contract
-	}
-
-	async studentSelfRegister(): Promise<any> {
-		this.txOn();
-		if (this._name == '') {
-			this.txMode = 'failedTX';
-		} else {
-			this.txMode = 'processingTX';
-			const selfRegister = await this.globals.service.studentSelfRegister(
-				this._name
-			);
-			if (!selfRegister) {
-				this.txMode = 'failedTX';
-			} else {
-				this.txMode = 'successTX';
-			}
-		}
-		//TODO: claim university ENS record
+		this.studentSmartContract = await this.globals.service.getStudentSmartContract();
+		this.name = await this.globals.service.getStudentName();
 	}
 
 
