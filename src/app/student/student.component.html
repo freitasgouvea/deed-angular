@@ -10,15 +10,15 @@
             <span></span>
             <span></span>
         </div>
-        <div *ngIf="userIsStudent===true" class="container py-lg-md d-flex">
+        <div class="container py-lg-md d-flex">
             <div class="col">
                 <div class="row mb-4">
                     <div class="col-lg-12 mb-4">
                         <h1 class="display-3  text-white">account
-                            <span>{{name}}</span>
+                            <span>{{globals.selectedStudent.name}}</span>
                         </h1>
-                        <p class="lead text-white">Address: {{address}}</p>
-                        <p class="lead text-white">Student Smart Contract: {{studentSmartContract}}</p>
+                        <p class="lead text-white">Address: {{globals.selectedStudent.address}}</p>
+                        <p class="lead text-white">Student Smart Contract: {{globals.selectedStudent.smartContractAddress}}</p>
                         <p class="lead text-white">Status: </p>
                         <div class="btn-wrapper">
                             <a (click)="openModal('custom-modal-edit');" class="btn btn-success btn-icon mb-3 mb-sm-0">
@@ -89,7 +89,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-link"></i></span>
                                             </div>
-                                            <input class="form-control" placeholder="Address" value={{address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
+                                            <input class="form-control" placeholder="Address" value={{globals.selectedStudent.address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-link"></i></span>
                                             </div>
-                                            <input class="form-control" placeholder="Address" value={{address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
+                                            <input class="form-control" placeholder="Address" value={{globals.selectedStudent.address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
                                         </div>
                                     </div>
                                 </div>
@@ -129,7 +129,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-link"></i></span>
                                             </div>
-                                            <input class="form-control" placeholder="Address" value={{address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
+                                            <input class="form-control" placeholder="Address" value={{globals.selectedStudent.address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
                                         </div>
                                     </div>
                                 </div>

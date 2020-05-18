@@ -19,33 +19,28 @@ export class StudentComponent implements OnInit {
 	focus1;
 
 	public mode = 'unconnected';
-	selectedClassroom: Classroom;
 	public form: FormGroup;
-	userIsClassroomAdmin = false;
-	userIsStudent = true;
 	public txMode = 'off';
-	name: any;
-	address: any;
-	studentSmartContract: any;
 
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
-		public portisService: PortisService,
-		public infuraService: InfuraService,
-		public ensService: ENSService
+		public portisService: PortisService
 	) { }
 
 	async ngOnInit() {
 		if (!this.globals.service) {
-			this.globals.service = this.infuraService;
-			this.ensService.configureProvider(
-				this.infuraService.provider,
+			this.globals.service = new InfuraService();
+			await this.globals.ensService.configureProvider(
+				this.globals.service.provider,
 				false
 			);
 			console.log("Connected to infura");
 		}
-		this.refreshAccountInfo();
+		if (!this.globals.selectedStudent) return;
+		this.globals.service
+			.connectStudent()
+			.then(() => this.refreshAccountInfo());
 	}
 
 	openModal(id: string) {
@@ -64,9 +59,9 @@ export class StudentComponent implements OnInit {
 	}
 
 	async refreshAccountInfo(): Promise<any> {
-		this.address = await this.globals.service.getAddress();
-		this.studentSmartContract = await this.globals.service.getStudentSmartContract();
-		this.name = await this.globals.service.getStudentName();
+		this.globals.selectedStudent.address = await this.globals.service.getAddress();
+		this.globals.selectedStudent.smartContractAddress = await this.globals.service.getStudentSmartContract();
+		this.globals.selectedStudent.name = await this.globals.service.getStudentName();
 	}
 
 

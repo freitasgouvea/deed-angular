@@ -86,7 +86,7 @@ export class baseClientService {
 			);
 	}
 
-	async conectStudent() {
+	async connectStudent() {
 		const providerOrSigner = this.useSigner
 			? this.provider.getSigner()
 			: this.provider;
