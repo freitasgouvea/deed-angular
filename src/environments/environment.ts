@@ -12,7 +12,10 @@ export const environment = {
   ENSPulbicResolverAddress: "0x42D63ae25990889E35F215bC95884039Ba354115", //TestResolver
   ENSReverseRegistrarAddress: "0x6F628b68b30Dc3c17f345c9dbBb1E483c2b7aE5c",
   ENSUniversityName: "deeduniversity",
-  ENSDomain: ".test"
+  ENSDomain: ".test",
+  DAIAddress: "0xad6d458402f60fd3bd25163575031acdce07538d",
+  CompoundDAIAddress: "0x6ce27497a64fffb5517aa4aee908b1e7eb63b9ff",
+  AaveDAIAddress: "0xcB1Fe6F440c49E9290c3eb7f158534c2dC374201",
 };
 
 /*

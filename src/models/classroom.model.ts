@@ -6,7 +6,9 @@ export class Classroom {
 	public startDate_String: string;
 	public finishDate_String: string;
 	dateStringOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-	public metadata = {email: '', url: '', avatar: '', description: '', notice: '', keywords: ['']}
+	public metadata = {email: '', url: '', avatar: '', description: '', notice: '', keywords: new Array<string>()}
+	public classdata = {students: 0, validStudents: 0, funds: 0, fundsInvested:0, investmentReturns:0}
+	public params = {compoundApplyPercentage: 0.5}
 
     constructor(
         public id: number,

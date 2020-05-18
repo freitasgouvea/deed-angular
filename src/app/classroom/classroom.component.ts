@@ -12,65 +12,70 @@ import { ENSService } from '../services/ens.service';
 @Component({
 	selector: 'app-classroom',
 	templateUrl: './classroom.component.html',
-	styleUrls: ['./classroom.component.css']
+	styleUrls: ['./classroom.component.css'],
 })
 export class ClassroomComponent implements OnInit {
 	focus;
 	focus1;
-
-	public mode = 'unconnected';
-	selectedClassroom: Classroom;
 	public form: FormGroup;
 	userIsClassroomAdmin = false;
+
+	address: any;
 
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
 		public portisService: PortisService,
-		public infuraService: InfuraService,
-		public ensService: ENSService
+		public infuraService: InfuraService
 	) {}
 
 	async ngOnInit() {
 		if (!this.globals.service) {
 			this.globals.service = this.infuraService;
-			this.ensService.configureProvider(
+			this.globals.ensService.configureProvider(
 				this.infuraService.provider,
 				false
 			);
-			console.log("Connected to infura");
+			console.log('Connected to infura');
 		}
-		if (!this.selectedClassroom) return;
-		this.infuraService.connectClassroom(
-			this.selectedClassroom.smartcontract
-		);
+		if (!this.globals.selectedClassroom) return;
+		this.globals.service
+			.connectClassroom(this.globals.selectedClassroom.smartcontract)
+			.then(() => this.refreshClassroomInfo());
 	}
 
-	address: any;
+	public refreshClassroomInfo() {
+		this.globals.service
+			.getClassroomOwner()
+			.then(
+				(adminAddress) =>
+					(this.globals.userIsClassroomAdmin =
+						this.address === adminAddress)
+			);
+		this.globals.service
+			.getDAIBalance(this.globals.selectedClassroom.smartcontract)
+			.then(
+				(val) => (this.globals.selectedClassroom.classdata.funds = val)
+			);
+	}
 
 	async conectPortis(): Promise<any> {
-		this.mode = 'loadingPage';
+		this.globals.mode = 'loadingPage';
 		const answer = await this.portisService.initPortis();
 		if (!answer) {
-			this.mode = 'unconnected';
+			this.globals.mode = 'unconnected';
 			return;
 		}
 		this.address = await this.portisService.getAddress();
-		await this.portisService.conectClassroom(
-			this.selectedClassroom.smartcontract
+		await this.portisService.connectClassroom(
+			this.globals.selectedClassroom.smartcontract
 		);
-		this.mode = 'connected';
+		this.globals.mode = 'connected';
 		this.globals.service = this.portisService;
-		this.ensService.configureProvider(this.portisService.provider);
-		await this.refreshClassroomInfo();
+		this.globals.ensService.configureProvider(this.portisService.provider);
 		const adminAddress = await this.portisService.getClassroomOwner();
-		this.userIsClassroomAdmin = this.address === adminAddress;
-		//TODO: Student Address and Student Smart Contract Address
-		//const adminAddress = await this.portisService.getUniversityOwner();
-		//this.userIsUniversityAdmin = (this.address === adminAddress);
+		this.globals.userIsClassroomAdmin = this.address === adminAddress;
 	}
-
-	async refreshClassroomInfo() {}
 
 	openModal(id: string) {
 		this.modalService.open(id);
