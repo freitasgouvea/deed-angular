@@ -86,6 +86,19 @@ export class baseClientService {
 			);
 	}
 
+	async conectStudent() {
+		const providerOrSigner = this.useSigner
+			? this.provider.getSigner()
+			: this.provider;
+		const smartContractAddress = await this.getStudentSmartContract();
+		if (this.checkContractInfo(smartContractAddress, Student))
+			this.studentContractInstance = new ethers.Contract(
+				smartContractAddress,
+				Student.abi,
+				providerOrSigner
+			);
+	}
+
 	public checkContractInfo(address: string, file: any): boolean {
 		if (!address || address.length < 40)
 			throw new Error('invalid contract address!');
@@ -112,28 +125,6 @@ export class baseClientService {
 
 	// View Student info
 
-	async conectStudent() {
-		const smartContractAddress = await this.getStudentSmartContract();
-		if (!smartContractAddress)
-			throw new Error('invalid contract smartContractAddress!');
-		if (!Student || !Student.abi)
-			throw new Error(
-				'invalid contract json, try to run truffle compile!'
-			);
-		if (this.provider) {
-			this.studentContractInstance = new ethers.Contract(
-				smartContractAddress,
-				Student.abi,
-				this.provider.getSigner()
-			);
-		} else {
-			console.warn('try to connect with portis!');
-			this.provider = new ethers.providers.JsonRpcProvider(
-				'http://localhost:8545'
-			);
-		}
-	}
-
 	public async isStudentRegistred() {
 		const studentAdress = await this.getAddress();
 		const check = await this.universityContractInstance.studentIsRegistered(studentAdress);
@@ -145,7 +136,7 @@ export class baseClientService {
 		console.log(studentSmartContract);
 		return studentSmartContract;
 	}
-	
+
 
 	// View Classroom info
 
