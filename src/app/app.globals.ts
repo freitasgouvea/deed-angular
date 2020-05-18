@@ -8,6 +8,7 @@ import { ENSService } from './services/ens.service';
 export class Globals {
 	public service: PortisService | InfuraService;
 	public ensService = new ENSService();
+	public address: string;
 	public mode = 'unconnected';
 	public userIsStudent = false;
 	public userIsUniversityAdmin = false;

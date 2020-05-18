@@ -142,6 +142,7 @@ export class baseClientService {
 
 	public async getClassroomOwner() {
 		const answer = await this.classroomContractInstance.owner();
+		return answer;
 	}
 
 	// View University info

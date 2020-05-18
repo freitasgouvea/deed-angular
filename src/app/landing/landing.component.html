@@ -83,7 +83,7 @@
                                         <i class="fa fa-user"></i>
                                     </div>
                                     <h6 class="text-success text-uppercase">Your Account</h6>
-                                    <p class="description">Address: {{address}} </p>
+                                    <p class="description">Address: {{globals.address}} </p>
                                     <p class="description">Amount: 400 DAI</p>
                                     <p class="description">Status: 300 Points</p>
                                     <button class="btn btn-success mt-4">See Account</button>
@@ -420,7 +420,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-link"></i></span>
                                             </div>
-                                            <input class="form-control" placeholder="Address" value={{address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
+                                            <input class="form-control" placeholder="Address" value={{globals.address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
                                         </div>
                                     </div>
                                 </div>
