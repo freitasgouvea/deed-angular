@@ -103,8 +103,7 @@ export class LandingComponent implements OnInit {
 		this.globals.address = await this.portisService.getAddress();
 		this.globals.service = this.portisService;
 		this.globals.ensService.configureProvider(this.portisService.provider);
-		const adminAddress = await this.portisService.getUniversityOwner();
-		this.globals.userIsUniversityAdmin = this.globals.address === adminAddress;
+		if (this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(element => element.address == this.globals.address)) this.globals.userIsUniversityAdmin = true;
 		const isRegistered = await this.globals.service.isStudentRegistred();
 		if (!isRegistered) {
 			this.globals.mode = 'connected';
@@ -126,6 +125,7 @@ export class LandingComponent implements OnInit {
 				this.globals.universityInfoNeedsRefresh = false;
 				this.globals.pageParalelRefreshLock = false;
 			});
+		this.loadUniversityAdmin()
 	}
 
 	async refreshUniversityMetadata() {
@@ -292,6 +292,7 @@ export class LandingComponent implements OnInit {
 		this.getRoleMembers('DEFAULT_ADMIN_ROLE').then((result) => {
 			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'] = result;
 		});
+		if (this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(element => element.address == this.globals.address)) this.globals.userIsUniversityAdmin = true;
 		this.getRoleMembers('FUNDS_MANAGER_ROLE').then((result) => {
 			this.roleMembersAdmin['FUNDS_MANAGER_ROLE'] = result;
 		});

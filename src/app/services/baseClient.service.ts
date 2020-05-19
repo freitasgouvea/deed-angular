@@ -126,15 +126,20 @@ export class baseClientService {
 
 	// View Student info
 
-	public async isStudentRegistred() {
-		const studentAdress = this.getStudentSmartContract()
-		const check = await this.universityContractInstance.studentIsRegistered(studentAdress);
+	public async isStudentRegistred(): Promise<boolean> {
+		const studentAdress = await this.getStudentSmartContract();
+		if (!studentAdress) return false;
+		const check = await this.universityContractInstance.studentIsRegistered(
+			studentAdress
+		);
 		return check;
 	}
 
 	public async getStudentSmartContract() {
-		const studentSmartContract = await this.universityContractInstance.myStudentAddress();
-		return studentSmartContract;
+		try {
+			const studentSmartContract = await this.universityContractInstance.myStudentAddress();
+			return studentSmartContract;
+		} catch (err) {}
 	}
 
 	public async getStudentName() {

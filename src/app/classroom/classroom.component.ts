@@ -198,7 +198,8 @@ export class ClassroomComponent implements OnInit {
 			.toLowerCase()
 			.replace(/\s/g, '');
 		const node = this.globals.ensService.getSubNode(normalName);
-		if (!this.globals.ensService.hasRecord(node))
+		const hasRecord = await this.globals.ensService.hasRecord(node);
+		if (!hasRecord)
 			await this.teacherClaimSubnode(
 				normalName,
 				this.globals.address,
