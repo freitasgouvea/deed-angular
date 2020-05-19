@@ -378,7 +378,7 @@ export class baseClientService {
 
 	public async studentUpdateName(newName: string) {
 		const name = ethers.utils.formatBytes32String(newName);
-		const register = await this.universityContractInstance.changeName(
+		const register = await this.studentContractInstance.changeName(
 			name
 		);
 		await register.wait();

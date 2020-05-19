@@ -64,9 +64,7 @@ export class StudentComponent implements OnInit {
 		this.globals.selectedStudent.name = await this.globals.service.getStudentName();
 		this.globals.selectedStudent.score = await this.globals.service.getScore();
 		this.globals.selectedStudent.applications = await this.globals.service.getApplications();
-		for (var application of this.globals.selectedStudent.applications) {
-			console.log(application)
-	   }
+		this.globals.selectedStudent.hasApplications = this.globals.selectedStudent.applications.length > 0
 	}
 
 	async updateName(newName: string): Promise<any> {
