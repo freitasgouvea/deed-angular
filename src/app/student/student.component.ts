@@ -90,6 +90,24 @@ export class StudentComponent implements OnInit {
 		}
 	}
 
+	async activeStudentENS(): Promise<any> {
+		this.txOn();
+		this.txMode = 'processingTX';
+		const node = this.globals.ensService.node;
+		const normalName = this.globals.selectedStudent.name.toLowerCase().replace(/\s/g, '');
+		const studentAddress = this.globals.selectedStudent.address;
+		const studentSmartcContract = this.globals.selectedStudent.smartContractAddress;
+		const transaction = await this.globals.service.claimSubnodeStudent( node,
+			normalName, studentAddress, studentSmartcContract
+		);
+		console.log(transaction);
+		if (!transaction) {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'successTX';
+		}
+	}
+
 	async updateENSNotice(text: string) {
 		await this.globals.service.setTxRecord(this.globals.ensService.node, 'notice', text);
 		await this.refreshAccountInfo();

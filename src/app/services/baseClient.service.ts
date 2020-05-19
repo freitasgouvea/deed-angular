@@ -476,5 +476,10 @@ export class baseClientService {
 			student
 		);
 		await tx.wait();
+		if (!tx) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
