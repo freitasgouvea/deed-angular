@@ -495,14 +495,14 @@
                                                 <button type="button" (click)="setUniversityOwner(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button><br>
                                                 <label for="inputObjUpdateUniversity_Name" class="UniversityAdmins mt-3">Name: <span class="text-default">{{globals.universityName}}</span></label>
                                                 <input id="inputObjUpdateUniversity_Name" #inputUniversity_Name class="form-control" type="text" size=32>
-                                                <button type="button" (click)="setUniversityName(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button><br>
+                                                <button type="button" (click)="setUniversityName(inputUniversity_Name.value)" class="btn btn-sm btn-default text-white">Set</button><br>
                                                 <label for="inputObjUpdateUniversity_Cut" class="UniversityAdmins mt-3">Cut: <span class="text-default">{{globals.universityCut}}</span></label>
                                                 <input id="inputObjUpdateUniversity_Cut" #inputUniversity_Cut class="form-control" type="text" size=32>
-                                                <button type="button" (click)="setUniversityCut(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button><br>
+                                                <button type="button" (click)="setUniversityCut(inputUniversity_Cut.value)" class="btn btn-sm btn-default text-white">Set</button><br>
                                                 <label for="inputObjUpdateUniversity_ConfigAddress" class="UniversityAdmins mt-3">Config address:</label>
                                                 <br><textarea class="form-control" rows="10" wrap="hard">{{globals.universityParams}}</textarea>
                                                 <input id="inputObjUpdateUniversity_ConfigAddress" #inputUniversity_Configaddress class="form-control" type="text" size=32 rows="10">
-                                                <button type="button" (click)="setUniversityParams(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button><br>
+                                                <button type="button" (click)="setUniversityParams(inputUniversity_Configaddress.value)" class="btn btn-sm btn-default text-white">Set</button><br>
                                             </div>
                                         </div>
                                     </div>

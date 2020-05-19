@@ -7,8 +7,10 @@ import { Globals } from '../app.globals';
 
 import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
+import { environment } from 'src/environments/environment';
 import { ENSService } from '../services/ens.service';
 import { ethers } from 'ethers';
+import * as Web3 from 'web3';
 
 @Component({
 	selector: 'app-classroom',
@@ -53,10 +55,10 @@ export class ClassroomComponent implements OnInit {
 		await this.updateClassrooms();
 		this.globals.classrooms.forEach((classroom) => {
 			if (classroom.smartcontract === address) {
-			this.modalService.close('custom-modal-search-classroom');
-			this.globals.selectedClassroom = classroom;
-			this.searchClassroomModalProgressMsg = false;
-			return;
+				this.modalService.close('custom-modal-search-classroom');
+				this.globals.selectedClassroom = classroom;
+				this.searchClassroomModalProgressMsg = false;
+				return;
 			}
 		});
 		const node = this.globals.ensService.getNode(address);
@@ -65,10 +67,10 @@ export class ClassroomComponent implements OnInit {
 		);
 		this.globals.classrooms.forEach((classroom) => {
 			if (classroom.smartcontract === ensAddress) {
-			this.modalService.close('custom-modal-search-classroom');
-			this.globals.selectedClassroom = classroom;
-			this.searchClassroomModalProgressMsg = false;
-			return;
+				this.modalService.close('custom-modal-search-classroom');
+				this.globals.selectedClassroom = classroom;
+				this.searchClassroomModalProgressMsg = false;
+				return;
 			}
 		});
 		this.searchClassroomModalProgressMsg = false;
@@ -77,8 +79,7 @@ export class ClassroomComponent implements OnInit {
 
 	async updateClassrooms() {
 		let classroomCount = await this.globals.service.getClassroomCount();
-		if (this.globals.classrooms.length == classroomCount)
-			return;
+		if (this.globals.classrooms.length == classroomCount) return;
 		this.globals.classlistLoaded = false;
 		this.globals.classrooms = new Array<Classroom>();
 		let index = 0;
@@ -147,12 +148,10 @@ export class ClassroomComponent implements OnInit {
 					(this.globals.userIsClassroomAdmin =
 						this.globals.address == adminAddress)
 			);
-		this.globals.service
-			.getDAIBalance(this.globals.selectedClassroom.smartcontract)
-			.then(
-				(val) => (this.globals.selectedClassroom.classdata.funds = val)
-			);
+		this.refreshClassroomFunds(this.globals.selectedClassroom);
 		this.refreshClassroomMetadata(this.globals.selectedClassroom);
+		this.refreshClassroomConfigs(this.globals.selectedClassroom);
+		this.refreshClassroomParams(this.globals.selectedClassroom);
 	}
 
 	async conectPortis(): Promise<any> {
@@ -252,5 +251,162 @@ export class ClassroomComponent implements OnInit {
 		classroom.metadata.keywords = await this.globals.ensService.getTxKeywordsArray(
 			node
 		);
+	}
+
+	async refreshClassroomFunds(
+		classroom: Classroom = this.globals.selectedClassroom
+	) {
+		this.globals.service
+			.getDAIBalance(this.globals.selectedClassroom.smartcontract)
+			.then(
+				(val) => (this.globals.selectedClassroom.funds.DAI = Number(ethers.utils.formatEther(val)))
+			);
+		this.globals.service
+			.getLINKBalance(this.globals.selectedClassroom.smartcontract)
+			.then(
+				(val) => (this.globals.selectedClassroom.funds.LINK = Number(ethers.utils.formatEther(val)))
+			);
+	}
+
+	async exchangeDAI_LINK(val: number) {}
+
+	async exchangeLINK_DAI(val: number) {}
+
+	async refreshClassroomConfigs(
+		classroom: Classroom = this.globals.selectedClassroom
+	) {
+		//TODO: abstract service
+		this.globals.service.classroomContractInstance
+			.oracleRandom()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.oracleRandom = val)
+			);
+		this.globals.service.classroomContractInstance
+			.requestIdRandom()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.requestIdRandom = val)
+			);
+		this.globals.service.classroomContractInstance
+			.oraclePaymentRandom()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.oraclePaymentRandom = val)
+			);
+		this.globals.service.classroomContractInstance
+			.oracleTimestamp()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.oracleTimestamp = val)
+			);
+		this.globals.service.classroomContractInstance
+			.requestIdTimestamp()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.requestIdTimestamp = val)
+			);
+		this.globals.service.classroomContractInstance
+			.oraclePaymentTimestamp()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.oraclePaymentTimestamp = val)
+			);
+		this.globals.service.classroomContractInstance
+			.linkToken()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.linkToken = val)
+			);
+		this.globals.service.classroomContractInstance
+			.uniswapDAI()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.uniswapDAI = val)
+			);
+		this.globals.service.classroomContractInstance
+			.uniswapLINK()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.uniswapLINK = val)
+			);
+		this.globals.service.classroomContractInstance
+			.uniswapRouter()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.uniswapRouter = val)
+			);
+		this.globals.service.classroomContractInstance
+			.aaveProvider()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.aaveProvider = val)
+			);
+		this.globals.service.classroomContractInstance
+			.aaveLendingPool()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.aaveLendingPool = val)
+			);
+		this.globals.service.classroomContractInstance
+			.aaveLendingPoolCore()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.aaveLendingPoolCore = val)
+			);
+		this.globals.service.classroomContractInstance
+			.aTokenDAI()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.configs.aTokenDAI = val)
+			);
+	}
+
+	async refreshClassroomParams(
+		classroom: Classroom = this.globals.selectedClassroom
+	) {}
+
+	configureUniswap(
+		uniswapDAI: string,
+		uniswapLINK: string,
+		uniswapRouter: string
+	) {
+		//TODO: abstract service
+		uniswapDAI = uniswapDAI ? uniswapDAI : environment.DAIAddress;
+		uniswapLINK = uniswapLINK ? uniswapLINK : environment.LINKAddress;
+		uniswapRouter = uniswapRouter ? uniswapRouter : environment.UniswapRouter;
+		this.globals.service.classroomContractInstance
+			.configureUniswap(uniswapDAI, uniswapLINK, uniswapRouter)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
+	}
+
+	configureOracles(
+		oracleRandom: string,
+		requestIdRandom: string,
+		oraclePaymentRandom: number,
+		oracleTimestamp: string,
+		requestIdTimestamp: string,
+		oraclePaymentTimestamp: number,
+		linkToken: string
+	) {
+		//TODO: abstract service
+		oracleRandom = oracleRandom ? oracleRandom : environment.ChainlinkOracleRandom;
+		requestIdRandom = requestIdRandom ? requestIdRandom : environment.ChainlinkRequestIdRandom;
+		oraclePaymentRandom = oraclePaymentRandom ? oraclePaymentRandom : environment.ChainlinkOraclePaymentRandom;
+		oracleTimestamp = oracleTimestamp ? oracleTimestamp : environment.ChainlinkOracleTimestamp;
+		requestIdTimestamp = requestIdTimestamp ? requestIdTimestamp : environment.ChainlinkRequestIdTimestamp;
+		oraclePaymentTimestamp = oraclePaymentTimestamp ? oraclePaymentTimestamp : environment.ChainlinkOraclePaymentTimestamp;
+		linkToken = linkToken ? linkToken : environment.LINKAddress;
+		this.globals.service.classroomContractInstance
+			.configureOracles(
+				oracleRandom,
+				requestIdRandom,
+				oraclePaymentRandom,
+				oracleTimestamp,
+				requestIdTimestamp,
+				oraclePaymentTimestamp,
+				linkToken
+			)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
 	}
 }

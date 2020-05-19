@@ -6,50 +6,86 @@ export class Classroom {
 	public startDate_String: string;
 	public finishDate_String: string;
 	dateStringOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-	public metadata = {ENSName: '', email: '', url: '', avatar: '', description: '', notice: '', keywords: new Array<string>()};
-	public classdata = {students: 0, validStudents: 0, funds: 0, fundsInvested:0, investmentReturns:0};
-	public params = {compoundApplyPercentage: 0.5};
+	public metadata = {
+		ENSName: '',
+		email: '',
+		url: '',
+		avatar: '',
+		description: '',
+		notice: '',
+		keywords: new Array<string>(),
+	};
+	public funds = {DAI: 0, LINK: 0};
+	public classdata = {
+		students: 0,
+		validStudents: 0,
+		fundsInvested: 0,
+		investmentReturns: 0,
+	};
+	public params = { compoundApplyPercentage: 0.5 };
+	public configs = {
+		oracleRandom: '',
+		requestIdRandom: '',
+		oraclePaymentRandom: 0,
+		oracleTimestamp: '',
+		requestIdTimestamp: '',
+		oraclePaymentTimestamp: 0,
+		linkToken: '',
+		uniswapDAI: '',
+		uniswapLINK: '',
+		uniswapRouter: '',
+		aaveProvider: '',
+		aaveLendingPool: '',
+		aaveLendingPoolCore: '',
+		aTokenDAI: '',
+	};
 	public ENSHasNotice = false;
 
-    constructor(
-        public id: number,
-        public title: string,
-        public smartcontract: string,
-        public startDateTimestamp: number,
-        public finishDateTimestamp: number,
-        public duration: number,
-        public price: number,
-        public minScore: number,
-        public cutPrincipal: number,
-        public cutPool: number,
+	constructor(
+		public id: number,
+		public title: string,
+		public smartcontract: string,
+		public startDateTimestamp: number,
+		public finishDateTimestamp: number,
+		public duration: number,
+		public price: number,
+		public minScore: number,
+		public cutPrincipal: number,
+		public cutPool: number,
 		public openForApplication: Boolean,
 		public courseEmpty: Boolean,
-        public classroomActive: Boolean,
-        public courseFinished: Boolean,
+		public classroomActive: Boolean,
+		public courseFinished: Boolean,
 		public addressChallenge: string,
 		public owner: string
 	) {
 		this.startDate = new Date(this.startDateTimestamp * 1000);
 		this.finishDate = new Date(this.finishDateTimestamp * 1000);
-		this.startDate_StringDate = this.startDate.toLocaleDateString('en-US', this.dateStringOptions);
-		this.finishDate_StringDate = this.finishDate.toLocaleDateString('en-US', this.dateStringOptions);
+		this.startDate_StringDate = this.startDate.toLocaleDateString(
+			'en-US',
+			this.dateStringOptions
+		);
+		this.finishDate_StringDate = this.finishDate.toLocaleDateString(
+			'en-US',
+			this.dateStringOptions
+		);
 		this.startDate_String = this.startDate.toUTCString();
 		this.finishDate_String = this.finishDate.toUTCString();
 	}
 
-	public isClassroomActive(): Boolean{
+	public isClassroomActive(): Boolean {
 		return this.state() === 3;
 	}
 
-	public isClassroomClosed(): Boolean{
+	public isClassroomClosed(): Boolean {
 		return this.state() === 2;
 	}
 
-	public isClassroomOpen(): Boolean{
+	public isClassroomOpen(): Boolean {
 		return this.state() === 1;
 	}
 
-	public isClassroomNotOpen(): Boolean{
+	public isClassroomNotOpen(): Boolean {
 		return this.state() === 0;
 	}
 
@@ -60,5 +96,4 @@ export class Classroom {
 		if (this.openForApplication && this.courseEmpty) return 1;
 		return 0;
 	}
-
 }

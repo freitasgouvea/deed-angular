@@ -286,8 +286,8 @@ export class LandingComponent implements OnInit {
 		this.roleMembersAdmin = new Map<string, Array<GenericUser>>();
 		this.getRoleMembers('DEFAULT_ADMIN_ROLE').then((result) => {
 			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'] = result;
+			if (this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(element => element.address == this.globals.address)) this.globals.userIsUniversityAdmin = true;
 		});
-		if (this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(element => element.address == this.globals.address)) this.globals.userIsUniversityAdmin = true;
 		this.getRoleMembers('FUNDS_MANAGER_ROLE').then((result) => {
 			this.roleMembersAdmin['FUNDS_MANAGER_ROLE'] = result;
 		});
@@ -321,7 +321,11 @@ export class LandingComponent implements OnInit {
 
 	public async setUniversityCut(param) {}
 
-	public async setUniversityParams(param) {}
+	public async setUniversityParams(param: string) {
+		const paramArray = param.split(',');
+		console.log(paramArray);
+		this.globals.service.universityContractInstance.updateAddresses(...paramArray)
+	}
 
 	public createClassroom(
 		_Owner: string,
