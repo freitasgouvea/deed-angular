@@ -97,6 +97,7 @@ export class baseClientService {
 				Student.abi,
 				providerOrSigner
 			);
+		console.log(this.studentContractInstance);
 	}
 
 	public checkContractInfo(address: string, file: any): boolean {
@@ -142,6 +143,14 @@ export class baseClientService {
 		const val = ethers.utils.parseBytes32String(answer);
 		return val;
 	}
+
+	public async getScore() {
+		const answer = await this.studentContractInstance.score();
+		const val = ethers.utils.parseBytes32String(answer);
+		return val;
+	}
+
+	// View Classroom info
 	
 	public async getClassroomOwner() {
 		const answer = await this.classroomContractInstance.owner();

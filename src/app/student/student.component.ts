@@ -62,6 +62,7 @@ export class StudentComponent implements OnInit {
 		this.globals.selectedStudent.address = await this.globals.service.getAddress();
 		this.globals.selectedStudent.smartContractAddress = await this.globals.service.getStudentSmartContract();
 		this.globals.selectedStudent.name = await this.globals.service.getStudentName();
+		this.globals.selectedStudent.score = await this.globals.service.getScore();
 	}
 
 }
