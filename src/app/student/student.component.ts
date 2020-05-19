@@ -64,5 +64,4 @@ export class StudentComponent implements OnInit {
 		this.globals.selectedStudent.name = await this.globals.service.getStudentName();
 	}
 
-
 }
