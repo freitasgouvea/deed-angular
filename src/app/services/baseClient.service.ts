@@ -127,14 +127,13 @@ export class baseClientService {
 	// View Student info
 
 	public async isStudentRegistred() {
-		const studentAdress = await this.getAddress();
+		const studentAdress = this.getStudentSmartContract()
 		const check = await this.universityContractInstance.studentIsRegistered(studentAdress);
 		return check;
 	}
 
 	public async getStudentSmartContract() {
 		const studentSmartContract = await this.universityContractInstance.myStudentAddress();
-		console.log(studentSmartContract);
 		return studentSmartContract;
 	}
 
