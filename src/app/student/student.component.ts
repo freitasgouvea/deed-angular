@@ -90,6 +90,7 @@ export class StudentComponent implements OnInit {
 		}
 	}
 
+	//TODO: fix activeStudentENS
 	async activeStudentENS(): Promise<any> {
 		this.txOn();
 		this.txMode = 'processingTX';
