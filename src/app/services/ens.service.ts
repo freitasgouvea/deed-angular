@@ -81,6 +81,12 @@ export class ENSService {
 		);
 	}
 
+	public async setAddr(node: string, address: string) {
+		await this.resolverContract.setAddr(node,
+			address
+		);
+	}
+
 	public async registerRecord(label: string, owner: string) {
 		return await this.ens.register(ethers.utils.namehash(label), owner);
 	}
@@ -101,6 +107,10 @@ export class ENSService {
 
 	public async lookupAddressNode(address: string): Promise<string> {
 		return await this.reverseRegistrarContract.node(address);
+	}
+
+	public async lookupNodeAddress(node: string): Promise<string> {
+		return await this.resolverContract.addr(node);
 	}
 
 	public async getResolverContract(node: string, sign: boolean) {

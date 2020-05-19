@@ -6,6 +6,8 @@ import { ENSService } from './services/ens.service';
 
 @Injectable()
 export class Globals {
+	public ADDR0 = "0x0000000000000000000000000000000000000000";
+
 	public service: PortisService | InfuraService;
 	public ensService = new ENSService();
 	public address: string;

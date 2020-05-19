@@ -18,6 +18,16 @@
                             <span>begin your journey today</span>
                         </h1>
                         <p class="lead  text-white">Climb your way to mastering a new skill in 7 easy steps. In this process you can earn money and even become a teacher yourself in the end.
+                            <div class="btn-wrapper">
+                                <a href="#classrooms" class="btn btn-white btn-icon mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                    <span class="btn-inner--text">Back</span>
+                                </a>
+                                <a (click)="openModal('custom-modal-search-classroom');" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-search"></i></span>
+                                    <span class="btn-inner--text">Search Address</span>
+                                </a>
+                            </div>
                     </div>
                     <div *ngIf=globals.selectedClassroom class="col-lg-8 mb-4">
                         <h1 class="display-3  text-white">classroom
@@ -33,13 +43,13 @@
                             <strong>Classroom Notice: </strong> {{globals.selectedClassroom.metadata.notice}}
                         </div>
                         <div class="btn-wrapper">
-                            <a (click)="openModal('custom-modal-classroomInfo');" class="btn btn-success btn-icon mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-search"></i></span>
-                                <span class="btn-inner--text">Details</span>
-                            </a>
                             <a href="#classrooms" class="btn btn-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
+                            </a>
+                            <a (click)="openModal('custom-modal-classroomInfo');" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-search"></i></span>
+                                <span class="btn-inner--text">Details</span>
                             </a>
                         </div>
                     </div>
@@ -236,8 +246,41 @@
                         <h4 class="UniversityAdmins mt-3">ENS Name: <span class="text-default">{{globals.selectedClassroom.metadata.ENSName}}</span>
                             <span *ngIf=globals.selectedClassroom.metadata.ENSName class="badge badge-pill badge-success">Recorded</span>
                             <span *ngIf=!globals.selectedClassroom.metadata.ENSName class="badge badge-pill badge-warning">Not Recorded</span></h4>
-                        <button type="button" *ngIf=!globals.selectedClassroom.metadata.ENSName (click)="registerENSRecord()">Register</button>
+                        <button type="button" class="btn btn-warning" *ngIf=!globals.selectedClassroom.metadata.ENSName (click)="registerENSRecord()">Register</button>
+                        <div class="form-group">
+                            <label for="classroomMetadataSelectType">Metadata field</label>
+                            <select #classroomMetadataSelectType class="form-control" id="classroomMetadataSelectType">
+							  <option>email</option>
+							  <option>url</option>
+							  <option>avatar</option>
+							  <option>description</option>
+							  <option>notice</option>
+							</select>
+                        </div>
+                        <div class="form-group">
+                            <label for="classroomMetadataValueInput">Value: </label>
+                            <input #classroomMetadataValueInput type="text" class="form-control" id="classroomMetadataValueInput" placeholder="new value">
+                        </div>
+                        <button type="button" class="btn btn-info" (click)="setMetadataRecord(classroomMetadataSelectType.value, classroomMetadataValueInput.value)">Change</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
+    <jw-modal id="custom-modal-search-classroom">
+        <div role="document" class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="modal-title-default">Search classroom</h6><button (click)="closeModal('custom-modal-search-classroom')" aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">×</span></button></div>
+                    <div class="modal-body">
+                        <p>You can input the address or ENS patch for your address. If you don't know, you can check the list in the university page.</p>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="ni ni-zoom-split-in"></i></span></div><input #searchClassroom class="form-control" placeholder="Search" type="text" (input)="resetSearchClassroomModalErrorMsg()"></div>
+                        <p *ngIf=searchClassroomModalProgressMsg class="text-warning mb-0" style="font-weight:bold;">Searching...</p>
+                        <p *ngIf=searchClassroomModalErrorMsg class="text-warning mb-0" style="font-weight:bold;">Classroom not found!</p>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-primary" type="button" (click)="searchForClassroomModal(searchClassroom.value)">Enter</button><button class="btn btn-link  ml-auto" data-dismiss="modal" (click)="closeModal('custom-modal-search-classroom')" type="button">Close</button></div>
                 </div>
             </div>
         </div>
