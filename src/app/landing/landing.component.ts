@@ -7,6 +7,7 @@ import { CLASSROOMS } from 'src/models/mock-classroom';
 import { Student } from 'src/models/student.model';
 import { ModalService } from '../_modal';
 import { Globals } from '../app.globals';
+import { ClassroomInfoComponent } from '../classroom/classroomInfo.component'
 
 import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
@@ -16,7 +17,7 @@ import { environment } from 'src/environments/environment';
 @Component({
 	selector: 'app-landing',
 	templateUrl: './landing.component.html',
-	styleUrls: ['./landing.component.css']
+	styleUrls: ['./landing.component.css'],
 })
 export class LandingComponent implements OnInit {
 	focus: any;
@@ -98,7 +99,7 @@ export class LandingComponent implements OnInit {
 		this.globals.ensService.configureProvider(this.portisService.provider);
 		const adminAddress = await this.portisService.getUniversityOwner();
 		this.globals.userIsUniversityAdmin = this.globals.address === adminAddress;
-		const isRegistered = await this.globals.service.getUniversityOwner();
+		const isRegistered = await this.globals.service.isStudentRegistred();
 		if (!isRegistered) {
 			this.globals.mode = 'connected';
 			return;
@@ -301,6 +302,12 @@ export class LandingComponent implements OnInit {
 		this.getRoleMembers('REGISTERED_SUPPLIER_ROLE').then((result) => {
 			this.roleMembersAdmin['REGISTERED_SUPPLIER_ROLE'] = result;
 		});
+		this.getRoleMembers('STUDENT_IDENTITY_ROLE').then((result) => {
+			this.roleMembersAdmin['STUDENT_IDENTITY_ROLE'] = result;
+		});
+		this.getRoleMembers('CLASSROOM_PROFESSOR_ROLE').then((result) => {
+			this.roleMembersAdmin['CLASSROOM_PROFESSOR_ROLE'] = result;
+		});
 		this.getRoleMembers('READ_STUDENT_LIST_ROLE').then((result) => {
 			this.roleMembersAdmin['READ_STUDENT_LIST_ROLE'] = result;
 			this.modeUniversityAdmin = 'loaded';
@@ -337,17 +344,6 @@ export class LandingComponent implements OnInit {
 				_Challengeaddress
 			)
 			.then(() => this.updateClassrooms());
-	}
-
-	async teacherClaimSubnode(label, owner, classroom) {
-		const node = this.globals.ensService.node;
-		const normalName = label.toLowerCase().replace(/\s/g, '');
-		await this.globals.service.claimSubnodeClassroom(
-			node,
-			normalName,
-			owner,
-			classroom
-		);
 	}
 
 	async studentClaimSubnode(label, owner, classroom) {

@@ -12,15 +12,28 @@
         </div>
         <div class="container py-lg-md d-flex">
             <div class="col">
-                <div *ngIf=globals.selectedClassroom class="row mb-4">
-                    <div class="col-lg-8 mb-4">
-                        <h1 class="display-3  text-white">classroom
-                            <span>Learn Solidity</span>
+                <div class="row mb-4">
+                    <div *ngIf=!globals.selectedClassroom class="col-lg-8 mb-4">
+                        <h1 class="display-3  text-white">get started
+                            <span>begin your journey today</span>
                         </h1>
-                        <p class="lead  text-white">Here you can see all details of this course and interact with classroom smart contract.
-                        </p>
+                        <p class="lead  text-white">Climb your way to mastering a new skill in 7 easy steps. In this process you can earn money and even become a teacher yourself in the end.
+                    </div>
+                    <div *ngIf=globals.selectedClassroom class="col-lg-8 mb-4">
+                        <h1 class="display-3  text-white">classroom
+                            <span>{{globals.selectedClassroom.title}}</span>
+                            <span *ngIf=globals.selectedClassroom.metadata.ENSName class="text-muted" style="font-size:smaller;">@{{globals.selectedClassroom.metadata.ENSName}}</span>
+                        </h1>
+                        <p *ngIf=globals.selectedClassroom.metadata.description class="lead text-white">{{globals.selectedClassroom.metadata.description}}</p>
+                        <p *ngIf=!globals.selectedClassroom.metadata.description class="lead text-white">No metadata for description.</p>
+                        <div *ngIf=globals.selectedClassroom.ENSHasNotice&&displayNotice #classroomNotice class="alert alert-info alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" aria-label="Close" (click)="closeNotice()">
+							  <span aria-hidden="true">&times;</span>
+							</button>
+                            <strong>Classroom Notice: </strong> {{globals.selectedClassroom.metadata.notice}}
+                        </div>
                         <div class="btn-wrapper">
-                            <a (click)="openModal('custom-modal-details');" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                            <a (click)="openModal('custom-modal-classroomInfo');" class="btn btn-success btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-search"></i></span>
                                 <span class="btn-inner--text">Details</span>
                             </a>
@@ -196,18 +209,18 @@
                     <h4 *ngIf=globals.selectedClassroom.isClassroomActive() class="text-light">Status: <span class="badge badge-pill badge-primary">Ongoing</span></h4>
                     <h4 *ngIf=globals.selectedClassroom.courseFinished class="text-light">Status: <span class="badge badge-pill badge-dark">Finished</span></h4>
                 </div>
-                <div class="mt-5 py-5 border-top text-center">
+                <div class="mt-2 py-5 border-top text-center">
                     <h4>Classroom Management</h4>
                     <div class="row justify-content-center">
                         <br>
-                        <button class="btn btn-md btn-info width:120px">Metadata</button>
-                        <button class="btn btn-md btn-info width:120px">Params</button>
-                        <button class="btn btn-md btn-info width:120px">Funds</button>
-                        <button class="btn btn-md btn-warning width:120px">Configs</button>
-                        <button class="btn btn-md btn-warning width:120px">Transfer</button>
+                        <button class="btn btn-md btn-info width:120px" (click)="openModal('classroom-metadata-admin')">Metadata</button>
+                        <button class="btn btn-md btn-info width:120px" (click)="openModal('classroom-params-admin')">Params</button>
+                        <button class="btn btn-md btn-info width:120px" (click)="openModal('classroom-funds-admin')">Funds</button>
+                        <button class="btn btn-md btn-warning width:120px" (click)="openModal('classroom-configs-admin')">Configs</button>
+                        <button class="btn btn-md btn-warning width:120px" (click)="openModal('classroom-transfer-admin')">Transfer</button>
                     </div>
                 </div>
-                <div class="mt-5 py-5 text-left">
+                <div class="mt-2 py-5 text-left">
                     <h5>Funds in Classroom: {{globals.selectedClassroom.classdata.funds}} DAI</h5>
                 </div>
             </div>
@@ -215,6 +228,20 @@
         <br>
         <br>
     </div>
+    <jw-modal id="classroom-metadata-admin">
+        <div *ngIf=globals.selectedClassroom class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card shadow border-0">
+                    <div class="card-body py-5">
+                        <h4 class="UniversityAdmins mt-3">ENS Name: <span class="text-default">{{globals.selectedClassroom.metadata.ENSName}}</span>
+                            <span *ngIf=globals.selectedClassroom.metadata.ENSName class="badge badge-pill badge-success">Recorded</span>
+                            <span *ngIf=!globals.selectedClassroom.metadata.ENSName class="badge badge-pill badge-warning">Not Recorded</span></h4>
+                        <button type="button" *ngIf=!globals.selectedClassroom.metadata.ENSName (click)="registerENSRecord()">Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
     <jw-modal id="custom-modal-register">
         <form role="form">
             <div class="row justify-content-center">
@@ -548,5 +575,8 @@
                 <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-details');">Close</button>
             </div>
         </form>
+    </jw-modal>
+    <jw-modal id="custom-modal-classroomInfo">
+        <app-classroomInfo></app-classroomInfo>
     </jw-modal>
 </main>
