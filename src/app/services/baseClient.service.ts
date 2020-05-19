@@ -145,8 +145,7 @@ export class baseClientService {
 	}
 
 	public async getScore() {
-		const answer = await this.studentContractInstance.score();
-		const val = ethers.utils.parseBytes32String(answer);
+		const val = await this.studentContractInstance.score();
 		return val;
 	}
 
