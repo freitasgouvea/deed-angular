@@ -122,14 +122,4 @@ export class StudentComponent implements OnInit {
 		await this.refreshAccountInfo();
 	}
 
-	async setupStudentENS() {
-		const normalName = this.globals.selectedStudent.name.toLowerCase().replace(/\s/g, '');
-		if (!this.globals.studentENSNameRecord)
-			await this.globals.service.registerInRegistrar(normalName);
-		const node = this.globals.ensService.node;
-		await this.globals.service.setResolver(node);
-		await this.globals.service.setAddr(node, this.globals.selectedStudent.smartContractAddress);
-		await this.globals.service.setReverse(normalName + environment.ENSDomain);
-	}
-
 }
