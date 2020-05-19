@@ -482,4 +482,15 @@ export class baseClientService {
 			return true;
 		}
 	}
+
+	//Classroom actions
+
+	public async applyToClassroom(classroomAddress: string) {
+		const application = await this.studentContractInstance.applyToClassroom(
+			classroomAddress
+		);
+		await application.wait();
+		return application;
+	}
+
 }

@@ -262,4 +262,22 @@ export class ClassroomComponent implements OnInit {
 			node
 		);
 	}
+
+	async applyClassroom(classroomAddress: string): Promise<any> {
+		this.txOn();
+		if (classroomAddress == '') {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'processingTX';
+			const application = await this.globals.service.applyToClassroom(
+				classroomAddress
+			);
+			if (!application) {
+				this.txMode = 'failedTX';
+			} else {
+				this.txMode = 'successTX';
+			}
+		}
+	}
+
 }
