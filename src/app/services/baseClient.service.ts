@@ -149,10 +149,17 @@ export class baseClientService {
 		return val;
 	}
 
+	public async getApplications() {
+		const studentAddress = this.getAddress();
+		const applications = await this.universityContractInstance.viewMyApplications(studentAddress);
+		console.log(applications)
+		return applications;
+	}
+
 	// View Classroom info
 	
 	public async getClassroomOwner() {
-		const answer = await this.classroomContractInstance.owner();
+		const answer = await this.universityContractInstance.owner();
 		return answer;
 	}
 

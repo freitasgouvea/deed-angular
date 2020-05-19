@@ -45,7 +45,7 @@ export class LandingComponent implements OnInit {
 	) {}
 
 	async ngOnInit() {
-		this.globals.selectedStudent = new Student('0', '0', '0', '0');
+		this.globals.selectedStudent = new Student('0', '0', '0', '0', []);
 		if (!this.globals.service) {
 			this.globals.service = new InfuraService();
 			console.log(this.globals.ensService)
@@ -77,7 +77,7 @@ export class LandingComponent implements OnInit {
 
 	onConnect(student: Student | void): void {
 		if (student) this.globals.selectedStudent = student;
-		else this.globals.selectedStudent = new Student('0', '0', '0', '0');
+		else this.globals.selectedStudent = new Student('0', '0', '0', '0', []);
 	}
 
 	txOn() {

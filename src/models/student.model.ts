@@ -3,6 +3,7 @@ export class Student {
         public address: String,
         public name: String,
         public score: String,
-        public smartContractAddress: String
+        public smartContractAddress: String,
+        public applications: []
     ) {}
     }
