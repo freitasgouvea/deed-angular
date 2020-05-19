@@ -16,18 +16,26 @@
                     <div class="col-lg-12 mb-4">
                         <h1 class="display-3  text-white">account
                             <span>{{globals.selectedStudent.name}}</span>
+                            <span *ngIf=globals.studentENSName class="text-muted" style="font-size:smaller;">@{{globals.studentENSName}}</span>
                         </h1>
+                        <h3 class="lead  text-white">{{globals.studentENSDescription}}</h3>
+                        <div *ngIf=globals.studentENSHasNotice&&globals.studentDisplayNotice #studentNotice class="alert alert-info alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" aria-label="Close" (click)="closeStudentNotice()">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                            <strong>Student Notice: </strong> {{globals.studentENSNotice}}
+                        </div>
                         <p class="lead text-white">Address: {{globals.selectedStudent.address}}</p>
                         <p class="lead text-white">Student Smart Contract: {{globals.selectedStudent.smartContractAddress}}</p>
                         <p class="lead text-white">Score: {{globals.selectedStudent.score}} </p>
                         <div class="btn-wrapper">
-                            <a (click)="openModal('custom-modal-edit'); txOn();" class="btn btn-success text-white btn-icon mb-3 mb-sm-0">
+                            <a href="" class="btn btn-white btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                <span class="btn-inner--text">Back</span>
+                            </a>
+                            <a (click)="openModal('custom-modal-edit'); txOn();" class="btn btn-warning text-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-edit"></i></span>
                                 <span class="btn-inner--text">Edit Profile</span>
-                            </a>
-                            <a href="#clasrooms" class="btn btn-white btn-icon mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
-                                <span class="btn-inner--text">Back</span>
                             </a>
                         </div>
                     </div>

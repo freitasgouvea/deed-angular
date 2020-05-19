@@ -39,4 +39,11 @@ export class Globals {
 	public universityReturns: any;
 	public universityAdmin: any;
 	public universityParams: any;
+
+	public studentENSName: any;
+	public studentENSDescription: any;
+	public studentENSNotice: any;
+	public studentENSNameRecord = false;
+	public studentENSHasNotice = false;
+	public studentDisplayNotice = false;
 }

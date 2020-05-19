@@ -242,7 +242,6 @@ export class LandingComponent implements OnInit {
 
 	async refreshAccountInfo(): Promise<any> {
 		this.globals.address = await this.globals.service.getAddress();
-		//TODO: call student smart contract
 	}
 
 	async studentSelfRegister(): Promise<any> {

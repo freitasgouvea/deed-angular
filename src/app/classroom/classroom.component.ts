@@ -21,6 +21,7 @@ export class ClassroomComponent implements OnInit {
 	public form: FormGroup;
 	userIsClassroomAdmin = false;
 	displayNotice = true;
+	public txMode = 'off';
 
 	constructor(
 		public globals: Globals,
@@ -39,6 +40,14 @@ export class ClassroomComponent implements OnInit {
 
 	closeNotice() {
 		this.displayNotice = false;
+	}
+
+	txOn() {
+		this.txMode = 'preTX';
+	}
+
+	txOff() {
+		this.txMode = 'off';
 	}
 
 	searchClassroomModalErrorMsg = false;

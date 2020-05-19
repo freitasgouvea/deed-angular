@@ -8,6 +8,7 @@ import { Globals } from '../app.globals';
 import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
 import { ENSService } from '../services/ens.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
 	selector: 'app-student',
@@ -46,8 +47,13 @@ export class StudentComponent implements OnInit {
 	openModal(id: string) {
 		this.modalService.open(id);
 	}
+
 	closeModal(id: string) {
 		this.modalService.close(id);
+	}
+
+	closeStudentNotice() {
+		this.globals.universityDisplayNotice = false;
 	}
 
 	txOn() {
@@ -82,6 +88,30 @@ export class StudentComponent implements OnInit {
 				this.txMode = 'successTX';
 			}
 		}
+	}
+
+	async updateENSNotice(text: string) {
+		await this.globals.service.setTxRecord(this.globals.ensService.node, 'notice', text);
+		await this.refreshAccountInfo();
+	}
+
+	async updateENSDescription(text: string) {
+		await this.globals.service.setTxRecord(
+			this.globals.ensService.node,
+			'description',
+			text
+		);
+		await this.refreshAccountInfo();
+	}
+
+	async setupStudentENS() {
+		const normalName = this.globals.selectedStudent.name.toLowerCase().replace(/\s/g, '');
+		if (!this.globals.studentENSNameRecord)
+			await this.globals.service.registerInRegistrar(normalName);
+		const node = this.globals.ensService.node;
+		await this.globals.service.setResolver(node);
+		await this.globals.service.setAddr(node, this.globals.selectedStudent.smartContractAddress);
+		await this.globals.service.setReverse(normalName + environment.ENSDomain);
 	}
 
 }
