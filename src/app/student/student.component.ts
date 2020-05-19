@@ -25,7 +25,7 @@ export class StudentComponent implements OnInit {
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
-		public portisService: PortisService
+		public portisService: PortisService,
 	) { }
 
 	async ngOnInit() {
@@ -64,6 +64,26 @@ export class StudentComponent implements OnInit {
 		this.globals.selectedStudent.name = await this.globals.service.getStudentName();
 		this.globals.selectedStudent.score = await this.globals.service.getScore();
 		this.globals.selectedStudent.applications = await this.globals.service.getApplications();
+		for (var application of this.globals.selectedStudent.applications) {
+			console.log(application)
+	   }
+	}
+
+	async updateName(newName: string): Promise<any> {
+		this.txOn();
+		if (newName == '') {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'processingTX';
+			const updateName = await this.globals.service.studentUpdateName(
+				newName
+			);
+			if (!updateName) {
+				this.txMode = 'failedTX';
+			} else {
+				this.txMode = 'successTX';
+			}
+		}
 	}
 
 }

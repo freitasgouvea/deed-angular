@@ -151,7 +151,6 @@ export class baseClientService {
 
 	public async getApplications() {
 		const applications = await this.universityContractInstance.viewMyApplications();
-		console.log(applications)
 		return applications;
 	}
 
@@ -371,6 +370,15 @@ export class baseClientService {
 	public async studentSelfRegister(_name: string) {
 		const name = ethers.utils.formatBytes32String(_name);
 		const register = await this.universityContractInstance.studentSelfRegister(
+			name
+		);
+		await register.wait();
+		return register;
+	}
+
+	public async studentUpdateName(newName: string) {
+		const name = ethers.utils.formatBytes32String(newName);
+		const register = await this.universityContractInstance.changeName(
 			name
 		);
 		await register.wait();
