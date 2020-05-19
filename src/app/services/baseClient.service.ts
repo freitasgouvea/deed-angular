@@ -150,8 +150,7 @@ export class baseClientService {
 	}
 
 	public async getApplications() {
-		const studentAddress = this.getAddress();
-		const applications = await this.universityContractInstance.viewMyApplications(studentAddress);
+		const applications = await this.universityContractInstance.viewMyApplications();
 		console.log(applications)
 		return applications;
 	}
