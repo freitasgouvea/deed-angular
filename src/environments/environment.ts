@@ -13,7 +13,7 @@ export const environment = {
 	ENSReverseRegistrarAddress: '0x6F628b68b30Dc3c17f345c9dbBb1E483c2b7aE5c',
 	ENSUniversityName: 'university',
 	ENSDomain: '.test',
-	DAIAddress: '0xad6d458402f60fd3bd25163575031acdce07538d',
+	DAIAddress: '0xf80A32A835F79D7787E8a8ee5721D0fEaFd78108',
 	CompoundDAIAddress: '0x6ce27497a64fffb5517aa4aee908b1e7eb63b9ff',
 	AaveDAIAddress: '0xcB1Fe6F440c49E9290c3eb7f158534c2dC374201',
 	UniswapRouter: '0xf164fC0Ec4E93095b804a4795bBe1e041497b92a',

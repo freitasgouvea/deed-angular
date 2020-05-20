@@ -235,9 +235,6 @@ export class LandingComponent implements OnInit {
 			this.refreshClassroomMetadata(newClassroom);
 			index++;
 		}
-		CLASSROOMS.forEach((element) => {
-			this.globals.classrooms.push(element);
-		});
 	}
 
 	async refreshClassroomMetadata(classroom: Classroom) {
