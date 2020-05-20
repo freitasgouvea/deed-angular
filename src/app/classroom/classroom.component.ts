@@ -168,6 +168,7 @@ export class ClassroomComponent implements OnInit {
 			);
 		this.refreshClassroomFunds();
 		this.refreshClassroomMetadata();
+		if (!this.userIsClassroomAdmin) return;
 		this.refreshClassroomConfigs();
 		this.refreshClassroomParams();
 		this.refreshClassroomData();
