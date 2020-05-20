@@ -157,10 +157,11 @@ export class ClassroomComponent implements OnInit {
 					(this.globals.userIsClassroomAdmin =
 						this.globals.address == adminAddress)
 			);
-		this.refreshClassroomFunds(this.globals.selectedClassroom);
-		this.refreshClassroomMetadata(this.globals.selectedClassroom);
-		this.refreshClassroomConfigs(this.globals.selectedClassroom);
-		this.refreshClassroomParams(this.globals.selectedClassroom);
+		this.refreshClassroomFunds();
+		this.refreshClassroomMetadata();
+		this.refreshClassroomConfigs();
+		this.refreshClassroomParams();
+		this.refreshClassroomData();
 	}
 
 	async conectPortis(): Promise<any> {
@@ -233,7 +234,9 @@ export class ClassroomComponent implements OnInit {
 		);
 	}
 
-	async refreshClassroomMetadata(classroom: Classroom) {
+	async refreshClassroomMetadata(
+		classroom: Classroom = this.globals.selectedClassroom
+	) {
 		const normalName = classroom.title.toLowerCase().replace(/\s/g, '');
 		const node = this.globals.ensService.getSubNode(normalName);
 		const record = await this.globals.ensService.hasRecord(node);
@@ -262,7 +265,7 @@ export class ClassroomComponent implements OnInit {
 		);
 	}
 
-	async refreshClassroomFunds(
+	refreshClassroomFunds(
 		classroom: Classroom = this.globals.selectedClassroom
 	) {
 		this.globals.service
@@ -287,7 +290,7 @@ export class ClassroomComponent implements OnInit {
 
 	async exchangeLINK_DAI(val: number) {}
 
-	async refreshClassroomConfigs(
+	refreshClassroomConfigs(
 		classroom: Classroom = this.globals.selectedClassroom
 	) {
 		//TODO: abstract service
@@ -377,9 +380,10 @@ export class ClassroomComponent implements OnInit {
 			);
 	}
 
-	async refreshClassroomParams(
+	refreshClassroomParams(
 		classroom: Classroom = this.globals.selectedClassroom
 	) {
+		//TODO: abstract service
 		this.globals.service.classroomContractInstance
 			.compoundApplyPercentage()
 			.then((val) => {
@@ -390,6 +394,41 @@ export class ClassroomComponent implements OnInit {
 					this.globals.selectedClassroom.params
 						.compoundApplyPercentage;
 			});
+	}
+
+	refreshClassroomData(
+		classroom: Classroom = this.globals.selectedClassroom
+	) {
+		//TODO: abstract service
+		this.globals.service.classroomContractInstance
+			.countNewApplications()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.classdata.students = val)
+			);
+		this.globals.service.classroomContractInstance
+			.countReadyApplications()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.classdata.validStudents = val)
+			);
+	}
+
+	closeApplications() {
+		this.globals.service.classroomContractInstance
+			.closeApplications()
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+	openApplications() {
+		this.globals.service.classroomContractInstance
+			.openApplications()
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	beginCourse() {
+		this.globals.service.classroomContractInstance
+			.beginCourse(true)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
 	}
 
 	configureUniswap(
@@ -475,5 +514,4 @@ export class ClassroomComponent implements OnInit {
 			}
 		}
 	}
-
 }

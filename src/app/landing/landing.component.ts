@@ -7,7 +7,7 @@ import { CLASSROOMS } from 'src/models/mock-classroom';
 import { Student } from 'src/models/student.model';
 import { ModalService } from '../_modal';
 import { Globals } from '../app.globals';
-import { ClassroomInfoComponent } from '../classroom/classroomInfo.component'
+import { ClassroomInfoComponent } from '../classroom/classroomInfo.component';
 
 import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
@@ -42,7 +42,7 @@ export class LandingComponent implements OnInit {
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
-		public portisService: PortisService,
+		public portisService: PortisService
 	) {}
 
 	async ngOnInit() {
@@ -53,9 +53,10 @@ export class LandingComponent implements OnInit {
 				this.globals.service.provider,
 				false
 			);
-			console.log("Connected to infura");
+			console.log('Connected to infura');
 		}
-		if (this.globals.universityInfoNeedsRefresh) this.refreshUniversityInfo()
+		if (this.globals.universityInfoNeedsRefresh)
+			this.refreshUniversityInfo();
 	}
 
 	openModal(id: string) {
@@ -102,7 +103,13 @@ export class LandingComponent implements OnInit {
 		this.globals.address = await this.portisService.getAddress();
 		this.globals.service = this.portisService;
 		this.globals.ensService.configureProvider(this.portisService.provider);
-		if (this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(element => element.address == this.globals.address)) this.globals.userIsUniversityAdmin = true;
+		if (
+			this.roleMembersAdmin &&
+			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(
+				(element) => element.address == this.globals.address
+			)
+		)
+			this.globals.userIsUniversityAdmin = true;
 		const isRegistered = await this.globals.service.isStudentRegistred();
 		if (!isRegistered) {
 			this.globals.mode = 'connected';
@@ -118,13 +125,12 @@ export class LandingComponent implements OnInit {
 		if (this.globals.pageParalelRefreshLock) return;
 		this.globals.pageParalelRefreshLock = true;
 		this.refreshUniversityMetadata();
-		this.updateClassrooms().then(() =>
-			{
-				this.globals.classlistLoaded = true;
-				this.globals.universityInfoNeedsRefresh = false;
-				this.globals.pageParalelRefreshLock = false;
-			});
-		this.loadUniversityAdmin()
+		this.updateClassrooms().then(() => {
+			this.globals.classlistLoaded = true;
+			this.globals.universityInfoNeedsRefresh = false;
+			this.globals.pageParalelRefreshLock = false;
+		});
+		this.loadUniversityAdmin();
 	}
 
 	async refreshUniversityMetadata() {
@@ -135,7 +141,8 @@ export class LandingComponent implements OnInit {
 		this.globals.universityENSTTL = await this.globals.ensService.getTTL();
 		this.globals.universityENSDescription = await this.globals.ensService.getTxDescription();
 		this.globals.universityENSNotice = await this.globals.ensService.getTxNotice();
-		this.globals.universityENSHasNotice = this.globals.universityENSNotice.length > 0;
+		this.globals.universityENSHasNotice =
+			this.globals.universityENSNotice.length > 0;
 		this.globals.universityName = await this.globals.service.getUniversityName();
 		this.globals.universityCut = await this.globals.service.getUniversityCut();
 		this.globals.universityDonations = await this.globals.service.getUniversityDonations();
@@ -147,7 +154,11 @@ export class LandingComponent implements OnInit {
 	}
 
 	async updateENSNotice(text: string) {
-		await this.globals.service.setTxRecord(this.globals.ensService.node, 'notice', text);
+		await this.globals.service.setTxRecord(
+			this.globals.ensService.node,
+			'notice',
+			text
+		);
 		await this.refreshUniversityMetadata();
 	}
 
@@ -161,18 +172,25 @@ export class LandingComponent implements OnInit {
 	}
 
 	async setupUniversityENS() {
-		const normalName = this.globals.universityName.toLowerCase().replace(/\s/g, '');
+		const normalName = this.globals.universityName
+			.toLowerCase()
+			.replace(/\s/g, '');
 		if (!this.globals.universityENSNameRecord)
 			await this.globals.service.registerInRegistrar(normalName);
 		const node = this.globals.ensService.node;
 		await this.globals.service.setResolver(node);
 		await this.globals.service.setAddr(node, environment.universityAddress);
-		await this.globals.service.setReverse(normalName + environment.ENSDomain);
+		await this.globals.service.setReverse(
+			normalName + environment.ENSDomain
+		);
 	}
 
 	async updateClassrooms() {
 		let classroomCount = await this.globals.service.getClassroomCount();
-		if (this.globals.classrooms.length == classroomCount + CLASSROOMS.length)
+		if (
+			this.globals.classrooms.length ==
+			classroomCount + CLASSROOMS.length
+		)
 			return;
 		this.globals.classlistLoaded = false;
 		this.globals.classrooms = new Array<Classroom>();
@@ -227,13 +245,19 @@ export class LandingComponent implements OnInit {
 		const node = this.globals.ensService.getSubNode(normalName);
 		const record = await this.globals.ensService.hasRecord(node);
 		if (!record) return;
-		classroom.metadata.email = await this.globals.ensService.getTxEmail(node);
+		classroom.metadata.email = await this.globals.ensService.getTxEmail(
+			node
+		);
 		classroom.metadata.url = await this.globals.ensService.getTxURL(node);
-		classroom.metadata.avatar = await this.globals.ensService.getTxAvatar(node);
+		classroom.metadata.avatar = await this.globals.ensService.getTxAvatar(
+			node
+		);
 		classroom.metadata.description = await this.globals.ensService.getTxDescription(
 			node
 		);
-		classroom.metadata.notice = await this.globals.ensService.getTxNotice(node);
+		classroom.metadata.notice = await this.globals.ensService.getTxNotice(
+			node
+		);
 		classroom.metadata.keywords = await this.globals.ensService.getTxKeywordsArray(
 			node
 		);
@@ -289,7 +313,12 @@ export class LandingComponent implements OnInit {
 		this.roleMembersAdmin = new Map<string, Array<GenericUser>>();
 		this.getRoleMembers('DEFAULT_ADMIN_ROLE').then((result) => {
 			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'] = result;
-			if (this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(element => element.address == this.globals.address)) this.globals.userIsUniversityAdmin = true;
+			if (
+				this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(
+					(element) => element.address == this.globals.address
+				)
+			)
+				this.globals.userIsUniversityAdmin = true;
 		});
 		this.getRoleMembers('FUNDS_MANAGER_ROLE').then((result) => {
 			this.roleMembersAdmin['FUNDS_MANAGER_ROLE'] = result;
@@ -326,7 +355,9 @@ export class LandingComponent implements OnInit {
 
 	public async setUniversityParams(param: string) {
 		const paramArray = param.split(',');
-		this.globals.service.universityContractInstance.updateAddresses(...paramArray)
+		this.globals.service.universityContractInstance.updateAddresses(
+			...paramArray
+		);
 	}
 
 	public createClassroom(

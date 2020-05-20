@@ -24,7 +24,8 @@ export const environment = {
 	ChainlinkOracleTimestamp: '0xc99B3D447826532722E41bc36e644ba3479E4365',
 	ChainlinkRequestIdTimestamp: '0x2ebb1c1a4b1e4229adac24ee0b5f784f00000000000000000000000000000000',
 	ChainlinkOraclePaymentTimestamp: 1,
-	AaveLendingPoolAddressesProvider : '0x1c8756FD2B28e9426CDBDcC7E3c4d64fa9A54728'
+	AaveLendingPoolAddressesProvider : '0x1c8756FD2B28e9426CDBDcC7E3c4d64fa9A54728',
+	DefaultGasRelayHub: "0xD216153c06E857cD7f72665E0aF1d7D82172F494",
 };
 
 /*

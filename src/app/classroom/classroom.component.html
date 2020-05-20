@@ -211,7 +211,7 @@
     <!--classroom admin begin-->
     <div *ngIf=globals.userIsClassroomAdmin class="container">
         <br><br><br>
-        <div class="card card-profile shadow mt--200">
+        <div *ngIf=globals.selectedClassroom class="card card-profile shadow mt--200">
             <div class="px-4">
                 <div class="text-center mt-5">
                     <h4 *ngIf=globals.selectedClassroom.state.isClassroomNotOpen class="text-light">Status: <span class="badge badge-pill badge-info">Not Open</span></h4>
@@ -233,6 +233,12 @@
                 </div>
                 <div class="mt-2 py-5 text-left">
                     <h5>Dashboard</h5>
+                    <button *ngIf=globals.selectedClassroom.state.isClassroomNotOpen class="btn btn-lg btn-icon btn-3 btn-success" (click)="openApplications()" type="button"><span class="btn-inner--icon"><i class="ni ni-button-play"></i></span><span class="btn-inner--text">Open applications</span></button>
+                    <div *ngIf=globals.selectedClassroom.state.isClassroomOpen>
+                        <h4>Student applications: {{globals.selectedClassroom.classdata.students}}</h4>
+                        <h4>Student ready applications: {{globals.selectedClassroom.classdata.validStudents}}</h4>
+                        <button class="btn btn-lg btn-icon btn-3 btn-warning" type="button" (click)="closeApplications()"><span class="btn-inner--icon"><i class="ni ni-close"></i></span><span class="btn-inner--text">Close applications</span></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -449,7 +455,7 @@
             </div>
         </form>
     </jw-modal>
-    <jw-modal id="custom-modal-1">
+    <jw-modal id="custom-modal-1" *ngIf=globals.selectedClassroom>
         <form role="form">
             <div class="row justify-content-center">
                 <div class="col-md-6">
@@ -505,7 +511,7 @@
             </div>
         </form>
     </jw-modal>
-    <jw-modal id="custom-modal-2">
+    <jw-modal id="custom-modal-2" *ngIf=globals.selectedClassroom>
         <form role="form">
             <div class="modal-header">
                 <h3 class="modal-title">Start Your Application</h3>
@@ -543,7 +549,7 @@
             </div>
         </form>
     </jw-modal>
-    <jw-modal id="custom-modal-3">
+    <jw-modal id="custom-modal-3" *ngIf=globals.selectedClassroom>
         <form role="form">
             <div class="modal-header">
                 <h3 class="modal-title">Call for a grant</h3>
@@ -581,7 +587,7 @@
             </div>
         </form>
     </jw-modal>
-    <jw-modal id="custom-modal-4">
+    <jw-modal id="custom-modal-4" *ngIf=globals.selectedClassroom>
         <form role="form">
             <div class="modal-header">
                 <h3 class="modal-title">Recieve classroom material</h3>
@@ -619,7 +625,7 @@
             </div>
         </form>
     </jw-modal>
-    <jw-modal id="custom-modal-5">
+    <jw-modal id="custom-modal-5" *ngIf=globals.selectedClassroom>
         <form role="form">
             <div class="modal-header">
                 <h3 class="modal-title">Submit your answer</h3>
@@ -657,9 +663,9 @@
             </div>
         </form>
     </jw-modal>
-    <jw-modal id="custom-modal-6"></jw-modal>
-    <jw-modal id="custom-modal-7"></jw-modal>
-    <jw-modal id="custom-modal-details">
+    <jw-modal id="custom-modal-6" *ngIf=globals.selectedClassroom></jw-modal>
+    <jw-modal id="custom-modal-7" *ngIf=globals.selectedClassroom></jw-modal>
+    <jw-modal id="custom-modal-details" *ngIf=globals.selectedClassroom>
         <form role="form">
             <div class="modal-header">
                 <h3 class="modal-title">Classroom Details</h3>
@@ -738,7 +744,7 @@
             </div>
         </form>
     </jw-modal>
-    <jw-modal id="custom-modal-classroomInfo">
+    <jw-modal id="custom-modal-classroomInfo" *ngIf=globals.selectedClassroom>
         <app-classroomInfo></app-classroomInfo>
     </jw-modal>
 </main>
