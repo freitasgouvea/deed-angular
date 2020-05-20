@@ -414,14 +414,15 @@ export class ClassroomComponent implements OnInit {
 			);
 	}
 
-	closeApplications() {
-		this.globals.service.classroomContractInstance
-			.closeApplications()
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
-	}
 	openApplications() {
 		this.globals.service.classroomContractInstance
 			.openApplications()
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	closeApplications() {
+		this.globals.service.classroomContractInstance
+			.closeApplications()
 			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
 	}
 
@@ -484,7 +485,8 @@ export class ClassroomComponent implements OnInit {
 				oracleTimestamp,
 				requestIdTimestamp,
 				oraclePaymentTimestamp,
-				linkToken
+				linkToken,
+				true
 			)
 			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
 	}
