@@ -3,12 +3,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { ModalModule } from './_modal';
+import { Globals } from './app.globals'
 
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
 import { ClassroomComponent } from './classroom/classroom.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
+import { StudentComponent } from './student/student.component';
+import { ClassroomInfoComponent } from './classroom/classroomInfo.component'
 
 
 @NgModule({
@@ -16,8 +19,10 @@ import { FooterComponent } from './footer/footer.component';
     AppComponent,
     LandingComponent,
     ClassroomComponent,
+    ClassroomInfoComponent,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    StudentComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +30,7 @@ import { FooterComponent } from './footer/footer.component';
     ModalModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [Globals],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

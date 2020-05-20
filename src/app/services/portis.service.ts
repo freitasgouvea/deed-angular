@@ -22,12 +22,13 @@ export class PortisService extends baseClientService {
 	public loginAddress: any;
 	public students: Student[] = [];
 
-	portis = new Portis('211b48db-e8cc-4b68-82ad-bf781727ea9e', 'ropsten', {
+	portis = new Portis('2910345a-33c7-46e4-a5d3-6178db3c692d', 'ropsten', {
 		scope: ['email'],
 	});
 
 	constructor() {
 		super();
+		this.useSigner = true;
 	}
 
 	async initPortis() {
@@ -35,7 +36,7 @@ export class PortisService extends baseClientService {
 			this.portis.provider
 		);
 		await this.portis.provider.enable();
-		this.setupProvider(provider);
+		await this.setupProvider(provider);
 		this.networkName = await this.provider.getNetwork();
 		const address = await this.getAddress();
 		if (address === '') {
@@ -43,30 +44,19 @@ export class PortisService extends baseClientService {
 			return false;
 		} else {
 			console.log('Connected with Portis!');
+			this.portis.onLogout(() => {
+				console.log('User logged out');
+				window.location.reload();
+			  });
+			this.portis.onActiveWalletChanged(walletAddress => {
+				console.log('Active wallet address:', walletAddress);
+				window.location.reload();
+			  });
 			return true;
 		}
 	}
 
-	async getAddress() {
-		const addresses = await this.provider.listAccounts();
-		return addresses[0];
-	}
-
-	async conectUniversity() {
-		if (!environment.universityAddress)
-			throw new Error('invalid contract address!');
-		if (!University || !University.abi)
-			throw new Error(
-				'invalid contract json, try to run truffle compile!'
-			);
-		if (this.portis.provider) {
-			this.connectContracts(this.provider.getSigner());
-			this.universityName = await this.universityContractInstance.name();
-		} else {
-			console.warn('try to connect with portis!');
-			this.provider = new ethers.providers.JsonRpcProvider(
-				'http://localhost:8545'
-			);
-		}
+	showPortis() {
+		this.portis.showPortis();
 	}
 }
