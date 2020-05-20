@@ -112,7 +112,7 @@
                                     1
                                 </div>
                                 <h6 class="text-default text-uppercase">Apply For Course</h6>
-                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                                <p class="description mt-3">To start this classroom you need to send your application.</p>
                                 <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-1'); txOn();" class="btn btn-default mt-4 text-white">Apply</a>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                                     2
                                 </div>
                                 <h6 class="text-default text-uppercase">Call for a Grant</h6>
-                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                                <p class="description mt-3">If you don't need have founds to pay the fee you can request a grant.</p>
                                 <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-2'); txOn();" class="btn btn-default mt-4 text-white">Call</a>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                                     3
                                 </div>
                                 <h6 class="text-default text-uppercase">Start Application</h6>
-                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                                <p class="description mt-3">You need to deposit the classroom fee to start your application.</p>
                                 <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-3'); txOn();" class="btn btn-default mt-4 text-white">Deposit</a>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                                     4
                                 </div>
                                 <h6 class="text-default text-uppercase">Access Material</h6>
-                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                                <p class="description mt-3">Here you can access all the stuff and materials of this classroom.</p>
                                 <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-4'); txOn();" class="btn btn-default mt-4 text-white">Recieve</a>
                             </div>
                         </div>
@@ -160,7 +160,7 @@
                                     5
                                 </div>
                                 <h6 class="text-default text-uppercase">Submit Your Answer</h6>
-                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                                <p class="description mt-3">Here you can send your secret to complete this classroom.</p>
                                 <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-5'); txOn();" class="btn btn-default mt-4 text-white">Submit</a>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
                                     6
                                 </div>
                                 <h6 class="text-default text-uppercase">Claim Your Reward</h6>
-                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p><br>
+                                <p class="description mt-3">If you send correct answer you can collect you reward here.</p><br>
                                 <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-6'); txOn();" class="btn btn-default mt-4 text-white">Claim</a>
                             </div>
                         </div>
@@ -184,7 +184,7 @@
                                     7
                                 </div>
                                 <h6 class="text-default text-uppercase">Start your own classroom</h6>
-                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                                <p class="description mt-3">After you complete a classroom you can create a new one.</p>
                                 <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-7'); txOn();" class="btn btn-default mt-4 text-white">Claim</a>
                             </div>
                         </div>
@@ -464,19 +464,7 @@
                             <h3 class="text-center text-white">Apply for this classroom</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-center text-white">To start in this classroom you need to send your application.</h2>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="form-group" [ngClass]="{'focused':focus===true}">
-                                        <div class="input-group input-group-alternative mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa fa-chalkboard"></i></span>
-                                            </div>
-                                            <input id="inputObjClassroomAddress" #inputObjClassroomAddress disabled class="form-control" placeholder="Classroom Address" value={{globals.selectedClassroom.smartcontract}} type="text" (focus)="focus=true" (blur)="focus=false">
-                                        </div>
-                                    </div>
+                                    <h2 class="description text-center text-white">To start this classroom you need to send your application.</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -501,7 +489,7 @@
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" type="submit" (click)="applyClassroom(inputObjClassroomAddress.value)" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="applyClassroom()" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Apply</span>
                             </a>
@@ -564,7 +552,7 @@
                             <h3 class="text-center text-white">Start your application</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-center text-white">You need to pay the classroom fee to start your application.</h2>
+                                    <h2 class="description text-center text-white">You need to deposit the classroom fee to start your application.</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -608,7 +596,7 @@
                             <h3 class="text-center text-white">Access classroom material</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-center text-white">Here you can access all the stuff of this classroom.</h2>
+                                    <h2 class="description text-center text-white">Here you can access all the stuff and materials of this classroom.</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -652,7 +640,7 @@
                             <h3 class="text-center text-white">Submit your answer</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-center text-white">Here you can send your secret to this classroom.</h2>
+                                    <h2 class="description text-center text-white">Here you can send your secret to complete this classroom.</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -764,7 +752,7 @@
                             <h3 class="text-center text-white">Claim new classroom</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-center text-white">Before you complete a classroom you can create a new one.</h2>
+                                    <h2 class="description text-center text-white">After you complete a classroom you can create a new one.</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
