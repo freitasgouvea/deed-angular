@@ -98,13 +98,13 @@ export class baseClientService {
 			? this.provider.getSigner()
 			: this.provider;
 		const smartContractAddress = await this.getStudentSmartContract();
+		if (!smartContractAddress) throw "Student not registered";
 		if (this.checkContractInfo(smartContractAddress, Student))
 			this.studentContractInstance = new ethers.Contract(
 				smartContractAddress,
 				Student.abi,
 				providerOrSigner
 			);
-		console.log(this.studentContractInstance);
 	}
 
 	public checkContractInfo(address: string, file: any): boolean {
@@ -171,7 +171,7 @@ export class baseClientService {
 	}
 
 	// View Classroom info
-	
+
 	public async getClassroomOwner() {
 		const answer = await this.universityContractInstance.owner();
 		return answer;
@@ -488,11 +488,6 @@ export class baseClientService {
 			student
 		);
 		await tx.wait();
-		if (!tx) {
-			return false;
-		} else {
-			return true;
-		}
 	}
 
 	//Classroom actions
