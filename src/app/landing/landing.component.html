@@ -399,7 +399,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                             </div>
-                                            <input id="_name" class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                                            <input id="studentInputName" #studentInputName class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
                                         </div>
                                     </div>
                                 </div>
@@ -437,7 +437,7 @@
                                 <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" type="submit" (click)="studentSelfRegister()" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="studentSelfRegister(studentInputName.value)" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Register</span>
                             </a>

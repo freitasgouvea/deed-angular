@@ -4,6 +4,7 @@ import { InfuraService } from './services/infura.service';
 import { Classroom } from 'src/models/classroom.model';
 import { ENSService } from './services/ens.service';
 import { Student } from 'src/models/student.model';
+import { baseClientService } from './services/baseClient.service';
 
 @Injectable()
 export class Globals {
@@ -40,11 +41,4 @@ export class Globals {
 	public universityReturns: any;
 	public universityAdmin: any;
 	public universityParams: any;
-
-	public studentENSName: any;
-	public studentENSDescription: any;
-	public studentENSNotice: any;
-	public studentENSNameRecord = false;
-	public studentENSHasNotice = false;
-	public studentDisplayNotice = false;
 }
