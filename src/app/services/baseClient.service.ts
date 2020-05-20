@@ -456,6 +456,14 @@ export class baseClientService {
 		);
 	}
 
+	async donateDAI(val: number){
+		const tx1 = await this.DAIContract.approve(this.universityContractInstance.address, val);
+		await tx1.wait();
+		const tx2 = await this.universityContractInstance.donateDAI(val);
+		await tx2.wait();
+		return true;
+	}
+
 	// ENS Signed actions
 
 	async registerInRegistrar(label: string) {
