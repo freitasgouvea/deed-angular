@@ -391,4 +391,15 @@ export class LandingComponent implements OnInit {
 	async getRoleMembers(role: string) {
 		return await this.globals.service.listRoles(role);
 	}
+
+	async donateDAi(val: number){
+		const tx1 = await this.globals.service.approveDAI(val);
+		this.globals.overlayLoader = true;
+		await tx1.wait();
+		this.globals.overlayLoader = false;
+		const tx2 = await this.globals.service.donateDAI(val);
+		this.globals.overlayLoader = true;
+		await tx1.wait();
+		this.globals.overlayLoader = false;
+	}
 }
