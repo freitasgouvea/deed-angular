@@ -72,7 +72,7 @@ export class StudentComponent implements OnInit {
 
 	refreshStudentData() {
 		if (!this.globals.selectedStudent)
-			this.globals.selectedStudent = new Student();
+			this.globals.selectedStudent = new Student(this.globals);
 		this.globals.service.getAddress().then((val) => {
 			this.globals.selectedStudent.address = val;
 		});
@@ -82,8 +82,7 @@ export class StudentComponent implements OnInit {
 		this.globals.service.getScore().then((val) => {
 			this.globals.selectedStudent.score = val;
 		});
-		this.globals.service.getApplications().then((val) => {
-			this.globals.selectedStudent.applications = val;
+		this.globals.selectedStudent.updateApplications().then((val) => {
 			this.globals.selectedStudent.hasApplications =
 				this.globals.selectedStudent.applications.length > 0;
 		});

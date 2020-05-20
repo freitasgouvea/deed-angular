@@ -191,10 +191,22 @@ export class baseClientService {
 		return answer;
 	}
 
+	public async viewMyApplication() {
+		const answer = await this.classroomContractInstance.viewMyApplication();
+		return answer;
+	}
+
 	// view Student info
 
 	public async viewMyApplicationState(classroomAddress: string) {
 		const answer = await this.studentContractInstance.viewMyApplicationState(classroomAddress);
+		return answer;
+	}
+
+	// view Student application info
+
+	public async viewApplicationClassroomAddress(){
+		const answer = await this.studentApplicationContractInstance.classroomAddress();
 		return answer;
 	}
 
