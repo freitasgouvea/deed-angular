@@ -323,6 +323,45 @@
                             <input class="form-control" #linkToken placeholder="Chainlink LINK Token address" type="text">
                             <button type="button" class="btn btn-info" (click)="configureOracles(oracleRandom.value,requestIdRandom.value,oraclePaymentRandom.value,oracleTimestamp.value,requestIdTimestamp.value,oraclePaymentTimestamp.value,linkToken.value)">Submit</button>
                         </div>
+                        <h4>Configure Aave:</h4>
+                        <div class="form-group">
+                            <input class="form-control" #aaveInput placeholder="Aave Lending Pool Addresses Provider" type="text">
+                            <button type="button" class="btn btn-info" (click)="configureAave(aaveInput.value)">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
+    <jw-modal id="classroom-params-admin">
+        <div *ngIf=globals.selectedClassroom class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card shadow border-0">
+                    <div class="card-body py-5">
+                        <h4>Classroom Parameters:</h4>
+                        <h5>Name: {{globals.selectedClassroom.title}}</h5>
+                        <input class="form-control" placeholder="Not implemented yet, sorry" type="text">
+                        <button type="button" class="btn btn-info">Change</button>
+                        <h5>Price: {{globals.selectedClassroom.price}}</h5>
+                        <input class="form-control" placeholder="Not implemented yet, sorry" type="text">
+                        <button type="button" class="btn btn-info">Change</button>
+                        <h5>Min. Score: {{globals.selectedClassroom.minScore}}</h5>
+                        <input class="form-control" placeholder="Not implemented yet, sorry" type="text">
+                        <button type="button" class="btn btn-info">Change</button>
+                        <h5>Cut from the principal: {{globals.selectedClassroom.cutPrincipal}}</h5>
+                        <input class="form-control" placeholder="Not implemented yet, sorry" type="text">
+                        <button type="button" class="btn btn-info">Change</button>
+                        <h5>Cut from the success pool: {{globals.selectedClassroom.cutPool}}</h5>
+                        <input class="form-control" placeholder="Not implemented yet, sorry" type="text">
+                        <button type="button" class="btn btn-info">Change</button>
+                        <h5>Duration: {{globals.selectedClassroom.duration}}</h5>
+                        <input class="form-control" placeholder="Not implemented yet, sorry" type="text">
+                        <button type="button" class="btn btn-info">Change</button>
+                        <h5>Compound application percentage: {{globals.selectedClassroom.params.compoundApplyPercentage}} %</h5>
+                        <h5>Aave application percentage: {{globals.selectedClassroom.params.aaveApplyPercentage}} %</h5>
+                        <label for="customRange1">Percentage</label>
+                        <input #percentageSelect type="range" class="custom-range" id="customRange1">
+                        <button type="button" class="btn btn-info">Change to {{percentageSelect.value}} % compound</button>
                     </div>
                 </div>
             </div>

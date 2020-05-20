@@ -259,12 +259,18 @@ export class ClassroomComponent implements OnInit {
 		this.globals.service
 			.getDAIBalance(this.globals.selectedClassroom.smartcontract)
 			.then(
-				(val) => (this.globals.selectedClassroom.funds.DAI = Number(ethers.utils.formatEther(val)))
+				(val) =>
+					(this.globals.selectedClassroom.funds.DAI = Number(
+						ethers.utils.formatEther(val)
+					))
 			);
 		this.globals.service
 			.getLINKBalance(this.globals.selectedClassroom.smartcontract)
 			.then(
-				(val) => (this.globals.selectedClassroom.funds.LINK = Number(ethers.utils.formatEther(val)))
+				(val) =>
+					(this.globals.selectedClassroom.funds.LINK = Number(
+						ethers.utils.formatEther(val)
+					))
 			);
 	}
 
@@ -364,7 +370,18 @@ export class ClassroomComponent implements OnInit {
 
 	async refreshClassroomParams(
 		classroom: Classroom = this.globals.selectedClassroom
-	) {}
+	) {
+		this.globals.service.classroomContractInstance
+			.compoundApplyPercentage()
+			.then((val) => {
+				this.globals.selectedClassroom.params.compoundApplyPercentage =
+					val / 1e4;
+				this.globals.selectedClassroom.params.aaveApplyPercentage =
+					100 -
+					this.globals.selectedClassroom.params
+						.compoundApplyPercentage;
+			});
+	}
 
 	configureUniswap(
 		uniswapDAI: string,
@@ -374,7 +391,9 @@ export class ClassroomComponent implements OnInit {
 		//TODO: abstract service
 		uniswapDAI = uniswapDAI ? uniswapDAI : environment.DAIAddress;
 		uniswapLINK = uniswapLINK ? uniswapLINK : environment.LINKAddress;
-		uniswapRouter = uniswapRouter ? uniswapRouter : environment.UniswapRouter;
+		uniswapRouter = uniswapRouter
+			? uniswapRouter
+			: environment.UniswapRouter;
 		this.globals.service.classroomContractInstance
 			.configureUniswap(uniswapDAI, uniswapLINK, uniswapRouter)
 			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
@@ -390,12 +409,24 @@ export class ClassroomComponent implements OnInit {
 		linkToken: string
 	) {
 		//TODO: abstract service
-		oracleRandom = oracleRandom ? oracleRandom : environment.ChainlinkOracleRandom;
-		requestIdRandom = requestIdRandom ? requestIdRandom : environment.ChainlinkRequestIdRandom;
-		oraclePaymentRandom = oraclePaymentRandom ? oraclePaymentRandom : environment.ChainlinkOraclePaymentRandom;
-		oracleTimestamp = oracleTimestamp ? oracleTimestamp : environment.ChainlinkOracleTimestamp;
-		requestIdTimestamp = requestIdTimestamp ? requestIdTimestamp : environment.ChainlinkRequestIdTimestamp;
-		oraclePaymentTimestamp = oraclePaymentTimestamp ? oraclePaymentTimestamp : environment.ChainlinkOraclePaymentTimestamp;
+		oracleRandom = oracleRandom
+			? oracleRandom
+			: environment.ChainlinkOracleRandom;
+		requestIdRandom = requestIdRandom
+			? requestIdRandom
+			: environment.ChainlinkRequestIdRandom;
+		oraclePaymentRandom = oraclePaymentRandom
+			? oraclePaymentRandom
+			: environment.ChainlinkOraclePaymentRandom;
+		oracleTimestamp = oracleTimestamp
+			? oracleTimestamp
+			: environment.ChainlinkOracleTimestamp;
+		requestIdTimestamp = requestIdTimestamp
+			? requestIdTimestamp
+			: environment.ChainlinkRequestIdTimestamp;
+		oraclePaymentTimestamp = oraclePaymentTimestamp
+			? oraclePaymentTimestamp
+			: environment.ChainlinkOraclePaymentTimestamp;
 		linkToken = linkToken ? linkToken : environment.LINKAddress;
 		this.globals.service.classroomContractInstance
 			.configureOracles(
@@ -407,6 +438,15 @@ export class ClassroomComponent implements OnInit {
 				oraclePaymentTimestamp,
 				linkToken
 			)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
+	}
+
+	configureAave(lendingPoolAddressesProvider: string) {
+		lendingPoolAddressesProvider = lendingPoolAddressesProvider
+			? lendingPoolAddressesProvider
+			: environment.AaveLendingPoolAddressesProvider;
+		this.globals.service.classroomContractInstance
+			.configureAave(lendingPoolAddressesProvider)
 			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
 	}
 }
