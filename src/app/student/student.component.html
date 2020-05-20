@@ -10,21 +10,32 @@
             <span></span>
             <span></span>
         </div>
-        <div class="container py-lg-md d-flex">
+        <div *ngIf=!globals.selectedStudent class="container py-lg-md d-flex">
+            <div class="row mb-4">
+                <div class="container">
+                    <div class="card bg-gradient-success shadow-lg border-0">
+                        <div class="p-5">
+                            <div class="row align-items-center">
+                                <div class="col-lg-8">
+                                    <h4 class="text-white">Connect to your account to begin.</h4>
+                                    <p class="lead text-white mt-3">You will need to connect to a wallet service in order to interact with this dApp.</p>
+                                </div>
+                                <div class="col-lg-3 ml-lg-auto"><a [routerLink]="['/']" class="btn btn-lg btn-block btn-white">CONNECT</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf=globals.selectedStudent class="container py-lg-md d-flex">
             <div class="col">
                 <div class="row mb-4">
                     <div class="col-lg-12 mb-4">
                         <h1 class="display-3  text-white">account
                             <span>{{globals.selectedStudent.name}}</span>
-                            <span *ngIf=globals.studentENSName class="text-muted" style="font-size:smaller;">@{{globals.studentENSName}}</span>
+                            <span *ngIf=globals.selectedStudent.metadata.ENSName class="text-muted" style="font-size:smaller;">@{{globals.selectedStudent.metadata.ENSName}}</span>
                         </h1>
-                        <h3 class="lead  text-white">{{globals.studentENSDescription}}</h3>
-                        <div *ngIf=globals.studentENSHasNotice&&globals.studentDisplayNotice #studentNotice class="alert alert-info alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" aria-label="Close" (click)="closeStudentNotice()">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                            <strong>Student Notice: </strong> {{globals.studentENSNotice}}
-                        </div>
+                        <h3 class="lead  text-white">{{globals.selectedStudent.metadata.description}}</h3>
                         <p class="lead text-white">Address: {{globals.selectedStudent.address}}</p>
                         <p class="lead text-white">Student Smart Contract: {{globals.selectedStudent.smartContractAddress}}</p>
                         <p class="lead text-white">Score: {{globals.selectedStudent.score}} </p>
@@ -33,9 +44,9 @@
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a *ngIf="globals.studentENSNameRecord==false" (click)="openModal('custom-modal-setup'); txOn();" class="btn btn-success text-white btn-icon mb-3 mb-sm-0">
+                            <a *ngIf=!globals.selectedStudent.studentENSNameRecord (click)="openModal('custom-modal-setup'); txOn();" class="btn btn-success text-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-star"></i></span>
-                                <span class="btn-inner--text">Active ENS</span>
+                                <span class="btn-inner--text">Register ENS</span>
                             </a>
                             <a (click)="openModal('custom-modal-edit'); txOn();" class="btn btn-primary text-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-edit"></i></span>
@@ -44,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <div  *ngIf="this.globals.selectedStudent.hasApplications==true" class="row mb-4">
+                <div *ngIf="globals.selectedStudent.hasApplications==true" class="row mb-4">
                     <div class="col-lg-12 mt-4">
                         <h1 class="display-3 text-white">applications</h1>
                         <table class="table table-hover bg-white" responsive>
@@ -54,7 +65,7 @@
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
-                            <tbody *ngFor="let application of this.globals.selectedStudent.applications">
+                            <tbody *ngFor="let application of globals.selectedStudent.applications">
                                 <tr>
                                     <th scope="row">{{ application }}</th>
                                     <td><a class="btn btn-sm btn-default text-white">Go</a></td>
@@ -63,7 +74,7 @@
                         </table>
                     </div>
                 </div>
-                <div *ngIf="this.globals.selectedStudent.hasApplications==false" class="row mb-4">
+                <div *ngIf="globals.selectedStudent.hasApplications==false" class="row mb-4">
                     <div class="container">
                         <div class="card bg-gradient-success shadow-lg border-0">
                             <div class="p-5">
@@ -81,7 +92,7 @@
             </div>
         </div>
     </section>
-    <jw-modal id="custom-modal-edit">
+    <jw-modal *ngIf=globals.selectedStudent id="custom-modal-edit">
         <form role="form">
             <div class="row justify-content-center">
                 <div class="col-md-6">
@@ -137,7 +148,7 @@
             </div>
         </form>
     </jw-modal>
-    <jw-modal id="custom-modal-setup">
+    <jw-modal *ngIf=globals.selectedStudent id="custom-modal-setup">
         <form role="form">
             <div class="row justify-content-center">
                 <div class="col-md-6">
@@ -167,9 +178,9 @@
                             </div>
                         </div>
                         <div class="card-footer bg-gradient-default">
-                            <a *ngIf="txMode=='preTX'" type="submit" (click)="activeStudentENS()" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="registerStudentENS()" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
-                                <span class="btn-inner--text">Active Now</span>
+                                <span class="btn-inner--text">Register Subdomain</span>
                             </a>
                             <a (click)="closeModal('custom-modal-setup'); txOff(); refreshAccountInfo();" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>

@@ -215,14 +215,6 @@ export class ClassroomComponent implements OnInit {
 			);
 	}
 
-	async setMetadataRecord(type: string, text: string) {
-		const normalName = this.globals.selectedClassroom.title
-			.toLowerCase()
-			.replace(/\s/g, '');
-		const node = this.globals.ensService.getSubNode(normalName);
-		await this.globals.ensService.setTxRecord(type, text, node);
-	}
-
 	async teacherClaimSubnode(label, owner, classroom) {
 		const node = this.globals.ensService.node;
 		const normalName = label.toLowerCase().replace(/\s/g, '');
@@ -232,6 +224,14 @@ export class ClassroomComponent implements OnInit {
 			owner,
 			classroom
 		);
+	}
+
+	async setMetadataRecord(type: string, text: string) {
+		const normalName = this.globals.selectedClassroom.title
+			.toLowerCase()
+			.replace(/\s/g, '');
+		const node = this.globals.ensService.getSubNode(normalName);
+		await this.globals.ensService.setTxRecord(type, text, node);
 	}
 
 	async refreshClassroomMetadata(

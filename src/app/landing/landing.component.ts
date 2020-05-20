@@ -25,9 +25,6 @@ export class LandingComponent implements OnInit {
 	page = 2;
 	page1 = 3;
 
-	//StudentSelfRegister
-	public _name = 'any';
-
 	universityEtherscan =
 		'https://' +
 		environment.network +
@@ -46,7 +43,6 @@ export class LandingComponent implements OnInit {
 	) {}
 
 	async ngOnInit() {
-		this.globals.selectedStudent = new Student('0', '0', '0', '0', []);
 		if (!this.globals.service) {
 			this.globals.service = new InfuraService();
 			await this.globals.ensService.configureProvider(
@@ -78,7 +74,7 @@ export class LandingComponent implements OnInit {
 
 	onConnect(student: Student | void): void {
 		if (student) this.globals.selectedStudent = student;
-		else this.globals.selectedStudent = new Student('0', '0', '0', '0', []);
+		else this.globals.selectedStudent = new Student();
 	}
 
 	txOn() {
@@ -265,14 +261,14 @@ export class LandingComponent implements OnInit {
 		this.globals.address = await this.globals.service.getAddress();
 	}
 
-	async studentSelfRegister(): Promise<any> {
+	async studentSelfRegister(_name: string): Promise<any> {
 		this.txOn();
-		if (this._name == '') {
+		if (_name.length < 1) {
 			this.txMode = 'failedTX';
 		} else {
 			this.txMode = 'processingTX';
 			const selfRegister = await this.globals.service.studentSelfRegister(
-				this._name
+				_name
 			);
 			if (!selfRegister) {
 				this.txMode = 'failedTX';
@@ -280,7 +276,6 @@ export class LandingComponent implements OnInit {
 				this.txMode = 'successTX';
 			}
 		}
-		//TODO: claim university ENS record
 	}
 
 	getClassrooms(id: Number) {
