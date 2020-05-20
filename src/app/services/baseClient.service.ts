@@ -9,6 +9,7 @@ import * as Student from '../../../build/contracts/Student.json';
 import * as DAI from '../../../build/contracts/ERC20.json';
 import * as CDAI from '../../../build/contracts/CERC20.json';
 import * as ADAI from '../../../build/contracts/aToken.json';
+import * as LINK from '../../../build/contracts/LinkTokenInterface.json';
 import { GenericUser } from '../../models/genericUser.model';
 
 @Injectable({
@@ -21,6 +22,7 @@ export class baseClientService {
 	public DAIContract: any;
 	public CDAIContract: any;
 	public ADAIContract: any;
+	public LINKContract: any;
 	public provider: any;
 	public networkName: any;
 	public useSigner = false;
@@ -52,6 +54,11 @@ export class baseClientService {
 		this.ADAIContract = new ethers.Contract(
 			environment.AaveDAIAddress,
 			ADAI.abi,
+			providerOrSigner
+		);
+		this.LINKContract = new ethers.Contract(
+			environment.LINKAddress,
+			LINK.abi,
 			providerOrSigner
 		);
 	}
@@ -121,6 +128,11 @@ export class baseClientService {
 
 	public async getDAIBalance(address: string) {
 		const val = await this.DAIContract.balanceOf(address);
+		return val;
+	}
+
+	public async getLINKBalance(address: string) {
+		const val = await this.LINKContract.balanceOf(address);
 		return val;
 	}
 
@@ -482,4 +494,15 @@ export class baseClientService {
 			return true;
 		}
 	}
+
+	//Classroom actions
+
+	public async applyToClassroom(classroomAddress: string) {
+		const application = await this.studentContractInstance.applyToClassroom(
+			classroomAddress
+		);
+		await application.wait();
+		return application;
+	}
+
 }

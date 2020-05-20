@@ -29,7 +29,7 @@
                         <p class="lead text-white">Student Smart Contract: {{globals.selectedStudent.smartContractAddress}}</p>
                         <p class="lead text-white">Score: {{globals.selectedStudent.score}} </p>
                         <div class="btn-wrapper">
-                            <a href="" class="btn btn-white btn-icon mb-3 mb-sm-0">
+                            <a [routerLink]="['/']" class="btn btn-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
@@ -84,7 +84,7 @@
     <jw-modal id="custom-modal-edit">
         <form role="form">
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <div class="card shadow bg-gradient-default border-0">
                         <div class="card-body py-5">
                             <h3 class="text-center text-white">Edit Your Profile</h3>
