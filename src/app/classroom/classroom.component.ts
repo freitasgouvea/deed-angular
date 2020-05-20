@@ -500,7 +500,7 @@ export class ClassroomComponent implements OnInit {
 			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
 	}
 
-	async applyClassroom(classroomAddress: string): Promise<any> {
+	async applyClassroom(classroomAddress: string = this.globals.selectedClassroom.smartcontract): Promise<any> {
 		this.txOn();
 		if (classroomAddress == '') {
 			this.txMode = 'failedTX';
