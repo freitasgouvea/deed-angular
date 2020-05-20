@@ -650,7 +650,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-key"></i></span>
                                             </div>
-                                            <input id="inputObjName" #inputObjName class="form-control" placeholder="Secret" type="text" (focus)="focus=true" (blur)="focus=false">
+                                            <input id="secret" #secret class="form-control" placeholder="Secret" type="text" (focus)="focus=true" (blur)="focus=false">
                                         </div>
                                     </div>
                                 </div>
@@ -677,7 +677,7 @@
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer(secret)" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Submit</span>
                             </a>
@@ -697,18 +697,6 @@
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <h2 class="description text-center text-white">If you send correct answer you can collect you reward here.</h2>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="form-group" [ngClass]="{'focused':focus===true}">
-                                        <div class="input-group input-group-alternative mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa fa-key"></i></span>
-                                            </div>
-                                            <input id="inputObjName" #inputObjName class="form-control" placeholder="Secret" type="text" (focus)="focus=true" (blur)="focus=false">
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -733,7 +721,7 @@
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" (click)="colletcReward()" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Collect</span>
                             </a>
@@ -749,7 +737,7 @@
                 <div class="col-md-6">
                     <div class="card shadow bg-gradient-default border-0">
                         <div class="card-body py-5">
-                            <h3 class="text-center text-white">Claim new classroom</h3>
+                            <h3 class="text-center text-white">Create new classroom</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <h2 class="description text-center text-white">After you complete a classroom you can create a new one.</h2>

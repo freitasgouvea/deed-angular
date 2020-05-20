@@ -541,5 +541,22 @@ export class baseClientService {
 		return application;
 	}
 
+	public async setAnswerSecret(classroomAddress: string, secret: string) {
+		const secret32 = ethers.utils.formatBytes32String(secret);
+		const answer = await this.studentContractInstance.setAnswerSecret(
+			classroomAddress, secret32
+		);
+		await answer.wait();
+		return answer;
+	}
+	
+	public async withdrawAllResultsFromClassroom(classroomAddress: string, studentAddress: string) {
+		const withdraw = await this.studentContractInstance.withdrawAllResultsFromClassroom(
+			classroomAddress, studentAddress
+		);
+		await withdraw.wait();
+		return withdraw;
+	}
+
 
 }

@@ -526,4 +526,41 @@ export class ClassroomComponent implements OnInit {
 			}
 		}
 	}
+
+	async sendAnswer(secret: string): Promise<any> {
+		this.txOn();
+		const classroomAddress = this.globals.selectedClassroom.smartcontract;
+		if (classroomAddress == '' || secret == '') {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'processingTX';
+			const application = await this.globals.service.setAnswerSecret(
+				classroomAddress, secret
+			);
+			if (!application) {
+				this.txMode = 'failedTX';
+			} else {
+				this.txMode = 'successTX';
+			}
+		}
+	}
+
+	async colletcReward(): Promise<any> {
+		this.txOn();
+		const classroomAddress = this.globals.selectedClassroom.smartcontract;
+		const studentAddress = this.globals.address;
+		if (classroomAddress == '' || studentAddress == '') {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'processingTX';
+			const application = await this.globals.service.withdrawAllResultsFromClassroom(
+				classroomAddress, studentAddress
+			);
+			if (!application) {
+				this.txMode = 'failedTX';
+			} else {
+				this.txMode = 'successTX';
+			}
+		}
+	}
 }
