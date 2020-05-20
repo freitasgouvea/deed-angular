@@ -562,9 +562,9 @@ export class baseClientService {
 		return withdraw;
 	}
 
-
 	public async payEntryPrice() {
 		const tx = await this.studentApplicationContractInstance.payEntryPrice();
 		await tx.wait();
+		return tx;
 	}
 }

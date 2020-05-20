@@ -552,7 +552,8 @@
                             <h3 class="text-center text-white">Start your application</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-center text-white">You need to deposit the classroom fee to start your application.</h2>
+                                    <h2 class="description text-center text-white">You need to approve and deposit fee to start your application.</h2>
+                                    <h4 class="text-center text-white">Price: {{this.globals.selectedClassroom.price}} DAI</h4>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -561,7 +562,7 @@
                                         <strong class="text-default">You need confirm this transaction on your portis wallet!</strong>
                                     </div>
                                     <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
-                                        <strong>Wait!</strong> Sending your payment...
+                                        <strong>Wait!</strong> Sending your Transaction...
                                     </div>
                                     <div *ngIf="txMode=='successTX'" class="alert alert-success" role="alert">
                                         <strong>Success!</strong> This is a success alert—check it out!
@@ -577,7 +578,11 @@
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" (click)="approveStart()" type="submit" class="btn btn-primary btn-icon text-white mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-check"></i></span>
+                                <span class="btn-inner--text">Approve</span>
+                            </a>
+                            <a *ngIf="txMode=='successTX'" (click)="payEntryPrice()" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Start</span>
                             </a>
@@ -734,7 +739,7 @@
     <jw-modal id="custom-modal-7" *ngIf=globals.selectedClassroom>
         <form role="form">
             <div class="row justify-content-center">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card shadow bg-gradient-default border-0">
                         <div class="card-body py-5">
                             <h3 class="text-center text-white">Create new classroom</h3>
@@ -781,6 +786,46 @@
                                                 <span class="input-group-text"><i class="fa fa-key"></i></span>
                                             </div>
                                             <input id="inputObjName4" #inputObjName4 class="form-control" placeholder="Secret" type="text" (focus)="focus=true" (blur)="focus=false">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{'focused':focus===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-key"></i></span>
+                                            </div>
+                                            <input id="inputObjName5" #inputObjName5 class="form-control" placeholder="Secret" type="text" (focus)="focus=true" (blur)="focus=false">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{'focused':focus===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-key"></i></span>
+                                            </div>
+                                            <input id="inputObjName6" #inputObjName6 class="form-control" placeholder="Secret" type="text" (focus)="focus=true" (blur)="focus=false">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{'focused':focus===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-key"></i></span>
+                                            </div>
+                                            <input id="inputObjName7" #inputObjName7 class="form-control" placeholder="Secret" type="text" (focus)="focus=true" (blur)="focus=false">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{'focused':focus===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-key"></i></span>
+                                            </div>
+                                            <input id="inputObjName8" #inputObjName8 class="form-control" placeholder="Secret" type="text" (focus)="focus=true" (blur)="focus=false">
                                         </div>
                                     </div>
                                 </div>

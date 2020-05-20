@@ -32,7 +32,7 @@ export class ClassroomComponent implements OnInit {
 		public globals: Globals,
 		private modalService: ModalService,
 		public portisService: PortisService
-	) {}
+	) { }
 
 	async ngOnInit() {
 		if (!this.globals.service) {
@@ -48,7 +48,7 @@ export class ClassroomComponent implements OnInit {
 			.connectClassroom(this.globals.selectedClassroom.smartcontract)
 			.then(() => this.refreshClassroomInfo());
 		if (!this.globals.selectedStudent) return;
-		this.globals.service.viewMyApplication().then((address) =>{
+		this.globals.service.viewMyApplication().then((address) => {
 			this.myStudentApplication = new StudentApplication(this.globals, address, this.globals.address);
 			this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
 			this.globals.service.viewMyApplicationState(this.globals.selectedClassroom.smartcontract).then((state) => this.myStudentApplication.state = state)
@@ -296,9 +296,9 @@ export class ClassroomComponent implements OnInit {
 			);
 	}
 
-	async exchangeDAI_LINK(val: number) {}
+	async exchangeDAI_LINK(val: number) { }
 
-	async exchangeLINK_DAI(val: number) {}
+	async exchangeLINK_DAI(val: number) { }
 
 	refreshClassroomConfigs(
 		classroom: Classroom = this.globals.selectedClassroom
@@ -510,8 +510,9 @@ export class ClassroomComponent implements OnInit {
 			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
 	}
 
-	async applyClassroom(classroomAddress: string = this.globals.selectedClassroom.smartcontract): Promise<any> {
+	async applyClassroom(): Promise<any> {
 		this.txOn();
+		const classroomAddress = this.globals.selectedClassroom.smartcontract;
 		if (classroomAddress == '') {
 			this.txMode = 'failedTX';
 		} else {
@@ -527,6 +528,29 @@ export class ClassroomComponent implements OnInit {
 		}
 	}
 
+	async approveStart(): Promise<any> {
+		this.txOn();
+		const value = this.globals.selectedClassroom.price; 
+		this.txMode = 'processingTX';
+		const approve = await this.globals.service.approveDAI(value);
+		if (!approve) {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'successTX';
+		}
+	}
+
+	async payEntryPrice(): Promise<any> {
+		this.txOn();
+		this.txMode = 'processingTX';
+		const pay = await this.globals.service.payEntryPrice();
+		if (!pay) {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'successTX';
+		}
+	}
+
 	async sendAnswer(secret: string): Promise<any> {
 		this.txOn();
 		const classroomAddress = this.globals.selectedClassroom.smartcontract;
@@ -534,10 +558,10 @@ export class ClassroomComponent implements OnInit {
 			this.txMode = 'failedTX';
 		} else {
 			this.txMode = 'processingTX';
-			const application = await this.globals.service.setAnswerSecret(
+			const sendTx = await this.globals.service.setAnswerSecret(
 				classroomAddress, secret
 			);
-			if (!application) {
+			if (!sendTx) {
 				this.txMode = 'failedTX';
 			} else {
 				this.txMode = 'successTX';
@@ -553,10 +577,10 @@ export class ClassroomComponent implements OnInit {
 			this.txMode = 'failedTX';
 		} else {
 			this.txMode = 'processingTX';
-			const application = await this.globals.service.withdrawAllResultsFromClassroom(
+			const collectTx = await this.globals.service.withdrawAllResultsFromClassroom(
 				classroomAddress, studentAddress
 			);
-			if (!application) {
+			if (!collectTx) {
 				this.txMode = 'failedTX';
 			} else {
 				this.txMode = 'successTX';
