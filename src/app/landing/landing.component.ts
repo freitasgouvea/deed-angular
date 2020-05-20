@@ -74,7 +74,7 @@ export class LandingComponent implements OnInit {
 
 	onConnect(student: Student | void): void {
 		if (student) this.globals.selectedStudent = student;
-		else this.globals.selectedStudent = new Student();
+		else this.globals.selectedStudent = new Student(this.globals);
 	}
 
 	txOn() {

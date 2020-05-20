@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { ENSService } from '../services/ens.service';
 import { ethers } from 'ethers';
 import * as Web3 from 'web3';
+import { StudentApplication } from 'src/models/studentApplication.model';
 
 @Component({
 	selector: 'app-classroom',
@@ -25,11 +26,34 @@ export class ClassroomComponent implements OnInit {
 	displayNotice = true;
 	public txMode = 'off';
 
+	public myStudentApplication: StudentApplication;
+
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
 		public portisService: PortisService
 	) {}
+
+	async ngOnInit() {
+		if (!this.globals.service) {
+			this.globals.service = new InfuraService();
+			this.globals.ensService.configureProvider(
+				this.globals.service.provider,
+				false
+			);
+			console.log('Connected to infura');
+		}
+		if (!this.globals.selectedClassroom) return;
+		this.globals.service
+			.connectClassroom(this.globals.selectedClassroom.smartcontract)
+			.then(() => this.refreshClassroomInfo());
+		if (!this.globals.selectedStudent) return;
+		this.globals.service.viewMyApplication().then((address) =>{
+			this.myStudentApplication = new StudentApplication(this.globals, address, this.globals.address);
+			this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
+			this.globals.service.viewMyApplicationState(this.globals.selectedClassroom.smartcontract).then((state) => this.myStudentApplication.state = state)
+		})
+	}
 
 	openModal(id: string) {
 		this.modalService.open(id);
@@ -132,21 +156,6 @@ export class ClassroomComponent implements OnInit {
 			await this.refreshClassroomMetadata(newClassroom);
 			index++;
 		}
-	}
-
-	async ngOnInit() {
-		if (!this.globals.service) {
-			this.globals.service = new InfuraService();
-			this.globals.ensService.configureProvider(
-				this.globals.service.provider,
-				false
-			);
-			console.log('Connected to infura');
-		}
-		if (!this.globals.selectedClassroom) return;
-		this.globals.service
-			.connectClassroom(this.globals.selectedClassroom.smartcontract)
-			.then(() => this.refreshClassroomInfo());
 	}
 
 	public refreshClassroomInfo() {
@@ -500,7 +509,7 @@ export class ClassroomComponent implements OnInit {
 			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
 	}
 
-	async applyClassroom(classroomAddress: string): Promise<any> {
+	async applyClassroom(classroomAddress: string = this.globals.selectedClassroom.smartcontract): Promise<any> {
 		this.txOn();
 		if (classroomAddress == '') {
 			this.txMode = 'failedTX';

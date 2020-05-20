@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import * as University from '../../../build/contracts/University.json';
 import * as Classroom from '../../../build/contracts/Classroom.json';
 import * as Student from '../../../build/contracts/Student.json';
+import * as StudentApplication from '../../../build/contracts/StudentApplication.json';
 import * as DAI from '../../../build/contracts/ERC20.json';
 import * as CDAI from '../../../build/contracts/CERC20.json';
 import * as ADAI from '../../../build/contracts/aToken.json';
@@ -19,6 +20,7 @@ export class baseClientService {
 	public universityContractInstance: any;
 	public classroomContractInstance: any;
 	public studentContractInstance: any;
+	public studentApplicationContractInstance: any;
 	public DAIContract: any;
 	public CDAIContract: any;
 	public ADAIContract: any;
@@ -107,6 +109,18 @@ export class baseClientService {
 			);
 	}
 
+	async connectStudentApplication(smartContractAddress: string) {
+		const providerOrSigner = this.useSigner
+			? this.provider.getSigner()
+			: this.provider;
+		if (this.checkContractInfo(smartContractAddress, StudentApplication))
+			this.studentApplicationContractInstance = new ethers.Contract(
+				smartContractAddress,
+				Student.abi,
+				providerOrSigner
+			);
+	}
+
 	public checkContractInfo(address: string, file: any): boolean {
 		if (!address || address.length < 40)
 			throw new Error('invalid contract address!');
@@ -174,6 +188,25 @@ export class baseClientService {
 
 	public async getClassroomOwner() {
 		const answer = await this.universityContractInstance.owner();
+		return answer;
+	}
+
+	public async viewMyApplication() {
+		const answer = await this.classroomContractInstance.viewMyApplication();
+		return answer;
+	}
+
+	// view Student info
+
+	public async viewMyApplicationState(classroomAddress: string) {
+		const answer = await this.studentContractInstance.viewMyApplicationState(classroomAddress);
+		return answer;
+	}
+
+	// view Student application info
+
+	public async viewApplicationClassroomAddress(){
+		const answer = await this.studentApplicationContractInstance.classroomAddress();
 		return answer;
 	}
 
@@ -490,7 +523,7 @@ export class baseClientService {
 		await tx.wait();
 	}
 
-	//Classroom actions
+	//Student actions
 
 	public async applyToClassroom(classroomAddress: string) {
 		const application = await this.studentContractInstance.applyToClassroom(
@@ -499,5 +532,6 @@ export class baseClientService {
 		await application.wait();
 		return application;
 	}
+
 
 }
