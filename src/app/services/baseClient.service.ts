@@ -93,7 +93,7 @@ export class baseClientService {
 			);
 	}
 
-	async conectStudent() {
+	async connectStudent() {
 		const providerOrSigner = this.useSigner
 			? this.provider.getSigner()
 			: this.provider;
@@ -104,6 +104,7 @@ export class baseClientService {
 				Student.abi,
 				providerOrSigner
 			);
+		console.log(this.studentContractInstance);
 	}
 
 	public checkContractInfo(address: string, file: any): boolean {
@@ -153,10 +154,26 @@ export class baseClientService {
 		} catch (err) {}
 	}
 
-	// View Classroom info
+	public async getStudentName() {
+		const answer = await this.studentContractInstance.name();
+		const val = ethers.utils.parseBytes32String(answer);
+		return val;
+	}
 
+	public async getScore() {
+		const val = await this.studentContractInstance.score();
+		return val;
+	}
+
+	public async getApplications() {
+		const applications = await this.universityContractInstance.viewMyApplications();
+		return applications;
+	}
+
+	// View Classroom info
+	
 	public async getClassroomOwner() {
-		const answer = await this.classroomContractInstance.owner();
+		const answer = await this.universityContractInstance.owner();
 		return answer;
 	}
 
@@ -375,6 +392,15 @@ export class baseClientService {
 		return register;
 	}
 
+	public async studentUpdateName(newName: string) {
+		const name = ethers.utils.formatBytes32String(newName);
+		const register = await this.studentContractInstance.changeName(
+			name
+		);
+		await register.wait();
+		return register;
+	}
+
 	async createClassroom(
 		_Owner: string,
 		_Name: string,
@@ -462,5 +488,21 @@ export class baseClientService {
 			student
 		);
 		await tx.wait();
+		if (!tx) {
+			return false;
+		} else {
+			return true;
+		}
 	}
+
+	//Classroom actions
+
+	public async applyToClassroom(classroomAddress: string) {
+		const application = await this.studentContractInstance.applyToClassroom(
+			classroomAddress
+		);
+		await application.wait();
+		return application;
+	}
+
 }

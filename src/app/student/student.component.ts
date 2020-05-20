@@ -8,6 +8,7 @@ import { Globals } from '../app.globals';
 import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
 import { ENSService } from '../services/ens.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
 	selector: 'app-student',
@@ -19,46 +20,40 @@ export class StudentComponent implements OnInit {
 	focus1;
 
 	public mode = 'unconnected';
-	selectedClassroom: Classroom;
 	public form: FormGroup;
-	userIsClassroomAdmin = false;
 	public txMode = 'off';
-
-
-	//StudentSelfRegister
-	public _name = 'any';
-	address: any;
 
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
 		public portisService: PortisService,
-		public infuraService: InfuraService,
-		public ensService: ENSService
 	) { }
 
 	async ngOnInit() {
 		if (!this.globals.service) {
-			this.globals.service = this.infuraService;
-			this.ensService.configureProvider(
-				this.infuraService.provider,
+			this.globals.service = new InfuraService();
+			await this.globals.ensService.configureProvider(
+				this.globals.service.provider,
 				false
 			);
 			console.log("Connected to infura");
 		}
-		if (!this.selectedClassroom) return;
-		this.infuraService.connectClassroom(
-			this.selectedClassroom.smartcontract
-		);
+		if (!this.globals.selectedStudent) return;
+		this.globals.service
+			.connectStudent()
+			.then(() => this.refreshAccountInfo());
 	}
-
-	//async refreshClassroomInfo() {}
 
 	openModal(id: string) {
 		this.modalService.open(id);
 	}
+
 	closeModal(id: string) {
 		this.modalService.close(id);
+	}
+
+	closeStudentNotice() {
+		this.globals.universityDisplayNotice = false;
 	}
 
 	txOn() {
@@ -69,53 +64,63 @@ export class StudentComponent implements OnInit {
 		this.txMode = 'off';
 	}
 
-	async conectPortis(): Promise<any> {
-		this.globals.mode = 'loadingPage';
-		const answer = await this.portisService.initPortis();
-		if (!answer) {
-			this.globals.mode = 'unconnected';
-			return;
-		}
-		this.address = await this.portisService.getAddress();
-		const connectUniversity = await this.portisService.connectUniversity();
-		this.globals.service = this.portisService;
-		this.ensService.configureProvider(this.portisService.provider);
-		await this.refreshAccountInfo();
-		const adminAddress = await this.portisService.getUniversityOwner();
-		this.globals.userIsUniversityAdmin = this.address === adminAddress;
-		const isRegistered = await this.globals.service.getUniversityOwner();
-		if (!isRegistered) {
-			this.globals.mode = 'connected';
-			return;
-		} else {
-			this.globals.userIsStudent = true;
-			this.globals.mode = 'registered';
-			return;
-		}
-	}
-
 	async refreshAccountInfo(): Promise<any> {
-		this.address = await this.globals.service.getAddress();
-		//TODO: call student smart contract
+		this.globals.selectedStudent.address = await this.globals.service.getAddress();
+		this.globals.selectedStudent.smartContractAddress = await this.globals.service.getStudentSmartContract();
+		this.globals.selectedStudent.name = await this.globals.service.getStudentName();
+		this.globals.selectedStudent.score = await this.globals.service.getScore();
+		this.globals.selectedStudent.applications = await this.globals.service.getApplications();
+		this.globals.selectedStudent.hasApplications = this.globals.selectedStudent.applications.length > 0
 	}
 
-	async studentSelfRegister(): Promise<any> {
+	async updateName(newName: string): Promise<any> {
 		this.txOn();
-		if (this._name == '') {
+		if (newName == '') {
 			this.txMode = 'failedTX';
 		} else {
 			this.txMode = 'processingTX';
-			const selfRegister = await this.globals.service.studentSelfRegister(
-				this._name
+			const updateName = await this.globals.service.studentUpdateName(
+				newName
 			);
-			if (!selfRegister) {
+			if (!updateName) {
 				this.txMode = 'failedTX';
 			} else {
 				this.txMode = 'successTX';
 			}
 		}
-		//TODO: claim university ENS record
 	}
 
+	//TODO: fix activeStudentENS
+	async activeStudentENS(): Promise<any> {
+		this.txOn();
+		this.txMode = 'processingTX';
+		const node = this.globals.ensService.node;
+		const normalName = this.globals.selectedStudent.name.toLowerCase().replace(/\s/g, '');
+		const studentAddress = this.globals.selectedStudent.address;
+		const studentSmartcContract = this.globals.selectedStudent.smartContractAddress;
+		const transaction = await this.globals.service.claimSubnodeStudent( node,
+			normalName, studentAddress, studentSmartcContract
+		);
+		console.log(transaction);
+		if (!transaction) {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'successTX';
+		}
+	}
+
+	async updateENSNotice(text: string) {
+		await this.globals.service.setTxRecord(this.globals.ensService.node, 'notice', text);
+		await this.refreshAccountInfo();
+	}
+
+	async updateENSDescription(text: string) {
+		await this.globals.service.setTxRecord(
+			this.globals.ensService.node,
+			'description',
+			text
+		);
+		await this.refreshAccountInfo();
+	}
 
 }

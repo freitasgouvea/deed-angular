@@ -19,11 +19,11 @@
                         </h1>
                         <p class="lead  text-white">Climb your way to mastering a new skill in 7 easy steps. In this process you can earn money and even become a teacher yourself in the end.
                             <div class="btn-wrapper">
-                                <a href="#classrooms" class="btn btn-white btn-icon mb-3 mb-sm-0">
+                                <a [routerLink]="['/']" class="btn btn-white btn-icon mb-3 mb-sm-0">
                                     <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                     <span class="btn-inner--text">Back</span>
                                 </a>
-                                <a (click)="openModal('custom-modal-search-classroom');" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                                <a (click)="openModal('custom-modal-search-classroom');" class="btn btn-primary text-white btn-icon mb-3 mb-sm-0">
                                     <span class="btn-inner--icon"><i class="fa fa-search"></i></span>
                                     <span class="btn-inner--text">Search Address</span>
                                 </a>
@@ -43,11 +43,11 @@
                             <strong>Classroom Notice: </strong> {{globals.selectedClassroom.metadata.notice}}
                         </div>
                         <div class="btn-wrapper">
-                            <a href="#classrooms" class="btn btn-white btn-icon mb-3 mb-sm-0">
+                            <a [routerLink]="['/']" class="btn btn-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a (click)="openModal('custom-modal-classroomInfo');" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                            <a (click)="openModal('custom-modal-classroomInfo');" class="btn btn-success text-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-search"></i></span>
                                 <span class="btn-inner--text">Details</span>
                             </a>
@@ -60,7 +60,8 @@
                                     <i class="fa fa-wifi"></i>
                                 </div>
                                 <h6 class="text-warning text-uppercase">Connecting</h6>
-                                <p class="description mt-3">Connecting to your Wallet Provider and DeEd University.</p>
+                                <p class="description mt-3">Connecting to your Wallet Provider and DeEd University.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -71,7 +72,8 @@
                                     <i class="fa fa-star"></i>
                                 </div>
                                 <h6 class="text-info text-uppercase">Welcome to DeEd</h6>
-                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
+                                <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.
+                                </p>
                                 <button class="btn btn-info mt-4" (click)="conectPortis()">Conect Portis</button>
                             </div>
                         </div>
@@ -83,9 +85,9 @@
                                     <i class="fa fa-user"></i>
                                 </div>
                                 <h6 class="text-primary text-uppercase">Register Your Account</h6>
-                                <p class="description mt-3">To do a apllication and use DeEd you need to register at University.</p>
+                                <p class="description mt-3">To use to DeEd you need to register at University.</p>
                                 <div #onLoginPlaceholder1></div>
-                                <button class="btn btn-primary mt-4" (click)="openModal('custom-modal-register')">Register DeEd</button>
+                                <button class="btn btn-primary mt-4" (click)="openModal('custom-modal-register'); txOn();">Register DeEd</button>
                             </div>
                         </div>
                     </div>
@@ -93,13 +95,11 @@
                         <div class="card card-lift--hover shadow border-0 text-center">
                             <div class="card-body py-5">
                                 <div class="icon icon-shape icon-shape-success rounded-circle mb-4">
-                                    <i class="fa fa-wallet"></i>
+                                    <i class="fa fa-user"></i>
                                 </div>
-                                <h6 class="text-success text-uppercase">Your Account</h6>
-                                <p class="description mt-3">Address: usdhfusdgfuisdhidshfiodshfhdsiofjhdiofjdio</p>
-                                <p class="description mt-3">Amount: 400 DAI</p>
-                                <p class="description mt-3">Status: 300 Points</p>
-                                <button class="btn btn-success mt-4" (click)="conectPortis()">Register DeEd</button>
+                                <h6 class="text-success text-uppercase">Connected</h6>
+                                <p class="description">Address: {{globals.address}} </p>
+                                <button [routerLink]="['/student']" class="btn btn-success mt-4">Go to Account</button>
                             </div>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Apply For Course</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-1')" class="btn btn-default mt-4 text-white">Apply</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-1'); txOn();" class="btn btn-default mt-4 text-white">Apply</a>
                             </div>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Call for a Grant</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-2')" class="btn btn-default mt-4 text-white">Call</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-2'); txOn();" class="btn btn-default mt-4 text-white">Call</a>
                             </div>
                         </div>
                     </div>
@@ -137,7 +137,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Start Application</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-3')" class="btn btn-default mt-4 text-white">Deposit</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-3'); txOn();" class="btn btn-default mt-4 text-white">Deposit</a>
                             </div>
                         </div>
                     </div>
@@ -149,7 +149,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Access Material</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-4')" class="btn btn-default mt-4 text-white">Recieve</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-4'); txOn();" class="btn btn-default mt-4 text-white">Recieve</a>
                             </div>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Submit Your Answer</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-5')" class="btn btn-default mt-4 text-white">Submit</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-5'); txOn();" class="btn btn-default mt-4 text-white">Submit</a>
                             </div>
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Claim Your Reward</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p><br>
-                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-6')" class="btn btn-default mt-4 text-white">Claim</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-6'); txOn();" class="btn btn-default mt-4 text-white">Claim</a>
                             </div>
                         </div>
                     </div>
@@ -185,7 +185,7 @@
                                 </div>
                                 <h6 class="text-default text-uppercase">Start your own classroom</h6>
                                 <p class="description mt-3">To connect to DeEd you need to install a Portis Wallet.</p>
-                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-7')" class="btn btn-default mt-4 text-white">Claim</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-7'); txOn();" class="btn btn-default mt-4 text-white">Claim</a>
                             </div>
                         </div>
                     </div>
@@ -451,39 +451,57 @@
     </jw-modal>
     <jw-modal id="custom-modal-1">
         <form role="form">
-            <div class="modal-header">
-                <h3 class="modal-title">Apply for this Classroom</h3>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group" [ngClass]="{'focused':focus===true}">
-                            <div class="input-group input-group-alternative mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow bg-gradient-default border-0">
+                        <div class="card-body py-5">
+                            <h3 class="text-center text-white">Apply for this classroom</h3>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h2 class="description text-white">Argon is a great free UI package based on Angular that includes the most important components and features.</h2>
                                 </div>
-                                <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-code"></i></span>
+                                            </div>
+                                            <input id="inputObjClassroomAddress" #inputObjClassroomAddress disabled class="form-control" placeholder="Classroom Address" value={{globals.selectedClassroom.smartcontract}} type="text" (focus)="focus=true" (blur)="focus=false">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div *ngIf="txMode=='preTX'" class="alert alert-neutral" role="alert">
+                                        <strong class="text-default">You need confirm this transaction on your portis wallet!</strong>
+                                    </div>
+                                    <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
+                                        <strong>Wait!</strong> Sending your application...
+                                    </div>
+                                    <div *ngIf="txMode=='successTX'" class="alert alert-success" role="alert">
+                                        <strong>Success!</strong> This is a success alert—check it out!
+                                    </div>
+                                    <div *ngIf="txMode=='failedTX'" class="alert alert-danger" role="alert">
+                                        <strong>Failed!</strong> This is a danger alert—check it out!
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                            <div class="input-group input-group-alternative mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                </div>
-                                <input class="form-control" placeholder="Address" type="text" (focus)="focus1=true" (blur)="focus1=false">
-                            </div>
+                        <div class="card-footer bg-gradient-default">
+                            <a (click)="closeModal('custom-modal-1'); txOff(); refreshClassroomInfo();" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                <span class="btn-inner--text">Back</span>
+                            </a>
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="applyClassroom(inputObjClassroomAddress.value)" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
+                                <span class="btn-inner--text">Apply</span>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-secondary" (click)="closeModal('custom-modal-1');">Close</button>
             </div>
         </form>
     </jw-modal>

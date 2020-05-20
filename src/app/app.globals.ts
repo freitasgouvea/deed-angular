@@ -3,6 +3,7 @@ import { PortisService } from './services/portis.service';
 import { InfuraService } from './services/infura.service';
 import { Classroom } from 'src/models/classroom.model';
 import { ENSService } from './services/ens.service';
+import { Student } from 'src/models/student.model';
 
 @Injectable()
 export class Globals {
@@ -16,6 +17,7 @@ export class Globals {
 	public userIsUniversityAdmin = false;
 	public userIsClassroomAdmin = false;
 	public selectedClassroom: Classroom;
+	public selectedStudent: Student;
 	public classrooms = new Array<Classroom>();
 	public universityInfoNeedsRefresh = true;
 	public universityENSNameRecord = false;
@@ -37,4 +39,11 @@ export class Globals {
 	public universityReturns: any;
 	public universityAdmin: any;
 	public universityParams: any;
+
+	public studentENSName: any;
+	public studentENSDescription: any;
+	public studentENSNotice: any;
+	public studentENSNameRecord = false;
+	public studentENSHasNotice = false;
+	public studentDisplayNotice = false;
 }

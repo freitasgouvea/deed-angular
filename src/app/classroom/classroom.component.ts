@@ -23,6 +23,7 @@ export class ClassroomComponent implements OnInit {
 	public form: FormGroup;
 	userIsClassroomAdmin = false;
 	displayNotice = true;
+	public txMode = 'off';
 
 	constructor(
 		public globals: Globals,
@@ -41,6 +42,14 @@ export class ClassroomComponent implements OnInit {
 
 	closeNotice() {
 		this.displayNotice = false;
+	}
+
+	txOn() {
+		this.txMode = 'preTX';
+	}
+
+	txOff() {
+		this.txMode = 'off';
 	}
 
 	searchClassroomModalErrorMsg = false;
@@ -449,4 +458,22 @@ export class ClassroomComponent implements OnInit {
 			.configureAave(lendingPoolAddressesProvider)
 			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
 	}
+
+	async applyClassroom(classroomAddress: string): Promise<any> {
+		this.txOn();
+		if (classroomAddress == '') {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'processingTX';
+			const application = await this.globals.service.applyToClassroom(
+				classroomAddress
+			);
+			if (!application) {
+				this.txMode = 'failedTX';
+			} else {
+				this.txMode = 'successTX';
+			}
+		}
+	}
+
 }
