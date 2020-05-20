@@ -456,12 +456,16 @@ export class baseClientService {
 		);
 	}
 
-	async donateDAI(val: number){
-		const tx1 = await this.DAIContract.approve(this.universityContractInstance.address, val);
-		await tx1.wait();
-		const tx2 = await this.universityContractInstance.donateDAI(val);
-		await tx2.wait();
-		return true;
+	async approveDAI(input: number){
+		const val = ethers.utils.parseEther(input.toString());
+		const tx = await this.DAIContract.approve(this.universityContractInstance.address, val);
+		return tx;
+	}
+
+	async donateDAI(input: number){
+		const val = ethers.utils.parseEther(input.toString());
+		const tx = await this.universityContractInstance.donateDAI(val);
+		return tx;
 	}
 
 	// ENS Signed actions
@@ -559,4 +563,8 @@ export class baseClientService {
 	}
 
 
+	public async payEntryPrice() {
+		const tx = await this.studentApplicationContractInstance.payEntryPrice();
+		await tx.wait();
+	}
 }

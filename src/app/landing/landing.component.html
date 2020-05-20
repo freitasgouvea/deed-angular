@@ -235,7 +235,7 @@
                     <span class="btn-inner--icon"><i class="fa fa-user"></i></span>
                     <span class="btn-inner--text">My Student Profile</span>
                 </button>
-                <button href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                <button (click)="openModal('transfer-dai')" class="btn btn-success btn-icon mb-3 mb-sm-0">
                     <span class="btn-inner--icon"><i class="fa fa-gratipay"></i></span>
                     <span class="btn-inner--text">Donate</span>
                 </button>
@@ -389,7 +389,7 @@
                             <h3 class="text-center text-white">Register at University</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-center text-white">To start your journey you need to register in the University. This will create a Student Smart Contract for you.</h2>
+                                    <h2 class="description text-white">Create your student registry in this university and enjoy all its features.</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -792,17 +792,42 @@
             </div>
         </div>
     </jw-modal>
-    <jw-modal id='donate-dai'>
-        <form role="form">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card shadow bg-gradient-success border-0">
-                        <div class="card-body py-5">
-                            <h3 class="text-center text-white">Register at University</h3>
+    <jw-modal id="transfer-dai">
+        <div id="donationInfo" class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="cmodal-body p-0">
+                    <div class="card shadow border-0 bg-gradient-success">
+                        <div class="card-header justify-content-center bg-gradient-success">
+                            <h3 class="text-center text-white">Make a Donation</h3>
+                        </div>
+                        <div class="card-body justify-content-center bg-gradient-success">
+                            <h4 class="text-center text-white">All donations go directly to the university endowment, helping good students to get grants</h4>
+                            <input #donationInputVal class="form-control" type="number" (focus)="focus=true" (blur)="focus=false">
+                            <div class="card-footer justify-content-center bg-gradient-success">
+                                <button (click)="closeModal('transfer-dai')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                    <span class="btn-inner--text">Back</span>
+                                </button>
+                                <button type="submit" (click)="donateDAi(donationInputVal.value)" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
+                                    <span class="btn-inner--text">Donate</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </jw-modal>
+    <div id="overlay">
+        <span id="nav" *ngIf="globals.overlayLoader">
+			<div class="spinner" style="display: block; position: fixed">
+			</div>
+		</span>
+        <span id="nav" *ngIf="globals.overlayLoader">
+			<div class="submit-message" style="display: block; color: #FFFFFF; position: fixed; left: 49.7%; top: 54.5%;">
+				Loading Transaction...
+			</div>
+		</span>
+    </div>
 </main>
