@@ -3,19 +3,29 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  universityAddress: "0xa03E45a84E253aE34C1298615cC3d140Bc69ECc9",
-  infuraKey: "50d52dadc1054facbb36bd19254da96e",
-  network: "ropsten",
-  ENSRegistryAddress: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
-  ENSRegistrarAddress: "0x09B5bd82f3351A4c8437FC6D7772A9E6cd5D25A1", //TestRegistrar
-  ENSPulbicResolverAddress: "0x42D63ae25990889E35F215bC95884039Ba354115", //TestResolver
-  ENSReverseRegistrarAddress: "0x6F628b68b30Dc3c17f345c9dbBb1E483c2b7aE5c",
-  ENSUniversityName: "university",
-  ENSDomain: ".test",
-  DAIAddress: "0xad6d458402f60fd3bd25163575031acdce07538d",
-  CompoundDAIAddress: "0x6ce27497a64fffb5517aa4aee908b1e7eb63b9ff",
-  AaveDAIAddress: "0xcB1Fe6F440c49E9290c3eb7f158534c2dC374201",
+	production: false,
+	universityAddress: '0xa03E45a84E253aE34C1298615cC3d140Bc69ECc9',
+	infuraKey: '50d52dadc1054facbb36bd19254da96e',
+	network: 'ropsten',
+	ENSRegistryAddress: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+	ENSRegistrarAddress: '0x09B5bd82f3351A4c8437FC6D7772A9E6cd5D25A1', //TestRegistrar
+	ENSPulbicResolverAddress: '0x42D63ae25990889E35F215bC95884039Ba354115', //TestResolver
+	ENSReverseRegistrarAddress: '0x6F628b68b30Dc3c17f345c9dbBb1E483c2b7aE5c',
+	ENSUniversityName: 'university',
+	ENSDomain: '.test',
+	DAIAddress: '0xad6d458402f60fd3bd25163575031acdce07538d',
+	CompoundDAIAddress: '0x6ce27497a64fffb5517aa4aee908b1e7eb63b9ff',
+	AaveDAIAddress: '0xcB1Fe6F440c49E9290c3eb7f158534c2dC374201',
+	UniswapRouter: '0xf164fC0Ec4E93095b804a4795bBe1e041497b92a',
+	LINKAddress: '0x20fe562d797a42dcb3399062ae9546cd06f63280',
+	ChainlinkOracleRandom: '0xc99B3D447826532722E41bc36e644ba3479E4365',
+	ChainlinkRequestIdRandom: '0x243e52d19ebc4098bfc30d9d7117b91a00000000000000000000000000000000',
+	ChainlinkOraclePaymentRandom: 1,
+	ChainlinkOracleTimestamp: '0xc99B3D447826532722E41bc36e644ba3479E4365',
+	ChainlinkRequestIdTimestamp: '0x2ebb1c1a4b1e4229adac24ee0b5f784f00000000000000000000000000000000',
+	ChainlinkOraclePaymentTimestamp: 1,
+	AaveLendingPoolAddressesProvider : '0x1c8756FD2B28e9426CDBDcC7E3c4d64fa9A54728',
+	DefaultGasRelayHub: "0xD216153c06E857cD7f72665E0aF1d7D82172F494",
 };
 
 /*

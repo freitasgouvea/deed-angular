@@ -22,7 +22,7 @@ export class PortisService extends baseClientService {
 	public loginAddress: any;
 	public students: Student[] = [];
 
-	portis = new Portis('211b48db-e8cc-4b68-82ad-bf781727ea9e', 'ropsten', {
+	portis = new Portis('2910345a-33c7-46e4-a5d3-6178db3c692d', 'ropsten', {
 		scope: ['email'],
 	});
 
@@ -46,5 +46,9 @@ export class PortisService extends baseClientService {
 			console.log('Connected with Portis!');
 			return true;
 		}
+	}
+
+	showPortis() {
+		this.portis.showPortis();
 	}
 }
