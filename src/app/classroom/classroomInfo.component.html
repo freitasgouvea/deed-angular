@@ -8,13 +8,13 @@
                 <div class="card-body py-5">
                     <div class="row">
                         <div class="col-md-6">
-                            <p class="text-light">Start: <span *ngIf=!globals.selectedClassroom.isClassroomNotOpen() class="text-default">{{globals.selectedClassroom.startDate_String}}</span><span *ngIf=globals.selectedClassroom.isClassroomNotOpen() class="text-default">To Be Defined</span></p>
-                            <p class="text-light">Finish: <span *ngIf=!globals.selectedClassroom.isClassroomNotOpen() class="text-default">{{globals.selectedClassroom.finishDate_String}}</span><span *ngIf=globals.selectedClassroom.isClassroomNotOpen() class="text-default">To Be Defined</span></p>
-                            <p *ngIf=globals.selectedClassroom.isClassroomNotOpen() class="text-light">Status: <span class="badge badge-pill badge-info">Not Open</span></p>
-                            <p *ngIf=globals.selectedClassroom.isClassroomOpen() class="text-light">Status: <span class="badge badge-pill badge-success">Open</span></p>
-                            <p *ngIf=globals.selectedClassroom.isClassroomClosed() class="text-light">Status: <span class="badge badge-pill badge-warning">Closed</span></p>
-                            <p *ngIf=globals.selectedClassroom.isClassroomActive() class="text-light">Status: <span class="badge badge-pill badge-primary">Ongoing</span></p>
-                            <p *ngIf=globals.selectedClassroom.courseFinished class="text-light">Status: <span class="badge badge-pill badge-dark">Finished</span></p>
+                            <p class="text-light">Start: <span *ngIf=!globals.selectedClassroom.state.isClassroomNotOpen class="text-default">{{globals.selectedClassroom.startDate_String}}</span><span *ngIf=globals.selectedClassroom.state.isClassroomNotOpen class="text-default">To Be Defined</span></p>
+                            <p class="text-light">Finish: <span *ngIf=!globals.selectedClassroom.state.isClassroomNotOpen class="text-default">{{globals.selectedClassroom.finishDate_String}}</span><span *ngIf=globals.selectedClassroom.state.isClassroomNotOpen class="text-default">To Be Defined</span></p>
+                            <p *ngIf=globals.selectedClassroom.state.isClassroomNotOpen class="text-light">Status: <span class="badge badge-pill badge-info">Not Open</span></p>
+                            <p *ngIf=globals.selectedClassroom.state.isClassroomOpen class="text-light">Status: <span class="badge badge-pill badge-success">Open</span></p>
+                            <p *ngIf=globals.selectedClassroom.state.isClassroomClosed class="text-light">Status: <span class="badge badge-pill badge-warning">Closed</span></p>
+                            <p *ngIf=globals.selectedClassroom.state.isClassroomActive class="text-light">Status: <span class="badge badge-pill badge-primary">Ongoing</span></p>
+                            <p *ngIf=globals.selectedClassroom.state.isCourseFinished class="text-light">Status: <span class="badge badge-pill badge-dark">Finished</span></p>
                         </div>
                         <div class="col-md-6">
                             <p class="text-light">Price: <span class="text-default">{{globals.selectedClassroom.price}}</span></p>

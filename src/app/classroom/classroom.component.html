@@ -214,11 +214,11 @@
         <div class="card card-profile shadow mt--200">
             <div class="px-4">
                 <div class="text-center mt-5">
-                    <h4 *ngIf=globals.selectedClassroom.isClassroomNotOpen() class="text-light">Status: <span class="badge badge-pill badge-info">Not Open</span></h4>
-                    <h4 *ngIf=globals.selectedClassroom.isClassroomOpen() class="text-light">Status: <span class="badge badge-pill badge-success">Open</span></h4>
-                    <h4 *ngIf=globals.selectedClassroom.isClassroomClosed() class="text-light">Status: <span class="badge badge-pill badge-warning">Closed</span></h4>
-                    <h4 *ngIf=globals.selectedClassroom.isClassroomActive() class="text-light">Status: <span class="badge badge-pill badge-primary">Ongoing</span></h4>
-                    <h4 *ngIf=globals.selectedClassroom.courseFinished class="text-light">Status: <span class="badge badge-pill badge-dark">Finished</span></h4>
+                    <h4 *ngIf=globals.selectedClassroom.state.isClassroomNotOpen class="text-light">Status: <span class="badge badge-pill badge-info">Not Open</span></h4>
+                    <h4 *ngIf=globals.selectedClassroom.state.isClassroomOpen class="text-light">Status: <span class="badge badge-pill badge-success">Open</span></h4>
+                    <h4 *ngIf=globals.selectedClassroom.state.isClassroomClosed class="text-light">Status: <span class="badge badge-pill badge-warning">Closed</span></h4>
+                    <h4 *ngIf=globals.selectedClassroom.state.isClassroomActive class="text-light">Status: <span class="badge badge-pill badge-primary">Ongoing</span></h4>
+                    <h4 *ngIf=globals.selectedClassroom.state.isCourseFinished class="text-light">Status: <span class="badge badge-pill badge-dark">Finished</span></h4>
                 </div>
                 <div class="mt-2 py-5 border-top text-center">
                     <h4>Classroom Management</h4>

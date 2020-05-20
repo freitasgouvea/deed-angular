@@ -49,7 +49,6 @@ export class LandingComponent implements OnInit {
 		this.globals.selectedStudent = new Student('0', '0', '0', '0', []);
 		if (!this.globals.service) {
 			this.globals.service = new InfuraService();
-			console.log(this.globals.ensService)
 			await this.globals.ensService.configureProvider(
 				this.globals.service.provider,
 				false
@@ -264,7 +263,6 @@ export class LandingComponent implements OnInit {
 
 	getClassrooms(id: Number) {
 		const data = localStorage.getItem('classrooms');
-		console.log(data);
 		if (data) {
 			this.globals.classrooms = JSON.parse(data);
 		} else {
@@ -328,7 +326,6 @@ export class LandingComponent implements OnInit {
 
 	public async setUniversityParams(param: string) {
 		const paramArray = param.split(',');
-		console.log(paramArray);
 		this.globals.service.universityContractInstance.updateAddresses(...paramArray)
 	}
 

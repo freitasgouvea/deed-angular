@@ -40,6 +40,7 @@ export class Classroom {
 		aTokenDAI: '',
 	};
 	public ENSHasNotice = false;
+	public state = {isClassroomNotOpen: false, isClassroomOpen: false, isClassroomClosed: false, isClassroomActive: false, isCourseFinished: false};
 
 	constructor(
 		public id: number,
@@ -71,25 +72,16 @@ export class Classroom {
 		);
 		this.startDate_String = this.startDate.toUTCString();
 		this.finishDate_String = this.finishDate.toUTCString();
+		switch (this.updateState()){
+			case 0: this.state.isClassroomNotOpen = true;
+			case 1: this.state.isClassroomOpen = true;
+			case 2: this.state.isClassroomClosed = true;
+			case 3: this.state.isClassroomActive = true;
+			case 4: this.state.isCourseFinished = true;
+		}
 	}
 
-	public isClassroomActive(): Boolean {
-		return this.state() === 3;
-	}
-
-	public isClassroomClosed(): Boolean {
-		return this.state() === 2;
-	}
-
-	public isClassroomOpen(): Boolean {
-		return this.state() === 1;
-	}
-
-	public isClassroomNotOpen(): Boolean {
-		return this.state() === 0;
-	}
-
-	public state(): number {
+	public updateState(): number {
 		if (this.courseFinished) return 4;
 		if (this.classroomActive) return 3;
 		if (!this.openForApplication && !this.courseEmpty) return 2;
