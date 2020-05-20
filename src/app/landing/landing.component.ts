@@ -249,6 +249,7 @@ export class LandingComponent implements OnInit {
 		classroom.metadata.avatar = await this.globals.ensService.getTxAvatar(
 			node
 		);
+		if (classroom.metadata.avatar.length < 5) classroom.metadata.avatar = this.globals.defaultClassroomImg;
 		classroom.metadata.description = await this.globals.ensService.getTxDescription(
 			node
 		);

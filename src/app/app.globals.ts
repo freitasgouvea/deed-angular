@@ -8,6 +8,7 @@ import { Student } from 'src/models/student.model';
 @Injectable()
 export class Globals {
 	public ADDR0 = "0x0000000000000000000000000000000000000000";
+	public defaultClassroomImg = "https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46";
 
 	public service: PortisService | InfuraService;
 	public ensService = new ENSService();

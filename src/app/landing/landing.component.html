@@ -133,67 +133,43 @@
             </div>
         </div>
     </section>
-    <section *ngIf=!globals.classlistLoaded id="classroom_loading">
-        <div class="container">
-            <div class="card shadow-lg border-0">
-                <div class="p-5">
-                    <div class="row align-items-center">
-                        <div class="col-lg-12">
-                            <h2 class="display-3">Loading...</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section *ngIf=globals.classlistLoaded id="classroom_section">
-        <section id="classrooms" class="section section-lg">
+    <section id="classroom">
+        <section id="classrooms_section" class="section section-lg">
             <div class="container">
                 <div class="row justify-content-left mb-4">
                     <div class="col-lg-8">
                         <h2 class="display-3">classrooms</h2>
-                        <p class="lead text-default">Here you can see and access theclassrooms of the university.</p>
+                        <p class="lead text-default">Here you can see and access the classrooms of the university.</p>
                     </div>
                 </div>
-                <div class="row justify-content-center">
+                <div *ngIf=!globals.classlistLoaded class="container">
+                    <div class="card shadow-lg border-0">
+                        <div class="p-5">
+                            <div class="row align-items-center">
+                                <div class="col-lg-12">
+                                    <h2 class="display-3">Loading...</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf=globals.classlistLoaded class="row justify-content-center">
                     <div class="col-lg-12">
                         <div class="row row-grid">
-                            <div class="col-lg-4">
+                            <div *ngFor="let classroom of globals.classrooms | slice:0:3" class="col-lg-4">
                                 <div class="card card-lift--hover shadow border-0">
-                                    <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46" alt="Card image cap">
+                                    <img class="card-img-top" src={{classroom.metadata.avatar}} alt="Card image cap">
                                     <div class="card-body py-5">
-                                        <h4 class="text-default text-uppercase">Learn Solidity</h4>
+                                        <h4 class="text-default text-uppercase">{{classroom.title}}</h4>
                                         <div>
-                                            <span class="badge badge-pill badge-success">26th May 2020</span>
+                                            <span *ngIf=classroom.state.isClassroomNotOpen class="badge badge-pill badge-info">Not Open</span>
+                                            <span *ngIf=classroom.state.isClassroomOpen class="badge badge-pill badge-success">Open</span>
+                                            <span *ngIf=classroom.state.isClassroomClosed class="badge badge-pill badge-warning">Closed</span>
+                                            <span *ngIf=classroom.state.isClassroomActive class="badge badge-pill badge-primary">Ongoing</span>
+                                            <span *ngIf=classroom.state.isCourseFinished class="badge badge-pill badge-dark">Finished</span>
                                         </div>
-                                        <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.</p>
-                                        <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="card card-lift--hover shadow border-0">
-                                    <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46" alt="Card image cap">
-                                    <div class="card-body py-5">
-                                        <h4 class="text-default text-uppercase">Learn Dapp</h4>
-                                        <div>
-                                            <span class="badge badge-pill badge-success">23th July 2020</span>
-                                        </div>
-                                        <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.</p>
-                                        <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="card card-lift--hover shadow border-0">
-                                    <img class="card-img-top" src="https://qph.fs.quoracdn.net/main-qimg-b1a1a5b86638cac39fa9e8389d4c3b46" alt="Card image cap">
-                                    <div class="card-body py-5">
-                                        <h4 class="text-default text-uppercase">Learn Solidity</h4>
-                                        <div>
-                                            <span class="badge badge-pill badge-success">1st June 2020</span>
-                                        </div>
-                                        <p class="description mt-3">Argon is a great free UI package based on Angular that includes the most important components and features.</p>
-                                        <a href="javascript:void(0)" class="btn btn-default mt-4">Details</a>
+                                        <p class="description mt-3" style="height: 32px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{classroom.metadata.description}}</p>
+                                        <a [class.selected]="classroom === globals.selectedClassroom" (click)="onSelect(classroom);openModal('custom-modal-classroomInfo')" class="btn btn-default mt-4 text-white">Details</a>
                                     </div>
                                 </div>
                             </div>
@@ -202,12 +178,13 @@
                 </div>
             </div>
         </section>
-        <section class="section section-lg pt-0">
+        <section *ngIf=globals.classlistLoaded class="section section-lg pt-0">
             <div class="container">
                 <div class="card shadow-lg border-0">
                     <div class="p-2">
                         <div class="row align-items-center">
                             <div class="col-md-12">
+                                <h3 style="text-align: center">View All Classrooms</h3><br>
                                 <table class="table table-hover" responsive>
                                     <thead>
                                         <tr>
