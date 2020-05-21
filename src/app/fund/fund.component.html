@@ -20,11 +20,8 @@
                             <h1 class="display-3 text-white">decentralized
                                 <span>university fund</span>
                             </h1>
-                            <h3 class="lead  text-white">This managed fund keeps all donations and revenues under a
-                                locked endowment account. This fund is managed by automated smart contracts and/or
-                                professional fund managers to make steady low-risk returns over time.</h3>
-                            <h3 class="lead  text-white">Even though the endowment funds are locked, the returns can be
-                                withdrawn to some specific ends:</h3>
+                            <h3 class="lead  text-white">This managed fund keeps all donations and revenues under a locked endowment account. This fund is managed by automated smart contracts and/or professional fund managers to make steady low-risk returns over time.</h3>
+                            <h3 class="lead  text-white">Even though the endowment funds are locked, the returns can be withdrawn to some specific ends:</h3>
                             <ul>
                                 <li class="lead  text-white">Paying grants to good students</li>
                                 <li class="lead  text-white">Paying for GSN relayed calls</li>
@@ -37,8 +34,7 @@
                 </div>
             </div>
             <div class="separator separator-bottom separator-skew">
-                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                    xmlns="http://www.w3.org/2000/svg">
+                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
                     <polygon class="fill-secondary" points="2560 0 2560 100 0 100"></polygon>
                 </svg>
             </div>
@@ -50,8 +46,7 @@
                         <div *ngIf=userIsFundManager class="card mb-4">
                             <div class="card-body">
                                 <h5 class="card-title text-primary">Fund Manager</h5>
-                                <input #inputSize class="form-control" placeholder="Operation Size (in 1e18)"
-                                    type="text" size=32>
+                                <input #inputSize class="form-control" placeholder="Operation Size (in 1e18)" type="text" size=32>
                                 <button class="btn btn-sm btn-primary" (click)="setOperationSize(inputSize.value)">Set
                                     Operation Size</button>
                             </div>
@@ -60,9 +55,7 @@
                             <div class="card-body">
                                 <h5 class="card-title text-primary">Stored assets</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of assetsData | keyvalue"><button *ngIf=userIsFundManager
-                                            class="btn btn-sm btn-warning"
-                                            (click)="sendToken(item.key, operationSize)">Withdraw</button>{{item.key}}:
+                                    <li *ngFor="let item of assetsData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="sendToken(item.key, operationSize)">Withdraw</button>{{item.key}}:
                                         <strong>{{item.value}}</strong></li>
                                 </ul>
                             </div>
@@ -80,11 +73,8 @@
                             <div class="card-body">
                                 <h5 class="card-title text-success">Invested funds</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of investmentData | keyvalue"><button *ngIf=userIsFundManager
-                                            class="btn btn-sm btn-primary"
-                                            (click)="deposit(item.key, operationSize)">Deposit</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary"
-                                            (click)="redeem(item.key, operationSize)">Redeem</button>{{item.key}}:
+                                    <li *ngFor="let item of investmentData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="deposit(item.key, operationSize)">Deposit</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="redeem(item.key, operationSize)">Redeem</button>{{item.key}}:
                                         <strong>{{item.value}}</strong></li>
                                 </ul>
                             </div>
@@ -93,15 +83,10 @@
                             <div class="card-body">
                                 <h5 class="card-title text-success">Uniswap liquidity providing</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of uniswapData | keyvalue"><button *ngIf=userIsFundManager
-                                            class="btn btn-sm btn-warning"
-                                            (click)="provide(item.key, operationSize)">Provide</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success"
-                                            (click)="remove(item.key, operationSize)">Remove</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary"
-                                            (click)="swap(item.key, operationSize, true)">Swap A for B</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary"
-                                            (click)="swap(item.key, operationSize, false)">Swap B for
+                                    <li *ngFor="let item of uniswapData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="provide(item.key, operationSize)">Provide</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="remove(item.key, operationSize)">Remove</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, true)">Swap A for B</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, false)">Swap B for
                                             A</button>{{item.key}}: <strong>{{item.value}}</strong></li>
                                 </ul>
                             </div>
@@ -110,15 +95,10 @@
                             <div class="card-body">
                                 <h5 class="card-title text-danger">Aave open positions</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of aaveBorrowData | keyvalue"><button *ngIf=userIsFundManager
-                                            class="btn btn-sm btn-primary"
-                                            (click)="enterMarket(item.key)">Enter</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary"
-                                            (click)="exitMarket(item.key)">Exit</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-warning"
-                                            (click)="borrow(item.key, operationSize)">Borrow</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success"
-                                            (click)="repay(item.key, operationSize)">Repay</button>{{item.key}}:
+                                    <li *ngFor="let item of aaveBorrowData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="enterMarket(item.key)">Enter</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="exitMarket(item.key)">Exit</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="borrow(item.key, operationSize)">Borrow</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="repay(item.key, operationSize)">Repay</button>{{item.key}}:
                                         <strong>{{item.value}}</strong></li>
                                     <li class="title text-success">Aave total colateral:
                                         <strong>{{aaveColateral}}</strong> ETH equivalent</li>
@@ -129,15 +109,10 @@
                             <div class="card-body">
                                 <h5 class="card-title text-danger">Compound open positions</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of compoundBorrowData | keyvalue"><button
-                                            *ngIf=userIsFundManager class="btn btn-sm btn-primary"
-                                            (click)="enterMarket(item.key)">Enter</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary"
-                                            (click)="exitMarket(item.key)">Exit</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-warning"
-                                            (click)="borrow(item.key, operationSize)">Borrow</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success"
-                                            (click)="repay(item.key, operationSize)">Repay</button>{{item.key}}:
+                                    <li *ngFor="let item of compoundBorrowData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="enterMarket(item.key)">Enter</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="exitMarket(item.key)">Exit</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="borrow(item.key, operationSize)">Borrow</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="repay(item.key, operationSize)">Repay</button>{{item.key}}:
                                         <strong>{{item.value}}</strong></li>
                                     <li class="title text-success">Compound total colateral:
                                         <strong>{{compoundColateral}}</strong> ETH equivalent</li>
@@ -148,13 +123,9 @@
                             <div class="card-body">
                                 <h5 class="card-title text-success">Total Colateral</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of compoundBorrowData | keyvalue"><button
-                                            *ngIf=userIsFundManager class="btn btn-sm btn-primary"
-                                            (click)="enterMarket(item.key)">Enter</button>
-                                    <li class="title ">Aave: <strong>{{aaveColateral}}</strong> ETH
-                                        equivalent</li>
-                                    <li class="title ">Compound: <strong>{{compoundColateral}}</strong>
-                                        ETH equivalent</li>
+                                    <li class="title ">Aave: <strong>{{aaveColateral}}</strong> ETH equivalent
+                                    </li>
+                                    <li class="title ">Compound: <strong>{{compoundColateral}}</strong> ETH equivalent</li>
                                 </ul>
                             </div>
                         </div>
