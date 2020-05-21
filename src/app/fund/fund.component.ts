@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Globals } from '../app.globals';
 import { InfuraService } from '../services/infura.service';
+import { environment } from 'src/environments/environment';
+import { ValueConverter } from '@angular/compiler/src/render3/view/template';
+import { ethers } from 'ethers';
 
 @Component({
 	selector: 'fund',
@@ -123,10 +126,17 @@ export class FundComponent implements OnInit {
 			)
 				this.userIsFundManager = true;
 		});
+		this.globals.service.getDAIBalance(environment.UniversityFundAddress).then((val) => this.assetsData.DAI = Number(ethers.utils.formatEther(val)));;
 	}
 
 	async getRoleMembers(role: string) {
 		return await this.globals.service.listRoles(role, this.globals.service.universityFundContractInstance);
+	}
+
+	operationSize: string;
+
+	setOperationSize(value: string){
+		this.operationSize = value;
 	}
 
 	sendToken(identifier: string, value: string){}
