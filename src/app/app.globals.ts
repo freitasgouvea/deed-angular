@@ -43,4 +43,5 @@ export class Globals {
 	public universityReturns: any;
 	public universityAdmin: any;
 	public universityParams: any;
+	public universityFundAddress: string;
 }
