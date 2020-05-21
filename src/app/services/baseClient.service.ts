@@ -4,6 +4,7 @@ import * as ethers from 'ethers';
 import { environment } from '../../environments/environment';
 
 import * as University from '../../../build/contracts/University.json';
+import * as UniversityFund from '../../../build/contracts/UniversityFund.json';
 import * as Classroom from '../../../build/contracts/Classroom.json';
 import * as Student from '../../../build/contracts/Student.json';
 import * as StudentApplication from '../../../build/contracts/StudentApplication.json';
@@ -21,6 +22,7 @@ export class baseClientService {
 	public classroomContractInstance: any;
 	public studentContractInstance: any;
 	public studentApplicationContractInstance: any;
+	public universityFundContractInstance: any;
 	public DAIContract: any;
 	public CDAIContract: any;
 	public ADAIContract: any;
@@ -35,6 +37,7 @@ export class baseClientService {
 		this.provider = _provider;
 		this.setupPublicTokens();
 		await this.connectUniversity();
+		await this.connectUniversityFund();
 	}
 
 	// Contracts setup
@@ -74,13 +77,24 @@ export class baseClientService {
 		const providerOrSigner = this.useSigner
 			? this.provider.getSigner()
 			: this.provider;
-		if (this.checkContractInfo(environment.universityAddress, University))
+		if (this.checkContractInfo(environment.UniversityAddress, University))
 			this.universityContractInstance = new ethers.Contract(
-				environment.universityAddress,
+				environment.UniversityAddress,
 				University.abi,
 				providerOrSigner
 			);
-		await this.universityContractInstance.deployed();
+	}
+
+	async connectUniversityFund() {
+		const providerOrSigner = this.useSigner
+			? this.provider.getSigner()
+			: this.provider;
+		if (this.checkContractInfo(environment.UniversityFundAddress, UniversityFund))
+			this.universityFundContractInstance = new ethers.Contract(
+				environment.UniversityFundAddress,
+				UniversityFund.abi,
+				providerOrSigner
+			);
 	}
 
 	async connectClassroom(address: string) {
@@ -230,7 +244,7 @@ export class baseClientService {
 	}
 
 	public async getUniversityFunds() {
-		const answer = await this.universityContractInstance.availableFunds();
+		const answer = await this.universityContractInstance.endowmentLocked();
 		const val = ethers.utils.formatEther(answer);
 		return val;
 	}
@@ -257,6 +271,11 @@ export class baseClientService {
 		const answer = await this.universityContractInstance.returnsReceived();
 		const val = ethers.utils.formatEther(answer);
 		return val;
+	}
+
+	public async getUniversityFund() {
+		const answer = await this.universityContractInstance.universityFund();
+		return answer;
 	}
 
 	public async getUniversityParams() {
@@ -292,18 +311,18 @@ export class baseClientService {
 		return text;
 	}
 
-	public async listRoles(role: string) {
+	public async listRoles(role: string, contract = this.universityContractInstance) {
 		let list: Array<GenericUser> = [];
 		const roleBytes =
 			role == 'DEFAULT_ADMIN_ROLE'
 				? ethers.utils.formatBytes32String('')
 				: ethers.utils.solidityKeccak256(['string'], [role]);
-		const size = await this.universityContractInstance.getRoleMemberCount(
+		const size = await contract.getRoleMemberCount(
 			roleBytes
 		);
 		let index = 0;
 		while (index < size) {
-			const member = await this.universityContractInstance.getRoleMember(
+			const member = await contract.getRoleMember(
 				roleBytes,
 				index
 			);
@@ -468,12 +487,29 @@ export class baseClientService {
 		return tx;
 	}
 
+	async grantFundAdmin(address: string){
+		const role = ethers.utils.solidityKeccak256(['string'], ['FUNDS_MANAGER_ROLE']);
+		await this.universityContractInstance.grantRoleFund(role, address);
+	}
+
+	async applyFunds(input: number){
+		const val = ethers.utils.parseEther(input.toString());
+		const tx = await this.universityContractInstance.applyFunds(val);
+		return tx;
+	}
+
+	async recoverFunds(input: number){
+		const val = ethers.utils.parseEther(input.toString());
+		const tx = await this.universityContractInstance.recoverFunds(val);
+		return tx;
+	}
+
 	// ENS Signed actions
 
 	async registerInRegistrar(label: string) {
 		const tx = await this.universityContractInstance.registerInRegistrar(
 			ethers.utils.solidityKeccak256(['string'], [label]),
-			environment.universityAddress
+			environment.UniversityAddress
 		);
 		await tx.wait();
 	}

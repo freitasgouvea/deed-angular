@@ -29,7 +29,7 @@ export class LandingComponent implements OnInit {
 		'https://' +
 		environment.network +
 		'.etherscan.io/address/' +
-		environment.universityAddress;
+		environment.UniversityAddress;
 
 	public modeUniversityAdmin = 'unconnected';
 	public txMode = 'off';
@@ -131,7 +131,7 @@ export class LandingComponent implements OnInit {
 
 	async refreshUniversityMetadata() {
 		this.globals.universityENSName = await this.globals.ensService.lookupAddress(
-			environment.universityAddress
+			environment.UniversityAddress
 		);
 		this.globals.universityENSNameRecord = await this.globals.ensService.checkENSRecord();
 		this.globals.universityENSTTL = await this.globals.ensService.getTTL();
@@ -147,6 +147,7 @@ export class LandingComponent implements OnInit {
 		this.globals.universityRevenue = await this.globals.service.getUniversityRevenue();
 		this.globals.universityReturns = await this.globals.service.getUniversityReturns();
 		this.globals.universityParams = await this.globals.service.getUniversityParams();
+		this.globals.universityFundAddress = await this.globals.service.getUniversityFund();
 	}
 
 	async updateENSNotice(text: string) {
@@ -175,7 +176,7 @@ export class LandingComponent implements OnInit {
 			await this.globals.service.registerInRegistrar(normalName);
 		const node = this.globals.ensService.node;
 		await this.globals.service.setResolver(node);
-		await this.globals.service.setAddr(node, environment.universityAddress);
+		await this.globals.service.setAddr(node, environment.UniversityAddress);
 		await this.globals.service.setReverse(
 			normalName + environment.ENSDomain
 		);
@@ -297,6 +298,22 @@ export class LandingComponent implements OnInit {
 		this.globals.service
 			.grantRole(role, address)
 			.then(() => this.loadUniversityAdmin());
+	}
+
+	attachFund(address: string) {
+		this.globals.service.universityContractInstance.attachFund(address);
+	}
+
+	grantFundAdmin(address: string) {
+		this.globals.service.grantFundAdmin(address);
+	}
+
+	applyFunds(val: number){
+		this.globals.service.applyFunds(val);
+	}
+
+	recoverFunds(val: number){
+		this.globals.service.recoverFunds(val);
 	}
 
 	roleMembersAdmin: Map<string, Array<GenericUser>>;
