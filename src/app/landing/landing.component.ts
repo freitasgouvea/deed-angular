@@ -33,6 +33,7 @@ export class LandingComponent implements OnInit {
 
 	public modeUniversityAdmin = 'unconnected';
 	public txMode = 'off';
+	public hashTx: any;
 	public receipt: any;
 	public form: FormGroup;
 
@@ -276,6 +277,7 @@ export class LandingComponent implements OnInit {
 			if (!selfRegister) {
 				this.txMode = 'failedTX';
 			} else {
+				this.hashTx = selfRegister.hash;
 				this.txMode = 'successTX';
 			}
 		}

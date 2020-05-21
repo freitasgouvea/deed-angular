@@ -568,6 +568,24 @@ export class ClassroomComponent implements OnInit {
 			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
 	}
 
+	async studentSelfRegister(_name: string): Promise<any> {
+		this.txOn();
+		if (_name.length < 1) {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'processingTX';
+			const selfRegister = await this.globals.service.studentSelfRegister(
+				_name
+			);
+			if (!selfRegister) {
+				this.txMode = 'failedTX';
+			} else {
+				this.hashTx = selfRegister.hash;
+				this.txMode = 'successTX';
+			}
+		}
+	}
+
 	async applyClassroom(): Promise<any> {
 		this.txOn();
 		const classroomAddress = this.globals.selectedClassroom.smartcontract;
