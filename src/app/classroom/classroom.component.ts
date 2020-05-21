@@ -48,8 +48,6 @@ export class ClassroomComponent implements OnInit {
 		this.globals.service
 			.connectClassroom(this.globals.selectedClassroom.smartcontract)
 			.then(() => this.refreshClassroomInfo());
-		if (!this.globals.selectedStudent) return;
-		console.log('ok')
 		this.globals.service.connectStudent();
 		this.globals.service.viewMyApplication().then((address) => {
 			this.myStudentApplication = new StudentApplication(this.globals, address, this.globals.address);
@@ -57,6 +55,7 @@ export class ClassroomComponent implements OnInit {
 			this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
 			this.globals.service.viewMyApplicationState(this.globals.selectedClassroom.smartcontract).then((state) => this.myStudentApplication.state = state)
 		})
+		console.log('application:' + this.globals.service.viewMyApplication())
 	}
 
 	openModal(id: string) {
@@ -64,6 +63,7 @@ export class ClassroomComponent implements OnInit {
 	}
 	closeModal(id: string) {
 		this.modalService.close(id);
+		this.ngOnInit();
 		if (id == 'custom-modal-search-classroom')
 			this.resetSearchClassroomModalErrorMsg();
 	}
