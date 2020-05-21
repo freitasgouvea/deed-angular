@@ -128,7 +128,7 @@ export class StudentComponent implements OnInit {
 			const updateName = await this.globals.service.studentUpdateName(
 				newName
 			)
-			if (!updateName) {
+			if (updateName == null) {
 				this.txMode = 'failedTX';
 			} else {
 				this.hashTx = updateName.hash;
