@@ -527,7 +527,7 @@ export class ClassroomComponent implements OnInit {
 			if (!application) {
 				this.txMode = 'failedTX';
 			} else {
-				this.hashTx = application;
+				this.hashTx = application.hash;
 				this.txMode = 'successTX';
 			}
 		}
@@ -535,13 +535,13 @@ export class ClassroomComponent implements OnInit {
 
 	async approveStart(): Promise<any> {
 		this.txOn();
-		const value = this.globals.selectedClassroom.price; 
+		const value = this.globals.selectedClassroom.price;
 		this.txMode = 'processingTX';
 		const approve = await this.globals.service.approveDAI(value);
 		if (!approve) {
 			this.txMode = 'failedTX';
 		} else {
-			this.hashTx = approve;
+			this.hashTx = approve.hash;
 			this.txMode = 'successTX';
 		}
 	}
@@ -553,7 +553,7 @@ export class ClassroomComponent implements OnInit {
 		if (!pay) {
 			this.txMode = 'failedTX';
 		} else {
-			this.hashTx = pay;
+			this.hashTx = pay.hash;
 			this.txMode = 'successTX';
 		}
 	}
@@ -571,7 +571,7 @@ export class ClassroomComponent implements OnInit {
 			if (!sendTx) {
 				this.txMode = 'failedTX';
 			} else {
-				this.hashTx = sendTx;
+				this.hashTx = sendTx.hash;
 				this.txMode = 'successTX';
 			}
 		}
@@ -591,7 +591,7 @@ export class ClassroomComponent implements OnInit {
 			if (!collectTx) {
 				this.txMode = 'failedTX';
 			} else {
-				this.hashTx = collectTx;
+				this.hashTx = collectTx.hash;
 				this.txMode = 'successTX';
 			}
 		}

@@ -131,7 +131,7 @@ export class StudentComponent implements OnInit {
 			if (!updateName) {
 				this.txMode = 'failedTX';
 			} else {
-				this.hashTx = updateName;
+				this.hashTx = updateName.hash;
 				this.txMode = 'successTX';
 			}
 		}

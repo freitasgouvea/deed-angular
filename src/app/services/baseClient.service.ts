@@ -446,14 +446,14 @@ export class baseClientService {
 			name
 		);
 		await register.wait();
-		return register.hash;
+		return register;
 	}
 
 	public async studentUpdateName(newName: string) {
 		const name = ethers.utils.formatBytes32String(newName);
 		const register = await this.studentContractInstance.changeName(name);
 		await register.wait();
-		return register.hash;
+		return register;
 	}
 
 	async createClassroom(
@@ -490,7 +490,7 @@ export class baseClientService {
 	async donateDAI(input: number) {
 		const val = ethers.utils.parseEther(input.toString());
 		const tx = await this.universityContractInstance.donateDAI(val);
-		return tx.hash;
+		return tx;
 	}
 
 	async grantFundAdmin(address: string) {
@@ -587,7 +587,7 @@ export class baseClientService {
 			classroomAddress
 		);
 		await application.wait();
-		return application.hash;
+		return application;
 	}
 
 	public async setAnswerSecret(classroomAddress: string, secret: string) {
@@ -596,21 +596,21 @@ export class baseClientService {
 			classroomAddress, secret32
 		);
 		await answer.wait();
-		return answer.hash;
+		return answer;
 	}
-	
+
 	public async withdrawAllResultsFromClassroom(classroomAddress: string, studentAddress: string) {
 		const withdraw = await this.studentContractInstance.withdrawAllResultsFromClassroom(
 			classroomAddress, studentAddress
 		);
 		await withdraw.wait();
-		return withdraw.hash;
+		return withdraw;
 	}
 
 	public async payEntryPrice() {
 		const tx = await this.studentApplicationContractInstance.payEntryPrice();
 		await tx.wait();
-		return tx.hash;
+		return tx;
 	}
 
 	// Direct contract interation
