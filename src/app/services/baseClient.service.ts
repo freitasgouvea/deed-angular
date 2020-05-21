@@ -135,7 +135,7 @@ export class baseClientService {
 		if (this.checkContractInfo(smartContractAddress, StudentApplication))
 			this.studentApplicationContractInstance = new ethers.Contract(
 				smartContractAddress,
-				Student.abi,
+				StudentApplication.abi,
 				providerOrSigner
 			);
 	}
@@ -184,7 +184,7 @@ export class baseClientService {
 		try {
 			const studentSmartContract = await this.universityContractInstance.myStudentAddress();
 			return studentSmartContract;
-		} catch (err) {}
+		} catch (err) {console.warn("Student address not found: " + err.toString());}
 	}
 
 	public async getStudentName() {
@@ -216,6 +216,11 @@ export class baseClientService {
 	}
 
 	// view Student info
+
+	public async viewMyStudentApplication(addressClassroom: string) {
+		const answer = await this.studentContractInstance.viewMyApplication(addressClassroom);
+		return answer;
+	}
 
 	public async viewMyApplicationState(classroomAddress: string) {
 		const answer = await this.studentContractInstance.viewMyApplicationState(
@@ -590,9 +595,27 @@ export class baseClientService {
 		return application;
 	}
 
+	public async setAnswerSecret(classroomAddress: string, secret: string) {
+		const secret32 = ethers.utils.formatBytes32String(secret);
+		const answer = await this.studentContractInstance.setAnswerSecret(
+			classroomAddress, secret32
+		);
+		await answer.wait();
+		return answer;
+	}
+
+	public async withdrawAllResultsFromClassroom(classroomAddress: string, studentAddress: string) {
+		const withdraw = await this.studentContractInstance.withdrawAllResultsFromClassroom(
+			classroomAddress, studentAddress
+		);
+		await withdraw.wait();
+		return withdraw;
+	}
+
 	public async payEntryPrice() {
 		const tx = await this.studentApplicationContractInstance.payEntryPrice();
 		await tx.wait();
+		return tx;
 	}
 
 	// Direct contract interation

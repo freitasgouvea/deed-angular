@@ -20,19 +20,24 @@ export class Student {
 	public address: string;
 	public name: string;
 	public score: string;
-	public smartContractAddress: string;
-	constructor(public globals: Globals) {}
+	constructor(public globals: Globals, public smartContractAddress: string) {}
 
 	public async updateApplications() {
 		this.applications = new Array<StudentApplication>();
 		const apps = await this.globals.service.getApplications();
-		apps.forEach(address => {
-			let thisApp = new StudentApplication(this.globals, address, this.smartContractAddress);
+		apps.forEach((address) => {
+			let thisApp = new StudentApplication(
+				this.globals,
+				address,
+				this.smartContractAddress
+			);
 			this.globals.service.connectStudentApplication(address);
-			this.globals.service.viewApplicationClassroomAddress().then((val) => {
-				thisApp.address = val;
-				this.applications.push(thisApp);
-			})
+			this.globals.service
+				.viewApplicationClassroomAddress()
+				.then((val) => {
+					thisApp.address = val;
+					this.applications.push(thisApp);
+				});
 		});
 	}
 }
