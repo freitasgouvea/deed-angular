@@ -4,10 +4,11 @@ import * as ethers from 'ethers';
 import { environment } from '../../environments/environment';
 
 import * as University from '../../../build/contracts/University.json';
+import * as UniversityFund from '../../../build/contracts/UniversityFund.json';
 import * as Classroom from '../../../build/contracts/Classroom.json';
 import * as Student from '../../../build/contracts/Student.json';
 import * as StudentApplication from '../../../build/contracts/StudentApplication.json';
-import * as DAI from '../../../build/contracts/ERC20.json';
+import * as ERC20 from '../../../build/contracts/ERC20.json';
 import * as CDAI from '../../../build/contracts/CERC20.json';
 import * as ADAI from '../../../build/contracts/aToken.json';
 import * as LINK from '../../../build/contracts/LinkTokenInterface.json';
@@ -21,6 +22,7 @@ export class baseClientService {
 	public classroomContractInstance: any;
 	public studentContractInstance: any;
 	public studentApplicationContractInstance: any;
+	public universityFundContractInstance: any;
 	public DAIContract: any;
 	public CDAIContract: any;
 	public ADAIContract: any;
@@ -35,6 +37,7 @@ export class baseClientService {
 		this.provider = _provider;
 		this.setupPublicTokens();
 		await this.connectUniversity();
+		await this.connectUniversityFund();
 	}
 
 	// Contracts setup
@@ -45,7 +48,7 @@ export class baseClientService {
 			: this.provider;
 		this.DAIContract = new ethers.Contract(
 			environment.DAIAddress,
-			DAI.abi,
+			ERC20.abi,
 			providerOrSigner
 		);
 		this.CDAIContract = new ethers.Contract(
@@ -74,13 +77,29 @@ export class baseClientService {
 		const providerOrSigner = this.useSigner
 			? this.provider.getSigner()
 			: this.provider;
-		if (this.checkContractInfo(environment.universityAddress, University))
+		if (this.checkContractInfo(environment.UniversityAddress, University))
 			this.universityContractInstance = new ethers.Contract(
-				environment.universityAddress,
+				environment.UniversityAddress,
 				University.abi,
 				providerOrSigner
 			);
-		await this.universityContractInstance.deployed();
+	}
+
+	async connectUniversityFund() {
+		const providerOrSigner = this.useSigner
+			? this.provider.getSigner()
+			: this.provider;
+		if (
+			this.checkContractInfo(
+				environment.UniversityFundAddress,
+				UniversityFund
+			)
+		)
+			this.universityFundContractInstance = new ethers.Contract(
+				environment.UniversityFundAddress,
+				UniversityFund.abi,
+				providerOrSigner
+			);
 	}
 
 	async connectClassroom(address: string) {
@@ -100,7 +119,7 @@ export class baseClientService {
 			? this.provider.getSigner()
 			: this.provider;
 		const smartContractAddress = await this.getStudentSmartContract();
-		if (!smartContractAddress) throw "Student not registered";
+		if (!smartContractAddress) throw 'Student not registered';
 		if (this.checkContractInfo(smartContractAddress, Student))
 			this.studentContractInstance = new ethers.Contract(
 				smartContractAddress,
@@ -199,13 +218,15 @@ export class baseClientService {
 	// view Student info
 
 	public async viewMyApplicationState(classroomAddress: string) {
-		const answer = await this.studentContractInstance.viewMyApplicationState(classroomAddress);
+		const answer = await this.studentContractInstance.viewMyApplicationState(
+			classroomAddress
+		);
 		return answer;
 	}
 
 	// view Student application info
 
-	public async viewApplicationClassroomAddress(){
+	public async viewApplicationClassroomAddress() {
 		const answer = await this.studentApplicationContractInstance.classroomAddress();
 		return answer;
 	}
@@ -230,7 +251,7 @@ export class baseClientService {
 	}
 
 	public async getUniversityFunds() {
-		const answer = await this.universityContractInstance.availableFunds();
+		const answer = await this.universityContractInstance.endowmentLocked();
 		const val = ethers.utils.formatEther(answer);
 		return val;
 	}
@@ -257,6 +278,11 @@ export class baseClientService {
 		const answer = await this.universityContractInstance.returnsReceived();
 		const val = ethers.utils.formatEther(answer);
 		return val;
+	}
+
+	public async getUniversityFund() {
+		const answer = await this.universityContractInstance.universityFund();
+		return answer;
 	}
 
 	public async getUniversityParams() {
@@ -292,21 +318,19 @@ export class baseClientService {
 		return text;
 	}
 
-	public async listRoles(role: string) {
+	public async listRoles(
+		role: string,
+		contract = this.universityContractInstance
+	) {
 		let list: Array<GenericUser> = [];
 		const roleBytes =
 			role == 'DEFAULT_ADMIN_ROLE'
 				? ethers.utils.formatBytes32String('')
 				: ethers.utils.solidityKeccak256(['string'], [role]);
-		const size = await this.universityContractInstance.getRoleMemberCount(
-			roleBytes
-		);
+		const size = await contract.getRoleMemberCount(roleBytes);
 		let index = 0;
 		while (index < size) {
-			const member = await this.universityContractInstance.getRoleMember(
-				roleBytes,
-				index
-			);
+			const member = await contract.getRoleMember(roleBytes, index);
 			list.push(new GenericUser(index, member));
 			index++;
 		}
@@ -427,9 +451,7 @@ export class baseClientService {
 
 	public async studentUpdateName(newName: string) {
 		const name = ethers.utils.formatBytes32String(newName);
-		const register = await this.studentContractInstance.changeName(
-			name
-		);
+		const register = await this.studentContractInstance.changeName(name);
 		await register.wait();
 		return register.hash;
 	}
@@ -456,16 +478,39 @@ export class baseClientService {
 		);
 	}
 
-	async approveDAI(input: number){
+	async approveDAI(input: number) {
 		const val = ethers.utils.parseEther(input.toString());
-		const tx = await this.DAIContract.approve(this.universityContractInstance.address, val);
-		return tx.hash;
+		const tx = await this.DAIContract.approve(
+			this.universityContractInstance.address,
+			val
+		);
+		return tx;
 	}
 
-	async donateDAI(input: number){
+	async donateDAI(input: number) {
 		const val = ethers.utils.parseEther(input.toString());
 		const tx = await this.universityContractInstance.donateDAI(val);
 		return tx.hash;
+	}
+
+	async grantFundAdmin(address: string) {
+		const role = ethers.utils.solidityKeccak256(
+			['string'],
+			['FUNDS_MANAGER_ROLE']
+		);
+		await this.universityContractInstance.grantRoleFund(role, address);
+	}
+
+	async applyFunds(input: number) {
+		const val = ethers.utils.parseEther(input.toString());
+		const tx = await this.universityContractInstance.applyFunds(val);
+		return tx;
+	}
+
+	async recoverFunds(input: number) {
+		const val = ethers.utils.parseEther(input.toString());
+		const tx = await this.universityContractInstance.recoverFunds(val);
+		return tx;
 	}
 
 	// ENS Signed actions
@@ -473,7 +518,7 @@ export class baseClientService {
 	async registerInRegistrar(label: string) {
 		const tx = await this.universityContractInstance.registerInRegistrar(
 			ethers.utils.solidityKeccak256(['string'], [label]),
-			environment.universityAddress
+			environment.UniversityAddress
 		);
 		await tx.wait();
 	}
@@ -535,7 +580,7 @@ export class baseClientService {
 		await tx.wait();
 	}
 
-	//Student actions
+	// Student actions
 
 	public async applyToClassroom(classroomAddress: string) {
 		const application = await this.studentContractInstance.applyToClassroom(
@@ -566,5 +611,35 @@ export class baseClientService {
 		const tx = await this.studentApplicationContractInstance.payEntryPrice();
 		await tx.wait();
 		return tx.hash;
+	}
+
+	// Direct contract interation
+
+	public async balanceOfERC20(addressERC20: string, address: string) {
+		const providerOrSigner = this.useSigner
+			? this.provider.getSigner()
+			: this.provider;
+		const erc20 = new ethers.Contract(
+			addressERC20,
+			ERC20.abi,
+			providerOrSigner
+		);
+		return await erc20.balanceOf(address);
+	}
+
+	public async transferERC20(
+		addressERC20: string,
+		address: string,
+		val: number
+	) {
+		const erc20 = new ethers.Contract(
+			addressERC20,
+			ERC20.abi,
+			this.provider.getSigner()
+		);
+		return await erc20.transfer(
+			address,
+			ethers.utils.parseEther(val.toString())
+		);
 	}
 }

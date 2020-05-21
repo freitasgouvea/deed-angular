@@ -272,6 +272,8 @@
                                             <strong>{{globals.universityRevenue}}</strong> DAI</li>
                                         <li id="university.returnsReceived">Returns:
                                             <strong>{{globals.universityReturns}}</strong> DAI</li>
+                                        <li id="university.returnsReceived">Fund address:
+                                            <strong>{{globals.universityFundAddress}}</strong></li>
                                     </ul>
                                     <a href="{{universityEtherscan}}" target="_blank" class="text-primary">See on
                                         Etherscan</a>
@@ -717,6 +719,14 @@
                                         <h4 class="UniversityAdmins mt-3">Notice: <span class="text-default">{{globals.universityENSNotice}}</span> </h4>
                                         <input #inputUniversityAdminENSNotice class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="updateENSNotice(inputUniversityAdminENSNotice.value)">Update</button>
                                         <button *ngIf=!globals.universityENSNameRecord type="button" class="btn btn-warning" (click)="setupUniversityENS()">Setup ENS</button>
+                                        <h4 class="UniversityAdmins mt-3">Attach University Fund</h4>
+                                        <input #inputFundAddress class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="attachFund(inputFundAddress.value)">Attach fund</button>
+                                        <h4 class="UniversityAdmins mt-3">University Fund Admin</h4>
+                                        <input #inputFundAdminAddress class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-warning" (click)="grantFundAdmin(inputFundAdminAddress.value)">Give fund admin</button>
+                                        <h4 class="UniversityAdmins mt-3">Apply funds in University Fund</h4>
+                                        <input #inputFundApply class="form-control" placeholder="DAI value" type="text" size=32> <button type="button" class="btn btn-primary" (click)="applyFunds(inputFundApply.value)">Apply funds</button>
+                                        <h4 class="UniversityAdmins mt-3">Recover funds from University Fund</h4>
+                                        <input #inputFundRecover class="form-control" placeholder="DAI value" type="text" size=32> <button type="button" class="btn btn-primary" (click)="recoverFunds(inputFundRecover.value)">Recover funds</button>
                                     </div>
                                 </div>
                             </div>
