@@ -457,14 +457,16 @@
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <div *ngIf="txMode=='preTX'" class="alert alert-neutral" role="alert">
-                                        <strong class="text-default">You need confirm this transaction on your portis wallet!</strong>
+                                        <strong class="text-default">You need confirm this transaction on your portis
+                                            wallet!</strong>
                                     </div>
                                     <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
                                         <strong>Wait!</strong> Registering your account ...
                                     </div>
                                     <div *ngIf="txMode=='successTX'" class="alert alert-success" role="alert">
                                         <strong>Success!</strong> Transaction Hash {{hashTx}}
-                                        <a href="https://ropsten.etherscan.io/tx/{{hashTx}}" target="_blank">See On Etherscan</a>
+                                        <a href="https://ropsten.etherscan.io/tx/{{hashTx}}" target="_blank">See On
+                                            Etherscan</a>
                                     </div>
                                     <div *ngIf="txMode=='failedTX'" class="alert alert-danger" role="alert">
                                         <strong>Failed!</strong> Transaction didn't complete. Try again!
@@ -521,14 +523,14 @@
                                         class="form-control" type="text" size=32>
                                     <button type="button" (click)="setUniversityOwner(inputUniversity_Owner.value)"
                                         class="btn btn-sm btn-default text-white">Set</button>
-                                        <br>
+                                    <br>
                                     <label for="inputObjUpdateUniversity_Name" class="UniversityAdmins mt-3">Name: <span
                                             class="text-default">{{globals.universityName}}</span></label>
                                     <input id="inputObjUpdateUniversity_Name" #inputUniversity_Name class="form-control"
                                         type="text" size=32>
                                     <button type="button" (click)="setUniversityName(inputUniversity_Name.value)"
                                         class="btn btn-sm btn-default text-white">Set</button>
-                                        <br>
+                                    <br>
                                     <label for="inputObjUpdateUniversity_Cut" class="UniversityAdmins mt-3">Cut: <span
                                             class="text-default">{{globals.universityCut}}</span></label>
                                     <input id="inputObjUpdateUniversity_Cut" #inputUniversity_Cut class="form-control"
@@ -1002,27 +1004,28 @@
     <jw-modal id="transfer-dai">
         <div id="donationInfo" class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
-                <div class="cmodal-body p-0">
+                <div class="modal-body p-0">
                     <div class="card shadow border-0 bg-gradient-success">
                         <div class="card-header justify-content-center bg-gradient-success">
-                            <h3 class="text-center text-white">Make a Donation</h3>
+                            <h4 class="text-center text-white">Make a Donation (DAI)</h4>
+                            <button type="button" (click)="closeModal('transfer-dai')" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="card-body justify-content-center bg-gradient-success">
-                            <h4 class="text-center text-white">All donations go directly to the university endowment,
-                                helping good students to get grants</h4>
-                            <input #donationInputVal class="form-control" type="number" (focus)="focus=true"
-                                (blur)="focus=false">
-                            <div class="card-footer justify-content-center bg-gradient-success">
-                                <button (click)="closeModal('transfer-dai')"
-                                    class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-                                    <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
-                                    <span class="btn-inner--text">Back</span>
-                                </button>
-                                <button type="submit" (click)="donateDAi(donationInputVal.value)"
-                                    class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
-                                    <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
-                                    <span class="btn-inner--text">Donate</span>
-                                </button>
+                            <h5 class="text-center text-white">All donations go directly to the university endowment,
+                                helping good students to get grants</h5>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6 align-content-center mt-2">
+                                    <input #donationInputVal class="form-control" placeholder="DAI" type="number" (focus)="focus=true"
+                                        (blur)="focus=false">
+                                </div>
+                                <div class="col-md-6 align-content-center mt-2">
+                                    <button type="submit" (click)="donateDAi(donationInputVal.value)"
+                                        class="btn btn-neutral btn-block btn-icon mb-3 mb-sm-0">
+                                        <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
+                                        <span class="btn-inner--text">Donate</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
