@@ -116,18 +116,18 @@
                                 <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-1'); txOn();" class="btn btn-default mt-4 text-white">Apply</a>
                                 <a *ngIf=!globals.selectedClassroom (click)="openModal('custom-modal-search-classroom')" class="btn btn-default mt-4 text-white">Search</a>
                             </div>
-                            <div *ngIf="phase>0" class="card-body bg-gradient-primary py-5">
+                            <div *ngIf="phase>0" class="card-body text-white bg-gradient-primary py-5">
                                 <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
                                     1
                                 </div>
-                                <h6 class="text-default text-uppercase">Applied</h6>
+                                <h6 class="text-white text-uppercase">Applied</h6>
                                 <p class="description mt-3">Your application is registered.</p>
                             </div>
-                            <div *ngIf="phase<0" class="card-body bg-gradient-success py-5">
+                            <div *ngIf="phase<0" class="card-body text-white bg-gradient-success py-5">
                                 <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
                                     1
                                 </div>
-                                <h6 class="text-default text-uppercase">Register</h6>
+                                <h6 class="text-white text-uppercase">Register</h6>
                                 <button *ngIf="globals.mode!='connected'" class="btn btn-info mt-4" (click)="conectPortis()">Conect Portis</button>
                                 <button *ngIf="globals.mode=='connected'" class="btn btn-success mt-4" (click)="openModal('custom-modal-register'); txOn();">Register DeEd</button>
                             </div>
