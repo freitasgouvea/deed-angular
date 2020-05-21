@@ -4,6 +4,7 @@ import { InfuraService } from '../services/infura.service';
 import { environment } from 'src/environments/environment';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { ethers } from 'ethers';
+import { promise } from 'protractor';
 
 @Component({
 	selector: 'fund',
@@ -31,11 +32,29 @@ export class FundComponent implements OnInit {
 		REP: 0,
 		WBTC: 0,
 		ZRX: 0,
-	}
+	};
+
+	addressERC20 = {
+		DAI: '0xf80A32A835F79D7787E8a8ee5721D0fEaFd78108',
+		ETH: '0x0000000000000000000000000000000000000000',
+		USDC: '0x851dEf71f0e6A903375C1e536Bd9ff1684BAD802',
+		TUSD: '0xa51EE1845C13Cb03FcA998304b00EcC407fc1F92',
+		USDT: '0xB404c51BBC10dcBE948077F18a4B8E553D160084',
+		BUSD: '0xFA6adcFf6A90c11f31Bc9bb59eC0a6efB38381C6',
+		LEND: '0x217b896620AfF6518B9862160606695607A63442',
+		BAT: '0x85B24b3517E3aC7bf72a14516160541A60cFF19d',
+		KNC: '0xCe4aA1dE3091033Ba74FA2Ad951f6adc5E5cF361',
+		LINK: '0x1a906E71FF9e28d8E01460639EB8CF0a6f0e2486',
+		MANA: '0x78b1F763857C8645E46eAdD9540882905ff32Db7',
+		MKR: '0x2eA9df3bABe04451c9C3B06a2c844587c59d9C37',
+		REP: '0xBeb13523503d35F9b3708ca577CdCCAdbFB236bD',
+		WBTC: '0xa0E54Ab6AA5f0bf1D62EC3526436F3c05b3348A0',
+		ZRX: '0x02d7055704EfF050323A2E5ee4ba05DB2A588959',
+	};
 
 	investmentData = {
-		'Compound DAI': 0,
-		'Aave DAI': 0,
+		cDAI: 0,
+		aDAI: 0,
 	};
 
 	investmentResultsData = {
@@ -46,59 +65,59 @@ export class FundComponent implements OnInit {
 	compoundColateral = 0;
 
 	compoundBorrowData = {
-		'Borrowed DAI': 0,
-		'Borrowed ETH': 0,
-		'Borrowed USDC': 0,
-		'Borrowed TUSD': 0,
-		'Borrowed USDT': 0,
-		'Borrowed BUSD': 0,
-		'Borrowed LEND': 0,
-		'Borrowed BAT': 0,
-		'Borrowed KNC': 0,
-		'Borrowed LINK': 0,
-		'Borrowed MANA': 0,
-		'Borrowed MKR': 0,
-		'Borrowed REP': 0,
-		'Borrowed WBTC': 0,
-		'Borrowed ZRX': 0,
-	}
+		DAI: 0,
+		ETH: 0,
+		USDC: 0,
+		TUSD: 0,
+		USDT: 0,
+		BUSD: 0,
+		LEND: 0,
+		BAT: 0,
+		KNC: 0,
+		LINK: 0,
+		MANA: 0,
+		MKR: 0,
+		REP: 0,
+		WBTC: 0,
+		ZRX: 0,
+	};
 
 	aaveColateral = 0;
 
 	aaveBorrowData = {
-		'Borrowed DAI': 0,
-		'Borrowed ETH': 0,
-		'Borrowed USDC': 0,
-		'Borrowed TUSD': 0,
-		'Borrowed USDT': 0,
-		'Borrowed BUSD': 0,
-		'Borrowed LEND': 0,
-		'Borrowed BAT': 0,
-		'Borrowed KNC': 0,
-		'Borrowed LINK': 0,
-		'Borrowed MANA': 0,
-		'Borrowed MKR': 0,
-		'Borrowed REP': 0,
-		'Borrowed WBTC': 0,
-		'Borrowed ZRX': 0,
-	}
+		DAI: 0,
+		ETH: 0,
+		USDC: 0,
+		TUSD: 0,
+		USDT: 0,
+		BUSD: 0,
+		LEND: 0,
+		BAT: 0,
+		KNC: 0,
+		LINK: 0,
+		MANA: 0,
+		MKR: 0,
+		REP: 0,
+		WBTC: 0,
+		ZRX: 0,
+	};
 
 	uniswapData = {
-		'ETH-DAI pair': 0,
-		'DAI-USDC pair': 0,
-		'DAI-TUSD pair': 0,
-		'DAI-USDT pair': 0,
-		'DAI-BUSD pair': 0,
-		'DAI-LEND pair': 0,
-		'DAI-BAT pair': 0,
-		'DAI-KNC pair': 0,
-		'DAI-LINK pair': 0,
-		'DAI-MANA pair': 0,
-		'DAI-MKR pair': 0,
-		'DAI-REP pair': 0,
-		'DAI-WBTC pair': 0,
-		'DAI-ZRX pair': 0,
-	}
+		'ETH-DAI': 0,
+		'DAI-USDC': 0,
+		'DAI-TUSD': 0,
+		'DAI-USDT': 0,
+		'DAI-BUSD': 0,
+		'DAI-LEND': 0,
+		'DAI-BAT': 0,
+		'DAI-KNC': 0,
+		'DAI-LINK': 0,
+		'DAI-MANA': 0,
+		'DAI-MKR': 0,
+		'DAI-REP': 0,
+		'DAI-WBTC': 0,
+		'DAI-ZRX': 0,
+	};
 
 	ngOnInit(): void {
 		if (!this.globals.service) {
@@ -113,10 +132,10 @@ export class FundComponent implements OnInit {
 	}
 
 	delay(ms: number) {
-		return new Promise( resolve => setTimeout(resolve, ms) );
+		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
-	refreshInfo(){
+	refreshInfo() {
 		this.getRoleMembers('FUNDS_MANAGER_ROLE').then((result) => {
 			if (
 				result &&
@@ -126,34 +145,49 @@ export class FundComponent implements OnInit {
 			)
 				this.userIsFundManager = true;
 		});
-		this.globals.service.getDAIBalance(environment.UniversityFundAddress).then((val) => this.assetsData.DAI = Number(ethers.utils.formatEther(val)));;
+		for (let key in this.addressERC20) {
+			let erc20Address = this.addressERC20[key];
+			this.balanceOf(erc20Address, environment.UniversityFundAddress)
+				.then((val) => (this.assetsData[key] = Number(ethers.utils.formatEther(val))));
+		}
 	}
 
 	async getRoleMembers(role: string) {
-		return await this.globals.service.listRoles(role, this.globals.service.universityFundContractInstance);
+		return await this.globals.service.listRoles(
+			role,
+			this.globals.service.universityFundContractInstance
+		);
 	}
 
 	operationSize: string;
 
-	setOperationSize(value: string){
+	setOperationSize(value: string) {
 		this.operationSize = value;
 	}
 
-	sendToken(identifier: string, value: string){}
+	async balanceOf(erc20Address: string, address: string): Promise<number>{
+		if (erc20Address == this.globals.ADDR0) return this.globals.service.provider.getBalance(address);
+		return this.globals.service
+		.balanceOfERC20(erc20Address, address);
+	}
 
-	deposit(identifier: string, value: string){}
+	sendToken(identifier: string, value: string) {}
 
-	redeem(identifier: string, value: string){}
+	deposit(identifier: string, value: string) {}
 
-	enterMarket(identifier: string){}
+	redeem(identifier: string, value: string) {}
 
-	exitMarket(identifier: string){}
+	enterMarket(identifier: string) {}
 
-	borrow(identifier: string, value: string){}
+	exitMarket(identifier: string) {}
 
-	repay(identifier: string, value: string){}
+	borrow(identifier: string, value: string) {}
 
-	provide(identifier: string, value: string){}
+	repay(identifier: string, value: string) {}
 
-	remove(identifier: string, value: string){}
+	provide(identifier: string, value: string) {}
+
+	remove(identifier: string, value: string) {}
+
+	swap(identifier: string, value: string, swapA_B: boolean) {}
 }

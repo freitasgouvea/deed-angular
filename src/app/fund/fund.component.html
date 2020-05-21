@@ -47,8 +47,10 @@
                                 <h4>Funds Information</h4>
                             </div>
                             <div class="card-body bg-gradient-neutral">
-                                <input id="inputSize" *ngIf=userIsFundManager #inputSize class="form-control" placeholder="Operation Size (in 1e18)" type="text" size=32>
-                                <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="setOperationSize(inputSize.value)">Set Operation Size</button>
+                                <div *ngIf=userIsFundManager>
+                                    <input #inputSize class="form-control" placeholder="Operation Size (in 1e18)" type="text" size=32>
+                                    <button class="btn btn-sm btn-primary" (click)="setOperationSize(inputSize.value)">Set Operation Size</button>
+                                </div>
                                 <div class="row">
                                     <div class="col">
                                         <div class="pl-1">
@@ -72,8 +74,10 @@
                                             <br>
                                             <h5 class="title text-success">Uniswap liquidity providing</h5>
                                             <ul>
-                                                <li *ngFor="let item of uniswapData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="provide(item.key, operationSize)">Provide</button>
-                                                    <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="remove(item.key, operationSize)">Remove</button>{{item.key}}: <strong>{{item.value}}</strong></li>
+                                                <li *ngFor="let item of uniswapData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="provide(item.key, operationSize)">Provide</button>
+                                                    <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="remove(item.key, operationSize)">Remove</button>
+                                                    <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, true)">Swap A for B</button>
+                                                    <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, false)">Swap B for A</button><br>{{item.key}}: <strong>{{item.value}}</strong></li>
                                             </ul>
                                         </div>
                                     </div>
