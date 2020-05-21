@@ -582,7 +582,7 @@
                                 <span class="btn-inner--icon"><i class="fa fa-check"></i></span>
                                 <span class="btn-inner--text">Approve</span>
                             </a>
-                            <a *ngIf="txMode=='successTX'" (click)="payEntryPrice()" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='successTX'" (click)="payPrice()" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Start</span>
                             </a>
@@ -598,7 +598,7 @@
                 <div class="col-md-6">
                     <div class="card shadow bg-gradient-default border-0">
                         <div class="card-body py-5">
-                            <h3 class="text-center text-white">Access classroom material</h3>
+                            <h3 class="text-center text-white">Classroom material</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <h2 class="description text-center text-white">Here you can access all the stuff and materials of this classroom.</h2>
@@ -710,7 +710,7 @@
                                         <strong class="text-default">You need confirm this transaction on your portis wallet!</strong>
                                     </div>
                                     <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
-                                        <strong>Wait!</strong> Sending your answer...
+                                        <strong>Wait!</strong> Sending your request...
                                     </div>
                                     <div *ngIf="txMode=='successTX'" class="alert alert-success" role="alert">
                                         <strong>Success!</strong> This is a success alert—check it out!

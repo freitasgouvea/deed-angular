@@ -48,6 +48,8 @@ export class ClassroomComponent implements OnInit {
 			.connectClassroom(this.globals.selectedClassroom.smartcontract)
 			.then(() => this.refreshClassroomInfo());
 		if (!this.globals.selectedStudent) return;
+		this.globals.service.connectStudent();
+		this.globals.service.connectStudentApplication(this.globals.selectedClassroom.smartcontract);
 		this.globals.service.viewMyApplication().then((address) => {
 			this.myStudentApplication = new StudentApplication(this.globals, address, this.globals.address);
 			this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
@@ -540,7 +542,7 @@ export class ClassroomComponent implements OnInit {
 		}
 	}
 
-	async payEntryPrice(): Promise<any> {
+	async payPrice(): Promise<any> {
 		this.txOn();
 		this.txMode = 'processingTX';
 		const pay = await this.globals.service.payEntryPrice();
