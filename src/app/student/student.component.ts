@@ -73,7 +73,7 @@ export class StudentComponent implements OnInit {
 
 	refreshStudentData() {
 		if (!this.globals.selectedStudent)
-			this.globals.selectedStudent = new Student(this.globals);
+			this.globals.selectedStudent = new Student(this.globals, this.globals.ADDR0);
 		this.globals.service.getAddress().then((val) => {
 			this.globals.selectedStudent.address = val;
 		});

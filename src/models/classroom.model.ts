@@ -78,7 +78,11 @@ export class Classroom {
 		);
 		this.startDate_String = this.startDate.toUTCString();
 		this.finishDate_String = this.finishDate.toUTCString();
-		switch (this.updateState()) {
+		this.updateState();
+	}
+
+	public updateState(){
+		switch (this.getState()) {
 			case 0: {
 				this.state.isClassroomNotOpen = true;
 				break;
@@ -102,11 +106,11 @@ export class Classroom {
 		}
 	}
 
-	public updateState(): number {
+	public getState(): number {
 		if (this.courseFinished) return 4;
 		if (this.classroomActive) return 3;
 		if (!this.openForApplication && !this.courseEmpty) return 2;
-		if (this.openForApplication && this.courseEmpty) return 1;
+		if (this.openForApplication) return 1;
 		return 0;
 	}
 }
