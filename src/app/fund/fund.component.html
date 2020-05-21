@@ -55,7 +55,7 @@
                             <div class="card-body">
                                 <h5 class="card-title text-primary">Stored assets</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of assetsData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="sendToken(item.key, operationSize)">Withdraw</button>{{item.key}}:
+                                    <li *ngFor="let item of assetsData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="withdrawToken(item.key, operationSize)">Withdraw</button>{{item.key}}:
                                         <strong>{{item.value}}</strong></li>
                                 </ul>
                             </div>
@@ -95,13 +95,13 @@
                             <div class="card-body">
                                 <h5 class="card-title text-danger">Aave open positions</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of aaveBorrowData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="enterMarket(item.key)">Enter</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="exitMarket(item.key)">Exit</button>
+                                    <li *ngFor="let item of aaveBorrowData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="enterMarket(item.key, operationSize, false)">Enter</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="exitMarket(item.key, operationSize, false)">Exit</button>
                                         <button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="borrow(item.key, operationSize)">Borrow</button>
                                         <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="repay(item.key, operationSize)">Repay</button>{{item.key}}:
                                         <strong>{{item.value}}</strong></li>
                                     <li class="title text-success">Aave total colateral:
-                                        <strong>{{aaveColateral}}</strong> ETH equivalent</li>
+                                        <strong>{{aaveColateral}}</strong></li>
                                 </ul>
                             </div>
                         </div>
@@ -109,13 +109,13 @@
                             <div class="card-body">
                                 <h5 class="card-title text-danger">Compound open positions</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of compoundBorrowData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="enterMarket(item.key)">Enter</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="exitMarket(item.key)">Exit</button>
+                                    <li *ngFor="let item of compoundBorrowData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="enterMarket(item.key, '', true)">Enter</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="exitMarket(item.key, '', true)">Exit</button>
                                         <button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="borrow(item.key, operationSize)">Borrow</button>
                                         <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="repay(item.key, operationSize)">Repay</button>{{item.key}}:
                                         <strong>{{item.value}}</strong></li>
                                     <li class="title text-success">Compound total colateral:
-                                        <strong>{{compoundColateral}}</strong> ETH equivalent</li>
+                                        <strong>{{compoundColateral}}</strong></li>
                                 </ul>
                             </div>
                         </div>

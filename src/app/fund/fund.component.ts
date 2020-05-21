@@ -128,7 +128,12 @@ export class FundComponent implements OnInit {
 			);
 			console.log('Connected to infura');
 		}
-		this.delay(1000).then(() => this.refreshInfo());
+		this.delay(1000).then(() => {
+			this.refreshInfo();
+			setInterval(() => {
+				this.refreshInfo();
+			}, 10000);
+		});
 	}
 
 	delay(ms: number) {
@@ -147,9 +152,36 @@ export class FundComponent implements OnInit {
 		});
 		for (let key in this.addressERC20) {
 			let erc20Address = this.addressERC20[key];
-			this.balanceOf(erc20Address, environment.UniversityFundAddress)
-				.then((val) => (this.assetsData[key] = Number(ethers.utils.formatEther(val))));
+			this.balanceOf(
+				erc20Address,
+				environment.UniversityFundAddress
+			).then(
+				(val) =>
+					(this.assetsData[key] = Number(
+						ethers.utils.formatEther(val)
+					))
+			);
 		}
+		this.globals.service.ADAIContract.balanceOf(
+			environment.UniversityFundAddress
+		).then((balance) => (this.investmentData.aDAI = balance / 1e18));
+		this.globals.service.ADAIContract.principalBalanceOf(
+			environment.UniversityFundAddress
+		).then(
+			(balance) =>
+				(this.investmentResultsData['Aave Underlying DAI'] =
+					balance / 1e18)
+		);
+		this.globals.service.CDAIContract.balanceOf(
+			environment.UniversityFundAddress
+		).then((balance) => (this.investmentData.cDAI = balance / 1e8));
+		this.globals.service.CDAIContract.balanceOfUnderlying(
+			environment.UniversityFundAddress
+		).then(
+			(balance) =>
+				(this.investmentResultsData['Compound Underlying DAI'] =
+					balance / 1e8)
+		);
 	}
 
 	async getRoleMembers(role: string) {
@@ -165,29 +197,81 @@ export class FundComponent implements OnInit {
 		this.operationSize = value;
 	}
 
-	async balanceOf(erc20Address: string, address: string): Promise<number>{
-		if (erc20Address == this.globals.ADDR0) return this.globals.service.provider.getBalance(address);
-		return this.globals.service
-		.balanceOfERC20(erc20Address, address);
+	async balanceOf(erc20Address: string, address: string): Promise<number> {
+		if (erc20Address == this.globals.ADDR0)
+			return this.globals.service.provider.getBalance(address);
+		return this.globals.service.balanceOfERC20(erc20Address, address);
 	}
 
-	sendToken(identifier: string, value: string) {}
+	async withdrawToken(identifier: string, value: string) {
+		const erc20Address = this.addressERC20[identifier];
+		if (erc20Address == this.globals.ADDR0) return;
+		const tx = await this.globals.service.transferERC20(
+			erc20Address,
+			this.globals.address,
+			Number(value)
+		);
+	}
 
-	deposit(identifier: string, value: string) {}
+	async deposit(identifier: string, value: string) {
+		const val = ethers.utils.parseEther(value);
+		let tx;
+		if (identifier == 'aDAI') {
+			tx = await this.globals.service.universityFundContractInstance.applyFundsAave(
+				val,
+				{ gasLimit: 850000 }
+			);
+		} else if (identifier == 'cDAI') {
+			tx = await this.globals.service.universityFundContractInstance.applyFundsCompound(
+				val,
+				{ gasLimit: 850000 }
+			);
+		}
+		await tx.wait();
+	}
 
-	redeem(identifier: string, value: string) {}
+	async redeem(identifier: string, value: string) {
+		const val = ethers.utils.parseEther(value);
+		let tx;
+		if (identifier == 'aDAI') {
+			tx = await this.globals.service.universityFundContractInstance.recoverFundsAave(
+				val,
+				{ gasLimit: 850000 }
+			);
+		} else if (identifier == 'cDAI') {
+			tx = await this.globals.service.universityFundContractInstance.recoverFundsCompound(
+				val,
+				{ gasLimit: 850000 }
+			);
+		}
+		await tx.wait();
+	}
 
-	enterMarket(identifier: string) {}
+	enterMarket(identifier: string, val: string, compound: boolean) {
+		//TODO:
+	}
 
-	exitMarket(identifier: string) {}
+	exitMarket(identifier: string, val: string, compound: boolean) {
+		//TODO:
+	}
 
-	borrow(identifier: string, value: string) {}
+	borrow(identifier: string, value: string) {
+		//TODO:
+	}
 
-	repay(identifier: string, value: string) {}
+	repay(identifier: string, value: string) {
+		//TODO:
+	}
 
-	provide(identifier: string, value: string) {}
+	provide(identifier: string, value: string) {
+		//TODO:
+	}
 
-	remove(identifier: string, value: string) {}
+	remove(identifier: string, value: string) {
+		//TODO:
+	}
 
-	swap(identifier: string, value: string, swapA_B: boolean) {}
+	swap(identifier: string, value: string, swapA_B: boolean) {
+		//TODO:
+	}
 }
