@@ -116,7 +116,7 @@ export class baseClientService {
 		if (this.checkContractInfo(smartContractAddress, StudentApplication))
 			this.studentApplicationContractInstance = new ethers.Contract(
 				smartContractAddress,
-				Student.abi,
+				StudentApplication.abi,
 				providerOrSigner
 			);
 	}
@@ -422,7 +422,7 @@ export class baseClientService {
 			name
 		);
 		await register.wait();
-		return register;
+		return register.hash;
 	}
 
 	public async studentUpdateName(newName: string) {
@@ -431,7 +431,7 @@ export class baseClientService {
 			name
 		);
 		await register.wait();
-		return register;
+		return register.hash;
 	}
 
 	async createClassroom(
@@ -459,13 +459,13 @@ export class baseClientService {
 	async approveDAI(input: number){
 		const val = ethers.utils.parseEther(input.toString());
 		const tx = await this.DAIContract.approve(this.universityContractInstance.address, val);
-		return tx;
+		return tx.hash;
 	}
 
 	async donateDAI(input: number){
 		const val = ethers.utils.parseEther(input.toString());
 		const tx = await this.universityContractInstance.donateDAI(val);
-		return tx;
+		return tx.hash;
 	}
 
 	// ENS Signed actions
@@ -542,7 +542,7 @@ export class baseClientService {
 			classroomAddress
 		);
 		await application.wait();
-		return application;
+		return application.hash;
 	}
 
 	public async setAnswerSecret(classroomAddress: string, secret: string) {
@@ -551,7 +551,7 @@ export class baseClientService {
 			classroomAddress, secret32
 		);
 		await answer.wait();
-		return answer;
+		return answer.hash;
 	}
 	
 	public async withdrawAllResultsFromClassroom(classroomAddress: string, studentAddress: string) {
@@ -559,12 +559,12 @@ export class baseClientService {
 			classroomAddress, studentAddress
 		);
 		await withdraw.wait();
-		return withdraw;
+		return withdraw.hash;
 	}
 
 	public async payEntryPrice() {
 		const tx = await this.studentApplicationContractInstance.payEntryPrice();
 		await tx.wait();
-		return tx;
+		return tx.hash;
 	}
 }

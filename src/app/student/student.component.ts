@@ -22,12 +22,13 @@ export class StudentComponent implements OnInit {
 	public mode = 'unconnected';
 	public form: FormGroup;
 	public txMode = 'off';
+	public hashTx: any;
 
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
 		public portisService: PortisService
-	) {}
+	) { }
 
 	async ngOnInit() {
 		if (!this.globals.service) {
@@ -126,10 +127,11 @@ export class StudentComponent implements OnInit {
 			this.txMode = 'processingTX';
 			const updateName = await this.globals.service.studentUpdateName(
 				newName
-			);
+			)
 			if (!updateName) {
 				this.txMode = 'failedTX';
 			} else {
+				this.hashTx = updateName;
 				this.txMode = 'successTX';
 			}
 		}

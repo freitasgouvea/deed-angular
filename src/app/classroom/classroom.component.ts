@@ -25,6 +25,7 @@ export class ClassroomComponent implements OnInit {
 	userIsClassroomAdmin = false;
 	displayNotice = true;
 	public txMode = 'off';
+	public hashTx: any;
 
 	public myStudentApplication: StudentApplication;
 
@@ -48,10 +49,11 @@ export class ClassroomComponent implements OnInit {
 			.connectClassroom(this.globals.selectedClassroom.smartcontract)
 			.then(() => this.refreshClassroomInfo());
 		if (!this.globals.selectedStudent) return;
+		console.log('ok')
 		this.globals.service.connectStudent();
-		this.globals.service.connectStudentApplication(this.globals.selectedClassroom.smartcontract);
 		this.globals.service.viewMyApplication().then((address) => {
 			this.myStudentApplication = new StudentApplication(this.globals, address, this.globals.address);
+			this.myStudentApplication.connectService();
 			this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
 			this.globals.service.viewMyApplicationState(this.globals.selectedClassroom.smartcontract).then((state) => this.myStudentApplication.state = state)
 		})
@@ -525,6 +527,7 @@ export class ClassroomComponent implements OnInit {
 			if (!application) {
 				this.txMode = 'failedTX';
 			} else {
+				this.hashTx = application;
 				this.txMode = 'successTX';
 			}
 		}
@@ -538,6 +541,7 @@ export class ClassroomComponent implements OnInit {
 		if (!approve) {
 			this.txMode = 'failedTX';
 		} else {
+			this.hashTx = approve;
 			this.txMode = 'successTX';
 		}
 	}
@@ -549,6 +553,7 @@ export class ClassroomComponent implements OnInit {
 		if (!pay) {
 			this.txMode = 'failedTX';
 		} else {
+			this.hashTx = pay;
 			this.txMode = 'successTX';
 		}
 	}
@@ -566,6 +571,7 @@ export class ClassroomComponent implements OnInit {
 			if (!sendTx) {
 				this.txMode = 'failedTX';
 			} else {
+				this.hashTx = sendTx;
 				this.txMode = 'successTX';
 			}
 		}
@@ -585,6 +591,7 @@ export class ClassroomComponent implements OnInit {
 			if (!collectTx) {
 				this.txMode = 'failedTX';
 			} else {
+				this.hashTx = collectTx;
 				this.txMode = 'successTX';
 			}
 		}
