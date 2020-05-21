@@ -184,7 +184,7 @@ export class baseClientService {
 		try {
 			const studentSmartContract = await this.universityContractInstance.myStudentAddress();
 			return studentSmartContract;
-		} catch (err) {}
+		} catch (err) {console.warn("Student address not found: " + err.toString());}
 	}
 
 	public async getStudentName() {
@@ -216,6 +216,11 @@ export class baseClientService {
 	}
 
 	// view Student info
+
+	public async viewMyStudentApplication(addressClassroom: string) {
+		const answer = await this.studentContractInstance.viewMyApplication(addressClassroom);
+		return answer;
+	}
 
 	public async viewMyApplicationState(classroomAddress: string) {
 		const answer = await this.studentContractInstance.viewMyApplicationState(

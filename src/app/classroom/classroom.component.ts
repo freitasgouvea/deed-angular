@@ -12,6 +12,7 @@ import { ENSService } from '../services/ens.service';
 import { ethers } from 'ethers';
 import * as Web3 from 'web3';
 import { StudentApplication } from 'src/models/studentApplication.model';
+import { Student } from 'src/models/student.model';
 
 @Component({
 	selector: 'app-classroom',
@@ -29,11 +30,13 @@ export class ClassroomComponent implements OnInit {
 
 	public myStudentApplication: StudentApplication;
 
+	phase = -1;
+
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
 		public portisService: PortisService
-	) { }
+	) {}
 
 	async ngOnInit() {
 		if (!this.globals.service) {
@@ -48,14 +51,43 @@ export class ClassroomComponent implements OnInit {
 		this.globals.service
 			.connectClassroom(this.globals.selectedClassroom.smartcontract)
 			.then(() => this.refreshClassroomInfo());
-		this.globals.service.connectStudent();
-		this.globals.service.viewMyApplication().then((address) => {
-			this.myStudentApplication = new StudentApplication(this.globals, address, this.globals.address);
-			this.myStudentApplication.connectService();
-			this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
-			this.globals.service.viewMyApplicationState(this.globals.selectedClassroom.smartcontract).then((state) => this.myStudentApplication.state = state)
-		})
-		console.log('application:' + this.globals.service.viewMyApplication())
+		this.checkApplication();
+	}
+
+	private checkApplication() {
+		if (!this.globals.selectedStudent) return;
+		this.phase = 0;
+		this.globals.service.connectStudent().then(() => {
+			this.globals.service
+				.viewMyStudentApplication(
+					this.globals.selectedClassroom.smartcontract
+				)
+				.then((address) => {
+					this.globals.service
+						.viewMyApplicationState(
+							this.globals.selectedClassroom.smartcontract
+						)
+						.then(
+							(state) => this.initApplication(address, state),
+							() =>
+								console.log(
+									'Student does not have an application'
+								)
+						);
+				});
+		});
+	}
+
+	private initApplication(address: string, state: any): any {
+		this.myStudentApplication = new StudentApplication(
+			this.globals,
+			address,
+			this.globals.address
+		);
+		this.myStudentApplication.connectService();
+		this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
+		this.myStudentApplication.state = state;
+		this.phase = state + 1;
 	}
 
 	openModal(id: string) {
@@ -88,6 +120,11 @@ export class ClassroomComponent implements OnInit {
 	}
 
 	async searchForClassroomModal(address: string) {
+		const found = await this.searchForClassroom(address);
+		if (found) this.checkApplication();
+	}
+
+	private async searchForClassroom(address: string) {
 		this.searchClassroomModalProgressMsg = true;
 		await this.updateClassrooms();
 		this.globals.classrooms.forEach((classroom) => {
@@ -95,10 +132,14 @@ export class ClassroomComponent implements OnInit {
 				this.modalService.close('custom-modal-search-classroom');
 				this.globals.selectedClassroom = classroom;
 				this.searchClassroomModalProgressMsg = false;
-				return;
+				return true;
 			}
 		});
-		const node = this.globals.ensService.getNode(address);
+		const node = address.includes('.')
+			? this.globals.ensService.getNode(address)
+			: this.globals.ensService.getSubNode(
+					address.toLowerCase().replace(/\s/g, '')
+			  );
 		const ensAddress = await this.globals.ensService.lookupNodeAddress(
 			node
 		);
@@ -107,11 +148,12 @@ export class ClassroomComponent implements OnInit {
 				this.modalService.close('custom-modal-search-classroom');
 				this.globals.selectedClassroom = classroom;
 				this.searchClassroomModalProgressMsg = false;
-				return;
+				return true;
 			}
 		});
 		this.searchClassroomModalProgressMsg = false;
 		this.searchClassroomModalErrorMsg = true;
+		return false;
 	}
 
 	async updateClassrooms() {
@@ -203,8 +245,20 @@ export class ClassroomComponent implements OnInit {
 		} else {
 			this.globals.userIsStudent = true;
 			this.globals.mode = 'registered';
+			const studentSmartContract = await this.globals.service.getStudentSmartContract();
+			this.onConnect(new Student(this.globals, studentSmartContract));
+			this.checkApplication();
 			return;
 		}
+	}
+
+	onConnect(student: Student | void): void {
+		if (student) this.globals.selectedStudent = student;
+		else
+			this.globals.selectedStudent = new Student(
+				this.globals,
+				this.globals.ADDR0
+			);
 	}
 
 	async registerENSRecord() {
@@ -300,9 +354,9 @@ export class ClassroomComponent implements OnInit {
 			);
 	}
 
-	async exchangeDAI_LINK(val: number) { }
+	async exchangeDAI_LINK(val: number) {}
 
-	async exchangeLINK_DAI(val: number) { }
+	async exchangeLINK_DAI(val: number) {}
 
 	refreshClassroomConfigs(
 		classroom: Classroom = this.globals.selectedClassroom
@@ -566,7 +620,8 @@ export class ClassroomComponent implements OnInit {
 		} else {
 			this.txMode = 'processingTX';
 			const sendTx = await this.globals.service.setAnswerSecret(
-				classroomAddress, secret
+				classroomAddress,
+				secret
 			);
 			if (!sendTx) {
 				this.txMode = 'failedTX';
@@ -586,7 +641,8 @@ export class ClassroomComponent implements OnInit {
 		} else {
 			this.txMode = 'processingTX';
 			const collectTx = await this.globals.service.withdrawAllResultsFromClassroom(
-				classroomAddress, studentAddress
+				classroomAddress,
+				studentAddress
 			);
 			if (!collectTx) {
 				this.txMode = 'failedTX';

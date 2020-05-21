@@ -74,7 +74,7 @@ export class LandingComponent implements OnInit {
 
 	onConnect(student: Student | void): void {
 		if (student) this.globals.selectedStudent = student;
-		else this.globals.selectedStudent = new Student(this.globals);
+		else this.globals.selectedStudent = new Student(this.globals, this.globals.ADDR0);
 	}
 
 	txOn() {
@@ -113,6 +113,8 @@ export class LandingComponent implements OnInit {
 		} else {
 			this.globals.userIsStudent = true;
 			this.globals.mode = 'registered';
+			const studentSmartContract = await this.globals.service.getStudentSmartContract();
+			this.onConnect(new Student(this.globals, studentSmartContract))
 			return;
 		}
 	}
