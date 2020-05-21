@@ -122,13 +122,14 @@
                                         <strong class="text-default">You need confirm this transaction on your portis wallet!</strong>
                                     </div>
                                     <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
-                                        <strong>Wait!</strong> Updating your account...
+                                        <strong>Wait!</strong> Updating your account ...
                                     </div>
                                     <div *ngIf="txMode=='successTX'" class="alert alert-success" role="alert">
-                                        <strong>Success!</strong> This is a success alert—check it out!
+                                        <strong>Success!</strong> Transaction Hash {{hashTx}}
+                                        <a href="https://ropsten.etherscan.io/tx/{{hashTx}}" target="_blank">See On Etherscan</a>
                                     </div>
                                     <div *ngIf="txMode=='failedTX'" class="alert alert-danger" role="alert">
-                                        <strong>Failed!</strong> This is a danger alert—check it out!
+                                        <strong>Failed!</strong> Transaction didn't complete. Try again!
                                     </div>
                                 </div>
                             </div>

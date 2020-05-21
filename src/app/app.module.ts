@@ -11,7 +11,8 @@ import { ClassroomComponent } from './classroom/classroom.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { StudentComponent } from './student/student.component';
-import { ClassroomInfoComponent } from './classroom/classroomInfo.component'
+import { ClassroomInfoComponent } from './classroom/classroomInfo.component';
+import { FundComponent } from './fund/fund.component'
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ClassroomInfoComponent } from './classroom/classroomInfo.component'
     ClassroomInfoComponent,
     NavbarComponent,
     FooterComponent,
-    StudentComponent
+    StudentComponent,
+    FundComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +33,7 @@ import { ClassroomInfoComponent } from './classroom/classroomInfo.component'
     AppRoutingModule
   ],
   providers: [Globals],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [FundComponent]
 })
 export class AppModule { }

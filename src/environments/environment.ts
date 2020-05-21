@@ -4,8 +4,8 @@
 
 export const environment = {
 	production: false,
-	universityAddress: '0xa03E45a84E253aE34C1298615cC3d140Bc69ECc9',
-	infuraKey: '50d52dadc1054facbb36bd19254da96e',
+	UniversityAddress: '0xa03E45a84E253aE34C1298615cC3d140Bc69ECc9',
+	InfuraKey: '50d52dadc1054facbb36bd19254da96e',
 	network: 'ropsten',
 	ENSRegistryAddress: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
 	ENSRegistrarAddress: '0x09B5bd82f3351A4c8437FC6D7772A9E6cd5D25A1', //TestRegistrar
@@ -26,6 +26,7 @@ export const environment = {
 	ChainlinkOraclePaymentTimestamp: 1,
 	AaveLendingPoolAddressesProvider : '0x1c8756FD2B28e9426CDBDcC7E3c4d64fa9A54728',
 	DefaultGasRelayHub: "0xD216153c06E857cD7f72665E0aF1d7D82172F494",
+	UniversityFundAddress: "0x630991655036A034Ff4eB99daEc449661988404C",
 };
 
 /*

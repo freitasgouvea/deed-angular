@@ -20,7 +20,7 @@ export class InfuraService extends baseClientService {
 		super();
 		const provider = new ethers.providers.InfuraProvider(
 			environment.network,
-			environment.infuraKey
+			environment.InfuraKey
 		);
 		this.setupProvider(provider);
 	}

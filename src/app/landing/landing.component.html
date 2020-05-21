@@ -235,7 +235,7 @@
                     <span class="btn-inner--icon"><i class="fa fa-user"></i></span>
                     <span class="btn-inner--text">My Student Profile</span>
                 </button>
-                <button href="#" class="btn btn-success btn-icon mb-3 mb-sm-0">
+                <button (click)="openModal('transfer-dai')" class="btn btn-success btn-icon mb-3 mb-sm-0">
                     <span class="btn-inner--icon"><i class="fa fa-gratipay"></i></span>
                     <span class="btn-inner--text">Donate</span>
                 </button>
@@ -272,6 +272,8 @@
                                             <strong>{{globals.universityRevenue}}</strong> DAI</li>
                                         <li id="university.returnsReceived">Returns:
                                             <strong>{{globals.universityReturns}}</strong> DAI</li>
+                                        <li id="university.returnsReceived">Fund address:
+                                            <strong>{{globals.universityFundAddress}}</strong></li>
                                     </ul>
                                     <a href="{{universityEtherscan}}" target="_blank" class="text-primary">See on
                                         Etherscan</a>
@@ -389,7 +391,7 @@
                             <h3 class="text-center text-white">Register at University</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-white">Argon is a great free UI package based on Angular that includes the most important components and features.</h2>
+                                    <h2 class="description text-white">Create your student registry in this university and enjoy all its features.</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -717,6 +719,14 @@
                                         <h4 class="UniversityAdmins mt-3">Notice: <span class="text-default">{{globals.universityENSNotice}}</span> </h4>
                                         <input #inputUniversityAdminENSNotice class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="updateENSNotice(inputUniversityAdminENSNotice.value)">Update</button>
                                         <button *ngIf=!globals.universityENSNameRecord type="button" class="btn btn-warning" (click)="setupUniversityENS()">Setup ENS</button>
+                                        <h4 class="UniversityAdmins mt-3">Attach University Fund</h4>
+                                        <input #inputFundAddress class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="attachFund(inputFundAddress.value)">Attach fund</button>
+                                        <h4 class="UniversityAdmins mt-3">University Fund Admin</h4>
+                                        <input #inputFundAdminAddress class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-warning" (click)="grantFundAdmin(inputFundAdminAddress.value)">Give fund admin</button>
+                                        <h4 class="UniversityAdmins mt-3">Apply funds in University Fund</h4>
+                                        <input #inputFundApply class="form-control" placeholder="DAI value" type="text" size=32> <button type="button" class="btn btn-primary" (click)="applyFunds(inputFundApply.value)">Apply funds</button>
+                                        <h4 class="UniversityAdmins mt-3">Recover funds from University Fund</h4>
+                                        <input #inputFundRecover class="form-control" placeholder="DAI value" type="text" size=32> <button type="button" class="btn btn-primary" (click)="recoverFunds(inputFundRecover.value)">Recover funds</button>
                                     </div>
                                 </div>
                             </div>
@@ -792,4 +802,42 @@
             </div>
         </div>
     </jw-modal>
+    <jw-modal id="transfer-dai">
+        <div id="donationInfo" class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="cmodal-body p-0">
+                    <div class="card shadow border-0 bg-gradient-success">
+                        <div class="card-header justify-content-center bg-gradient-success">
+                            <h3 class="text-center text-white">Make a Donation</h3>
+                        </div>
+                        <div class="card-body justify-content-center bg-gradient-success">
+                            <h4 class="text-center text-white">All donations go directly to the university endowment, helping good students to get grants</h4>
+                            <input #donationInputVal class="form-control" type="number" (focus)="focus=true" (blur)="focus=false">
+                            <div class="card-footer justify-content-center bg-gradient-success">
+                                <button (click)="closeModal('transfer-dai')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                                    <span class="btn-inner--text">Back</span>
+                                </button>
+                                <button type="submit" (click)="donateDAi(donationInputVal.value)" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
+                                    <span class="btn-inner--text">Donate</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
+    <div id="overlay">
+        <span id="nav" *ngIf="globals.overlayLoader">
+			<div class="spinner" style="display: block; position: fixed">
+			</div>
+		</span>
+        <span id="nav" *ngIf="globals.overlayLoader">
+			<div class="submit-message" style="display: block; color: #FFFFFF; position: fixed; left: 49.7%; top: 54.5%;">
+				Loading Transaction...
+			</div>
+		</span>
+    </div>
 </main>
