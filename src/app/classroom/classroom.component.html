@@ -108,13 +108,13 @@
                     <div class="col-lg-4 mt-4">
                         <div class="card card-lift--hover shadow border-0 text-center">
                             <div *ngIf="phase==0" class="card-body bg-gradient-success py-5">
-                                <div class="icon icon-shape icon-shape-default rounded-circle mb-4">
+                                <div class="icon icon-shape icon-shape-default bg-white rounded-circle mb-4">
                                     1
                                 </div>
                                 <h6 class="text-default text-uppercase">Apply For Course</h6>
                                 <p *ngIf=globals.selectedClassroom class="description mt-3">To start this classroom you need to send your application.</p>
-                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-1'); txOn();" class="btn btn-default mt-4 text-white">Apply</a>
-                                <a *ngIf=!globals.selectedClassroom (click)="openModal('custom-modal-search-classroom')" class="btn btn-default mt-4 text-white">Search</a>
+                                <a *ngIf=globals.selectedClassroom (click)="openModal('custom-modal-1'); txOn();" class="btn btn-neutral mt-4">Apply</a>
+                                <a *ngIf=!globals.selectedClassroom (click)="openModal('custom-modal-search-classroom')" class="btn btn-neutral mt-4">Search</a>
                             </div>
                             <div *ngIf="phase>0" class="card-body text-white bg-gradient-primary py-5">
                                 <div class="icon icon-shape icon-shape-default bg-white rounded-circle mb-4">
@@ -128,8 +128,8 @@
                                     1
                                 </div>
                                 <h6 class="text-white text-uppercase">Register</h6>
-                                <button *ngIf="globals.mode=='unconnected'" class="btn btn-info mt-4" (click)="conectPortis()">Conect Portis</button>
-                                <button *ngIf="globals.mode=='connected'" class="btn btn-success mt-4" (click)="openModal('custom-modal-register'); txOn();">Register DeEd</button>
+                                <button *ngIf="globals.mode=='unconnected'" class="btn btn-neutral mt-4" (click)="conectPortis()">Conect Portis</button>
+                                <button *ngIf="globals.mode=='connected'" class="btn btn-neutral mt-4" (click)="openModal('custom-modal-register'); txOn();">Register DeEd</button>
                             </div>
                         </div>
                     </div>
