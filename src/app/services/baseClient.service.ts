@@ -12,6 +12,7 @@ import * as ERC20 from '../../../build/contracts/ERC20.json';
 import * as CDAI from '../../../build/contracts/CERC20.json';
 import * as ADAI from '../../../build/contracts/aToken.json';
 import * as LINK from '../../../build/contracts/LinkTokenInterface.json';
+import * as IUniswapV2Router01 from '../../../build/contracts/IUniswapV2Router01.json'
 import { GenericUser } from '../../models/genericUser.model';
 
 @Injectable({
@@ -27,6 +28,7 @@ export class baseClientService {
 	public CDAIContract: any;
 	public ADAIContract: any;
 	public LINKContract: any;
+	public UniswapRouter: any;
 	public provider: any;
 	public networkName: any;
 	public useSigner = false;
@@ -64,6 +66,11 @@ export class baseClientService {
 		this.LINKContract = new ethers.Contract(
 			environment.LINKAddress,
 			LINK.abi,
+			providerOrSigner
+		);
+		this.UniswapRouter = new ethers.Contract(
+			environment.UniswapRouter,
+			IUniswapV2Router01.abi,
 			providerOrSigner
 		);
 	}
@@ -615,6 +622,22 @@ export class baseClientService {
 	public async payEntryPrice() {
 		const tx = await this.studentApplicationContractInstance.payEntryPrice();
 		await tx.wait();
+		return tx;
+	}
+
+	// Uniswap trades
+
+	public async uniswapETHForDAI(units: string|number, addressReceiver: string, timestampsToWait: number = 1000) {
+		const route_buyDai = [environment.WETHAddress , environment.DAIAddress];
+		const val = ethers.utils.parseEther(units.toString());
+		const tx = this.UniswapRouter.swapExactTokensForTokens(val, 0, route_buyDai, addressReceiver, timestampsToWait)
+		return tx;
+	}
+
+	public async uniswapDAIForETH(units: string|number, addressReceiver: string, timestampsToWait: number = 1000) {
+		const route_sellDai = [environment.DAIAddress, environment.WETHAddress];
+		const val = ethers.utils.parseEther(units.toString());
+		const tx = this.UniswapRouter.swapExactTokensForTokens(val, 0, route_sellDai, addressReceiver, timestampsToWait)
 		return tx;
 	}
 
