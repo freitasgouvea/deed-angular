@@ -730,19 +730,19 @@
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer(secret)" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer(secret.value)" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Set Secret</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer(secret)" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer()" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Submit right answer</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer(secret)" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer()" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Submit wrong answer</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer(secret)" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer(secret.value)" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Call solve function</span>
                             </a>

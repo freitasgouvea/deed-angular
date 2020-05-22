@@ -1,0 +1,697 @@
+{
+  "contractName": "IClassroom",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "entryPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnershipClassroom",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "studentApply",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "viewMyApplication",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "ownerClassroom",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.6+commit.6c089d02\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"entryPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ownerClassroom\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"studentApply\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"transferOwnershipClassroom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"viewMyApplication\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/mnt/e/Repositories/Uproot/contracts/interface/IClassroom.sol\":\"IClassroom\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":10},\"remappings\":[]},\"sources\":{\"/mnt/e/Repositories/Uproot/contracts/interface/IClassroom.sol\":{\"keccak256\":\"0xcd60aebb96ad46e4d66976c8034381ed94ad433b2a518dcc4fb3cc06a3a11122\",\"urls\":[\"bzz-raw://c695b0661a75044d0a4f5b575456c96c675ba4c2251426105143c06d69722a74\",\"dweb:/ipfs/QmckEar49DULENGchT4ZgihHDSeTvZqWJDCVx1P4nv3xag\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.6.6;\n\ninterface IClassroom {\n\n    function entryPrice() external view returns (uint256);\n\n    function transferOwnershipClassroom(address) external;\n    \n    function studentApply() external;\n\n    function viewMyApplication() external view returns (address);\n\n    function ownerClassroom() external view returns (address);\n}",
+  "sourcePath": "/mnt/e/Repositories/Uproot/contracts/interface/IClassroom.sol",
+  "ast": {
+    "absolutePath": "/mnt/e/Repositories/Uproot/contracts/interface/IClassroom.sol",
+    "exportedSymbols": {
+      "IClassroom": [
+        8177
+      ]
+    },
+    "id": 8178,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 8153,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:19"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 8177,
+        "linearizedBaseContracts": [
+          8177
+        ],
+        "name": "IClassroom",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "f745adfc",
+            "id": 8158,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "entryPrice",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8154,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "72:2:19"
+            },
+            "returnParameters": {
+              "id": 8157,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8156,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 8158,
+                  "src": "98:7:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8155,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "98:7:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "97:9:19"
+            },
+            "scope": 8177,
+            "src": "53:54:19",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "18b9533b",
+            "id": 8163,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "transferOwnershipClassroom",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8161,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8160,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 8163,
+                  "src": "149:7:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8159,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "149:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "148:9:19"
+            },
+            "returnParameters": {
+              "id": 8162,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "166:0:19"
+            },
+            "scope": 8177,
+            "src": "113:54:19",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "1b9dbc60",
+            "id": 8166,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "studentApply",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8164,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "198:2:19"
+            },
+            "returnParameters": {
+              "id": 8165,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "209:0:19"
+            },
+            "scope": 8177,
+            "src": "177:33:19",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "6e8055a7",
+            "id": 8171,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "viewMyApplication",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8167,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "242:2:19"
+            },
+            "returnParameters": {
+              "id": 8170,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8169,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 8171,
+                  "src": "268:7:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8168,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "268:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "267:9:19"
+            },
+            "scope": 8177,
+            "src": "216:61:19",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "8b45fb67",
+            "id": 8176,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "ownerClassroom",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8172,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "306:2:19"
+            },
+            "returnParameters": {
+              "id": 8175,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8174,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 8176,
+                  "src": "332:7:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8173,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "332:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "331:9:19"
+            },
+            "scope": 8177,
+            "src": "283:58:19",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 8178,
+        "src": "25:318:19"
+      }
+    ],
+    "src": "0:343:19"
+  },
+  "legacyAST": {
+    "absolutePath": "/mnt/e/Repositories/Uproot/contracts/interface/IClassroom.sol",
+    "exportedSymbols": {
+      "IClassroom": [
+        8177
+      ]
+    },
+    "id": 8178,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 8153,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:19"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 8177,
+        "linearizedBaseContracts": [
+          8177
+        ],
+        "name": "IClassroom",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "f745adfc",
+            "id": 8158,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "entryPrice",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8154,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "72:2:19"
+            },
+            "returnParameters": {
+              "id": 8157,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8156,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 8158,
+                  "src": "98:7:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8155,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "98:7:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "97:9:19"
+            },
+            "scope": 8177,
+            "src": "53:54:19",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "18b9533b",
+            "id": 8163,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "transferOwnershipClassroom",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8161,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8160,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 8163,
+                  "src": "149:7:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8159,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "149:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "148:9:19"
+            },
+            "returnParameters": {
+              "id": 8162,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "166:0:19"
+            },
+            "scope": 8177,
+            "src": "113:54:19",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "1b9dbc60",
+            "id": 8166,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "studentApply",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8164,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "198:2:19"
+            },
+            "returnParameters": {
+              "id": 8165,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "209:0:19"
+            },
+            "scope": 8177,
+            "src": "177:33:19",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "6e8055a7",
+            "id": 8171,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "viewMyApplication",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8167,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "242:2:19"
+            },
+            "returnParameters": {
+              "id": 8170,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8169,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 8171,
+                  "src": "268:7:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8168,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "268:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "267:9:19"
+            },
+            "scope": 8177,
+            "src": "216:61:19",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "8b45fb67",
+            "id": 8176,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "ownerClassroom",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 8172,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "306:2:19"
+            },
+            "returnParameters": {
+              "id": 8175,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8174,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 8176,
+                  "src": "332:7:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8173,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "332:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "331:9:19"
+            },
+            "scope": 8177,
+            "src": "283:58:19",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 8178,
+        "src": "25:318:19"
+      }
+    ],
+    "src": "0:343:19"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.6+commit.6c089d02.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.1.0",
+  "updatedAt": "2020-05-17T13:52:24.958Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
