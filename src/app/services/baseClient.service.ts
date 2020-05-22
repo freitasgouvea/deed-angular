@@ -627,17 +627,17 @@ export class baseClientService {
 
 	// Uniswap trades
 
-	public async uniswapETHForDAI(units: string|number, addressReceiver: string, timestampsToWait: number = 1000) {
+	public async uniswapETHForDAI(units: string, addressReceiver: string) {
 		const route_buyDai = [environment.WETHAddress , environment.DAIAddress];
 		const val = ethers.utils.parseEther(units.toString());
-		const tx = this.UniswapRouter.swapExactTokensForTokens(val, 0, route_buyDai, addressReceiver, timestampsToWait)
+		const tx = this.UniswapRouter.swapExactETHForTokens(val, 0, route_buyDai, addressReceiver, 1000)
 		return tx;
 	}
 
-	public async uniswapDAIForETH(units: string|number, addressReceiver: string, timestampsToWait: number = 1000) {
+	public async uniswapDAIForETH(units: string, addressReceiver: string) {
 		const route_sellDai = [environment.DAIAddress, environment.WETHAddress];
 		const val = ethers.utils.parseEther(units.toString());
-		const tx = this.UniswapRouter.swapExactTokensForTokens(val, 0, route_sellDai, addressReceiver, timestampsToWait)
+		const tx = this.UniswapRouter.swapExactTokensForETH(val, 0, route_sellDai, addressReceiver, 1000)
 		return tx;
 	}
 
