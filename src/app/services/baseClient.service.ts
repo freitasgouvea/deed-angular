@@ -490,18 +490,20 @@ export class baseClientService {
 		);
 	}
 
-	async approveDAI(input: number) {
+	async approveDAI(input: number, address: string = this.universityContractInstance.address) {
 		const val = ethers.utils.parseEther(input.toString());
 		const tx = await this.DAIContract.approve(
-			this.universityContractInstance.address,
+			address,
 			val
 		);
+		await tx.wait();
 		return tx;
 	}
 
 	async donateDAI(input: number) {
 		const val = ethers.utils.parseEther(input.toString());
 		const tx = await this.universityContractInstance.donateDAI(val);
+		await tx.wait();
 		return tx;
 	}
 

@@ -70,7 +70,7 @@ export class ClassroomComponent implements OnInit {
 						.then(
 							(state) => this.initApplication(address, state),
 							() =>
-								console.log(
+								console.warn(
 									'Student does not have an application'
 								)
 						);
@@ -87,7 +87,31 @@ export class ClassroomComponent implements OnInit {
 		this.myStudentApplication.connectService();
 		this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
 		this.myStudentApplication.state = state;
+		this.updatePhase(state);
+	}
+
+	private updatePhase(stateBN: any) {
+		const state = stateBN.toNumber();
+		if (state > 2){
+			this.phase = 5;
+			if (this.myStudentApplication.funds == 0) this.phase++;
+			return;
+		}
 		this.phase = state + 1;
+		if (this.myStudentApplication.verifyAnswer) this.phase++;
+	}
+
+	refreshApplication() {
+		this.myStudentApplication.updateState().then(() => {
+			this.globals.service
+				.viewMyApplicationState(
+					this.globals.selectedClassroom.smartcontract
+				)
+				.then((state) => {
+					this.myStudentApplication.state = state;
+					this.updatePhase(state);
+				});
+		});
 	}
 
 	openModal(id: string) {
@@ -609,13 +633,36 @@ export class ClassroomComponent implements OnInit {
 		this.txOn();
 		const value = this.globals.selectedClassroom.price;
 		this.txMode = 'processingTX';
-		const approve = await this.globals.service.approveDAI(value);
+		const approve = await this.globals.service.approveDAI(
+			value,
+			this.myStudentApplication.address
+		);
 		if (!approve) {
 			this.txMode = 'failedTX';
 		} else {
 			this.hashTx = approve.hash;
 			this.txMode = 'successTX';
+			this.allowanceMode = 1;
 		}
+	}
+
+	allowanceMode = -1;
+
+	checkAllowance() {
+		if (this.allowanceMode > 0) return;
+		this.globals.service.DAIContract.allowance(
+			this.globals.address,
+			this.myStudentApplication.address
+		).then((val) => {
+			if (
+				Number(ethers.utils.formatEther(val)) >=
+				this.globals.selectedClassroom.price
+			) {
+				this.allowanceMode = 2;
+			} else {
+				this.allowanceMode = 1;
+			}
+		});
 	}
 
 	async payPrice(): Promise<any> {
@@ -627,6 +674,8 @@ export class ClassroomComponent implements OnInit {
 		} else {
 			this.hashTx = pay.hash;
 			this.txMode = 'successTX';
+			this.allowanceMode = 3;
+			this.phase = 2;
 		}
 	}
 
