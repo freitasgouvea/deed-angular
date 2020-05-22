@@ -8,6 +8,7 @@ export class StudentApplication {
 	public prize = 0;
 	public principal = 0;
 	public funds = 0;
+	public material: string;
 
 	constructor(
 		public globals: Globals,

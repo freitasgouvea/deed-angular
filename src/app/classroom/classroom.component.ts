@@ -23,7 +23,6 @@ export class ClassroomComponent implements OnInit {
 	focus;
 	focus1;
 	public form: FormGroup;
-	userIsClassroomAdmin = false;
 	displayNotice = true;
 	public txMode = 'off';
 	public hashTx: any;
@@ -87,12 +86,18 @@ export class ClassroomComponent implements OnInit {
 		this.myStudentApplication.connectService();
 		this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
 		this.myStudentApplication.state = state;
+		//TODO: abstract service
+		this.globals.service.studentContractInstance
+			.viewChallengeMaterial(this.myStudentApplication.classroomAddress)
+			.then(
+				(material) => (this.myStudentApplication.material = material)
+			);
 		this.updatePhase(state);
 	}
 
 	private updatePhase(stateBN: any) {
 		const state = stateBN.toNumber();
-		if (state > 2){
+		if (state > 2) {
 			this.phase = 5;
 			if (this.myStudentApplication.funds == 0) this.phase++;
 			return;
@@ -229,19 +234,17 @@ export class ClassroomComponent implements OnInit {
 	}
 
 	public refreshClassroomInfo() {
-		this.globals.service
-			.getClassroomOwner()
-			.then(
-				(adminAddress) =>
-					(this.globals.userIsClassroomAdmin =
-						this.globals.address == adminAddress)
-			);
+		this.globals.service.getClassroomOwner().then((adminAddress) => {
+			this.globals.userIsClassroomAdmin =
+				this.globals.address == adminAddress;
+			if (this.globals.userIsClassroomAdmin) {
+				this.refreshClassroomConfigs();
+				this.refreshClassroomParams();
+				this.refreshClassroomData();
+			}
+		});
 		this.refreshClassroomFunds();
 		this.refreshClassroomMetadata();
-		if (!this.userIsClassroomAdmin) return;
-		this.refreshClassroomConfigs();
-		this.refreshClassroomParams();
-		this.refreshClassroomData();
 	}
 
 	async conectPortis(): Promise<any> {
@@ -504,6 +507,38 @@ export class ClassroomComponent implements OnInit {
 				(val) =>
 					(this.globals.selectedClassroom.classdata.validStudents = val)
 			);
+		this.courseFunds();
+	}
+
+	private courseFunds() {
+		let [aDAI, cDAI, aDAI_u, cDAI_u] = [0, 0, 0, 0];
+		this.globals.service.ADAIContract.balanceOf(
+			environment.UniversityFundAddress
+		).then((balance) => {
+			aDAI = balance / 1e18;
+			this.globals.service.ADAIContract.principalBalanceOf(
+				environment.UniversityFundAddress
+			).then((balance) => {
+				aDAI_u = balance / 1e18;
+				this.globals.service.CDAIContract.balanceOf(
+					environment.UniversityFundAddress
+				).then((balance) => {
+					cDAI = balance / 1e8;
+					this.globals.service.CDAIContract.balanceOfUnderlying(
+						environment.UniversityFundAddress
+					).then((balance) => {
+						cDAI_u = balance / 1e8;
+						this.globals.selectedClassroom.classdata.fundsInvested =
+							aDAI_u + cDAI_u;
+						this.globals.selectedClassroom.classdata.investmentReturns =
+							aDAI +
+							cDAI -
+							this.globals.selectedClassroom.classdata
+								.fundsInvested;
+					});
+				});
+			});
+		});
 	}
 
 	openApplications() {
@@ -518,9 +553,33 @@ export class ClassroomComponent implements OnInit {
 			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
 	}
 
+	applyDAI() {
+		this.globals.service.classroomContractInstance
+			.applyDAI()
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
 	beginCourse() {
 		this.globals.service.classroomContractInstance
 			.beginCourse(true)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	finishCourse() {
+		this.globals.service.classroomContractInstance
+			.finishCourse()
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	processResults() {
+		this.globals.service.classroomContractInstance
+			.processResults()
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	withdrawAllResults() {
+		this.globals.service.classroomContractInstance
+			.withdrawAllResults()
 			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
 	}
 
@@ -538,6 +597,54 @@ export class ClassroomComponent implements OnInit {
 		this.globals.service.classroomContractInstance
 			.configureUniswap(uniswapDAI, uniswapLINK, uniswapRouter)
 			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
+	}
+
+	changeName(val) {
+		this.globals.service.classroomContractInstance
+			.changeName(val)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	changePrincipalCut(percentage) {
+		this.globals.service.classroomContractInstance
+			.changePrincipalCut(percentage * 1e4)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	changePoolCut(percentage) {
+		this.globals.service.classroomContractInstance
+			.changePoolCut(percentage * 1e4)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	changeMinScore(val) {
+		this.globals.service.classroomContractInstance
+			.changeMinScore(val)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	changeEntryPrice(val: string) {
+		this.globals.service.classroomContractInstance
+			.changeEntryPrice(ethers.utils.parseEther(val))
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	changeDuration(val) {
+		this.globals.service.classroomContractInstance
+			.changeDuration(val)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	changeCompoundApplyPercentage(percentage) {
+		this.globals.service.classroomContractInstance
+			.changeCompoundApplyPercentage(percentage * 1e4)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+	}
+
+	changeChallenge(addr) {
+		this.globals.service.classroomContractInstance
+			.changeChallenge(addr)
+			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
 	}
 
 	configureOracles(
