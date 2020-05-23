@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { RelayProvider } from '@opengsn/gsn';
 
 import { Classroom } from 'src/models/classroom.model';
 import { GenericUser } from 'src/models/genericUser.model';
@@ -16,6 +17,7 @@ import { ENSService } from '../services/ens.service';
 import { environment } from 'src/environments/environment';
 import Web3 from 'web3';
 import { MetamaskService } from '../services/metamask.service';
+import { ethers } from 'ethers';
 
 const web3 = new Web3(Web3.givenProvider);
 
@@ -66,6 +68,27 @@ export class LandingComponent implements OnInit {
 	connectMetamaskForTests() {
 		this.globals.service = new MetamaskService();
 		this.initSigner();
+	}
+
+	connectGSN() {
+		const relayHubAddress = environment.DefaultGasRelayHub;
+		const paymasterAddress = environment.DefaultTestPaymaster;
+		const stakeManagerAddress = environment.DefaultStakeManager;
+		const gsnConfig = {
+			relayHubAddress,
+			paymasterAddress,
+			stakeManagerAddress,
+			methodSuffix: '_v4',
+			jsonStringifyRequest: true,
+			chainId: 3,
+		};
+		const gsnProvider = new RelayProvider(
+			this.globals.service.provider,
+			gsnConfig
+		);
+		const provider = new ethers.providers.Web3Provider(gsnProvider);
+		this.globals.service.provider = provider;
+		console.log("GSN Registered as provider");
 	}
 
 	openModal(id: string) {
@@ -121,14 +144,17 @@ export class LandingComponent implements OnInit {
 	private async initSigner() {
 		this.globals.address = await this.globals.service.getAddress();
 		this.globals.ensService.configureProvider(this.portisService.provider);
-		if (this.roleMembersAdmin &&
-			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find((element) => element.address == this.globals.address))
+		if (
+			this.roleMembersAdmin &&
+			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(
+				(element) => element.address == this.globals.address
+			)
+		)
 			this.globals.userIsUniversityAdmin = true;
 		const isRegistered = await this.globals.service.isStudentRegistred();
 		if (!isRegistered) {
 			this.globals.mode = 'connected';
-		}
-		else {
+		} else {
 			this.globals.userIsStudent = true;
 			this.globals.mode = 'registered';
 			const studentSmartContract = await this.globals.service.getStudentSmartContract();
