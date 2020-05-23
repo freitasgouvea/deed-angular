@@ -92,6 +92,12 @@ export class ClassroomComponent implements OnInit {
 			.then(
 				(material) => (this.myStudentApplication.material = material)
 			);
+		this.globals.service.studentApplicationContractInstance
+				.verifyAnswer()
+				.then(
+					(correct) => (this.myStudentApplication.correctAnswer = correct)
+				);
+
 		this.updatePhase(state);
 	}
 
@@ -513,19 +519,19 @@ export class ClassroomComponent implements OnInit {
 	private courseFunds() {
 		let [aDAI, cDAI, aDAI_u, cDAI_u] = [0, 0, 0, 0];
 		this.globals.service.ADAIContract.balanceOf(
-			environment.UniversityFundAddress
+			this.globals.selectedClassroom.smartcontract
 		).then((balance) => {
 			aDAI = balance / 1e18;
 			this.globals.service.ADAIContract.principalBalanceOf(
-				environment.UniversityFundAddress
+				this.globals.selectedClassroom.smartcontract
 			).then((balance) => {
 				aDAI_u = balance / 1e18;
 				this.globals.service.CDAIContract.balanceOf(
-					environment.UniversityFundAddress
+					this.globals.selectedClassroom.smartcontract
 				).then((balance) => {
 					cDAI = balance / 1e8;
 					this.globals.service.CDAIContract.balanceOfUnderlying(
-						environment.UniversityFundAddress
+						this.globals.selectedClassroom.smartcontract
 					).then((balance) => {
 						cDAI_u = balance / 1e8;
 						this.globals.selectedClassroom.classdata.fundsInvested =
@@ -561,7 +567,7 @@ export class ClassroomComponent implements OnInit {
 
 	beginCourse() {
 		this.globals.service.classroomContractInstance
-			.beginCourse(true)
+			.beginCourse(false)
 			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
 	}
 

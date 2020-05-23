@@ -42,6 +42,20 @@
 							</button>
                             <strong>Classroom Notice: </strong> {{globals.selectedClassroom.metadata.notice}}
                         </div>
+                        <div *ngIf="myStudentApplication&&!myStudentApplication.correctAnswer&&displayNotice" #applicationNotice1 class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" aria-label="Close" (click)="closeNotice()">
+							  <span aria-hidden="true">&times;</span>
+							</button>
+                            <strong>Student application address: </strong> {{myStudentApplication.address}}<br>
+                            <strong>Your answer is wrong or null so far. </strong>
+                        </div>
+                        <div *ngIf="myStudentApplication&&myStudentApplication.correctAnswer&&displayNotice" #applicationNotice2 class="alert alert-success alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" aria-label="Close" (click)="closeNotice()">
+							  <span aria-hidden="true">&times;</span>
+							</button>
+                            <strong>Student application address: </strong> {{myStudentApplication.address}}<br>
+                            <strong>Your answer is correct. Congratulations! </strong>
+                        </div>
                         <div class="btn-wrapper">
                             <a [routerLink]="['/']" class="btn btn-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
@@ -276,13 +290,13 @@
                     </div>
                 </div>
                 <div class="mt-2 py-5 text-left">
-                    <h5>Dashboard</h5>
+                    <h4>Dashboard</h4>
                     <div>
-                        <h4>Student applications: {{globals.selectedClassroom.classdata.students}}</h4>
-                        <h4>Student ready applications: {{globals.selectedClassroom.classdata.validStudents}}</h4>
-                        <h4>Funds in classroom: {{globals.selectedClassroom.funds.DAI}} DAI</h4>
-                        <h4>Funds invested: {{globals.selectedClassroom.classdata.fundsInvested}} DAI</h4>
-                        <h4>Pooled returns: {{globals.selectedClassroom.classdata.investmentReturns}} DAI</h4>
+                        <h5>Student applications: {{globals.selectedClassroom.classdata.students}}</h5>
+                        <h5>Student ready applications: {{globals.selectedClassroom.classdata.validStudents}}</h5>
+                        <h5>Funds in classroom: {{globals.selectedClassroom.funds.DAI}} DAI</h5>
+                        <h5>Funds invested: {{globals.selectedClassroom.classdata.fundsInvested}} DAI</h5>
+                        <h5>Pooled returns: {{globals.selectedClassroom.classdata.investmentReturns}} DAI</h5>
                     </div>
                     <button *ngIf="globals.selectedClassroom.state.isClassroomNotOpen&&globals.selectedClassroom.classdata.validStudents==0" class="btn btn-lg btn-icon btn-3 btn-success" (click)="openApplications()" type="button"><span class="btn-inner--text">Open applications</span></button>
                     <button *ngIf=globals.selectedClassroom.state.isClassroomOpen class="btn btn-lg btn-icon btn-3 btn-warning" type="button" (click)="closeApplications()"><span class="btn-inner--icon"><i class="ni ni-close"></i></span><span class="btn-inner--text">Close applications</span></button>
@@ -692,7 +706,6 @@
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <h2 class="description text-center text-white">Here you can set your secret to protect your answer. Don't share this with anyone</h2>
-                                    <h2 class="description text-center text-white">In this demo classroom, you can also submit a ready answer for your application</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -733,18 +746,6 @@
                             <a *ngIf="txMode=='preTX'" (click)="sendAnswer(secret.value)" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Set Secret</span>
-                            </a>
-                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer()" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
-                                <span class="btn-inner--text">Submit right answer</span>
-                            </a>
-                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer()" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
-                                <span class="btn-inner--text">Submit wrong answer</span>
-                            </a>
-                            <a *ngIf="txMode=='preTX'" (click)="sendAnswer(secret.value)" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
-                                <span class="btn-inner--text">Call solve function</span>
                             </a>
                         </div>
                     </div>

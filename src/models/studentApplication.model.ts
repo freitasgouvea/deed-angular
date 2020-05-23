@@ -9,6 +9,8 @@ export class StudentApplication {
 	public principal = 0;
 	public funds = 0;
 	public material: string;
+	public answerAddress: string;
+	public correctAnswer: boolean;
 
 	constructor(
 		public globals: Globals,

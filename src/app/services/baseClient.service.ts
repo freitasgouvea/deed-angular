@@ -12,7 +12,9 @@ import * as ERC20 from '../../../build/contracts/ERC20.json';
 import * as CDAI from '../../../build/contracts/CERC20.json';
 import * as ADAI from '../../../build/contracts/aToken.json';
 import * as LINK from '../../../build/contracts/LinkTokenInterface.json';
-import * as IUniswapV2Router01 from '../../../build/contracts/IUniswapV2Router01.json'
+import * as IUniswapV2Router01 from '../../../build/contracts/IUniswapV2Router01.json';
+import * as ExampleRightStudentAnswer from '../../../build/contracts/ExampleStudentAnswer.json';
+import * as ExampleWrongStudentAnswer from '../../../build/contracts/ExampleWrongStudentAnswer.json';
 import { GenericUser } from '../../models/genericUser.model';
 
 @Injectable({
@@ -191,7 +193,9 @@ export class baseClientService {
 		try {
 			const studentSmartContract = await this.universityContractInstance.myStudentAddress();
 			return studentSmartContract;
-		} catch (err) {console.warn("Student address not found: " + err.toString());}
+		} catch (err) {
+			console.warn('Student address not found: ' + err.toString());
+		}
 	}
 
 	public async getStudentName() {
@@ -225,7 +229,9 @@ export class baseClientService {
 	// view Student info
 
 	public async viewMyStudentApplication(addressClassroom: string) {
-		const answer = await this.studentContractInstance.viewMyApplication(addressClassroom);
+		const answer = await this.studentContractInstance.viewMyApplication(
+			addressClassroom
+		);
 		return answer;
 	}
 
@@ -401,15 +407,15 @@ export class baseClientService {
 		isFinished = await classroomContractInstance.courseFinished();
 		duration = await classroomContractInstance.duration();
 		startDate = await classroomContractInstance.startDate();
-		finishDate = startDate > 0 ? startDate + duration : 0;
+		finishDate = startDate.toNumber() > 0 ? startDate.toNumber() + duration.toNumber() : 0;
 		addressChallenge = await classroomContractInstance.challengeAddress();
 		owner = await classroomContractInstance.owner();
 		return [
 			title,
 			smartcontract,
-			startDate,
+			startDate.toNumber(),
 			finishDate,
-			duration,
+			duration.toNumber(),
 			price,
 			minScore,
 			cutPrincipal,
@@ -490,12 +496,12 @@ export class baseClientService {
 		);
 	}
 
-	async approveDAI(input: number, address: string = this.universityContractInstance.address) {
+	async approveDAI(
+		input: number,
+		address: string = this.universityContractInstance.address
+	) {
 		const val = ethers.utils.parseEther(input.toString());
-		const tx = await this.DAIContract.approve(
-			address,
-			val
-		);
+		const tx = await this.DAIContract.approve(address, val);
 		await tx.wait();
 		return tx;
 	}
@@ -607,15 +613,20 @@ export class baseClientService {
 	public async setAnswerSecret(classroomAddress: string, secret: string) {
 		const secret32 = ethers.utils.formatBytes32String(secret);
 		const answer = await this.studentContractInstance.setAnswerSecret(
-			classroomAddress, secret32
+			classroomAddress,
+			secret32
 		);
 		await answer.wait();
 		return answer;
 	}
 
-	public async withdrawAllResultsFromClassroom(classroomAddress: string, studentAddress: string) {
+	public async withdrawAllResultsFromClassroom(
+		classroomAddress: string,
+		studentAddress: string
+	) {
 		const withdraw = await this.studentContractInstance.withdrawAllResultsFromClassroom(
-			classroomAddress, studentAddress
+			classroomAddress,
+			studentAddress
 		);
 		await withdraw.wait();
 		return withdraw;
@@ -629,17 +640,37 @@ export class baseClientService {
 
 	// Uniswap trades
 
-	public async uniswapETHForDAI(units: string|number, addressReceiver: string, timestampsToWait: number = 1000) {
-		const route_buyDai = [environment.WETHAddress , environment.DAIAddress];
+	public async uniswapETHForDAI(
+		units: string | number,
+		addressReceiver: string,
+		timestampsToWait: number = 60
+	) {
+		const route_buyDai = [environment.WETHAddress, environment.DAIAddress];
 		const val = ethers.utils.parseEther(units.toString());
-		const tx = this.UniswapRouter.swapExactTokensForTokens(val, 0, route_buyDai, addressReceiver, timestampsToWait)
+		const tx = this.UniswapRouter.swapExactTokensForTokens(
+			val,
+			0,
+			route_buyDai,
+			addressReceiver,
+			timestampsToWait
+		);
 		return tx;
 	}
 
-	public async uniswapDAIForETH(units: string|number, addressReceiver: string, timestampsToWait: number = 1000) {
+	public async uniswapDAIForETH(
+		units: string | number,
+		addressReceiver: string,
+		timestampsToWait: number = 60
+	) {
 		const route_sellDai = [environment.DAIAddress, environment.WETHAddress];
 		const val = ethers.utils.parseEther(units.toString());
-		const tx = this.UniswapRouter.swapExactTokensForTokens(val, 0, route_sellDai, addressReceiver, timestampsToWait)
+		const tx = this.UniswapRouter.swapExactTokensForTokens(
+			val,
+			0,
+			route_sellDai,
+			addressReceiver,
+			timestampsToWait
+		);
 		return tx;
 	}
 
