@@ -452,7 +452,7 @@ export class ClassroomComponent implements OnInit {
 		// 	filename,
 		// 	skylink,
 		// 	skynet.DefaultDownloadOptions
-		);
+		//);
 	}
 
 	refreshClassroomFunds(
