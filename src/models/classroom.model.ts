@@ -14,6 +14,7 @@ export class Classroom {
 		description: '',
 		notice: '',
 		keywords: new Array<string>(),
+		skylink: '',
 	};
 	public funds = { DAI: 0, LINK: 0 };
 	public classdata = {
