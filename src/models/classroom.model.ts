@@ -21,6 +21,7 @@ export class Classroom {
 		validStudents: 0,
 		fundsInvested: 0,
 		investmentReturns: 0,
+		courseBalance: 0,
 	};
 	public params = { compoundApplyPercentage: 50, aaveApplyPercentage: 50 };
 	public configs = {
@@ -66,6 +67,47 @@ export class Classroom {
 		public addressChallenge: string,
 		public owner: string
 	) {
+		this.refreshInfo();
+	}
+
+	public setupInfo(
+		id_: number,
+		title_: string,
+		smartcontract_: string,
+		startDateTimestamp_: number,
+		finishDateTimestamp_: number,
+		duration_: number,
+		price_: number,
+		minScore_: number,
+		cutPrincipal_: number,
+		cutPool_: number,
+		openForApplication_: Boolean,
+		courseEmpty_: Boolean,
+		classroomActive_: Boolean,
+		courseFinished_: Boolean,
+		addressChallenge_: string,
+		owner_: string
+	) {
+		this.id = id_;
+		this.title = title_;
+		this.smartcontract = smartcontract_;
+		this.startDateTimestamp = startDateTimestamp_;
+		this.finishDateTimestamp = finishDateTimestamp_;
+		this.duration = duration_;
+		this.price = price_;
+		this.minScore = minScore_;
+		this.cutPrincipal = cutPrincipal_;
+		this.cutPool = cutPool_;
+		this.openForApplication = openForApplication_;
+		this.courseEmpty = courseEmpty_;
+		this.classroomActive = classroomActive_;
+		this.courseFinished = courseFinished_;
+		this.addressChallenge = addressChallenge_;
+		this.owner = owner_;
+		this.refreshInfo();
+	}
+
+	private refreshInfo() {
 		this.startDate = new Date(this.startDateTimestamp * 1000);
 		this.finishDate = new Date(this.finishDateTimestamp * 1000);
 		this.startDate_StringDate = this.startDate.toLocaleDateString(
@@ -81,7 +123,12 @@ export class Classroom {
 		this.updateState();
 	}
 
-	public updateState(){
+	public updateState() {
+		this.state.isClassroomNotOpen = false;
+		this.state.isClassroomOpen = false;
+		this.state.isClassroomClosed = false;
+		this.state.isClassroomActive = false;
+		this.state.isCourseFinished = false;
 		switch (this.getState()) {
 			case 0: {
 				this.state.isClassroomNotOpen = true;

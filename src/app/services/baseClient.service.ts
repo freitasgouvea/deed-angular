@@ -12,8 +12,9 @@ import * as ERC20 from '../../../build/contracts/ERC20.json';
 import * as CDAI from '../../../build/contracts/CERC20.json';
 import * as ADAI from '../../../build/contracts/aToken.json';
 import * as LINK from '../../../build/contracts/LinkTokenInterface.json';
-import * as IUniswapV2Router01 from '../../../build/contracts/IUniswapV2Router01.json'
+import * as IUniswapV2Router01 from '../../../build/contracts/IUniswapV2Router01.json';
 import { GenericUser } from '../../models/genericUser.model';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Injectable({
 	providedIn: 'root',
@@ -32,6 +33,8 @@ export class baseClientService {
 	public provider: any;
 	public networkName: any;
 	public useSigner = false;
+
+	account: any;
 
 	constructor() {}
 
@@ -76,8 +79,10 @@ export class baseClientService {
 	}
 
 	async getAddress() {
+		if (this.account) return this.account;
 		const addresses = await this.provider.listAccounts();
-		return addresses[0];
+		this.account = addresses[0];
+		return this.account;
 	}
 
 	async connectUniversity() {
@@ -191,7 +196,9 @@ export class baseClientService {
 		try {
 			const studentSmartContract = await this.universityContractInstance.myStudentAddress();
 			return studentSmartContract;
-		} catch (err) {console.warn("Student address not found: " + err.toString());}
+		} catch (err) {
+			console.warn('Student address not found: ' + err.toString());
+		}
 	}
 
 	public async getStudentName() {
@@ -225,7 +232,9 @@ export class baseClientService {
 	// view Student info
 
 	public async viewMyStudentApplication(addressClassroom: string) {
-		const answer = await this.studentContractInstance.viewMyApplication(addressClassroom);
+		const answer = await this.studentContractInstance.viewMyApplication(
+			addressClassroom
+		);
 		return answer;
 	}
 
@@ -401,15 +410,15 @@ export class baseClientService {
 		isFinished = await classroomContractInstance.courseFinished();
 		duration = await classroomContractInstance.duration();
 		startDate = await classroomContractInstance.startDate();
-		finishDate = startDate > 0 ? startDate + duration : 0;
+		finishDate = startDate.toNumber() > 0 ? startDate.toNumber() + duration.toNumber() : 0;
 		addressChallenge = await classroomContractInstance.challengeAddress();
 		owner = await classroomContractInstance.owner();
 		return [
 			title,
 			smartcontract,
-			startDate,
+			startDate.toNumber(),
 			finishDate,
-			duration,
+			duration.toNumber(),
 			price,
 			minScore,
 			cutPrincipal,
@@ -437,7 +446,7 @@ export class baseClientService {
 			roleBytes,
 			address
 		);
-		await transaction.wait();
+		return transaction;
 	}
 
 	async grantRole(role: string, address: string) {
@@ -449,7 +458,7 @@ export class baseClientService {
 			roleBytes,
 			address
 		);
-		await transaction.wait();
+		return transaction;
 	}
 
 	public async studentSelfRegister(_name: string) {
@@ -457,14 +466,12 @@ export class baseClientService {
 		const register = await this.universityContractInstance.studentSelfRegister(
 			name
 		);
-		await register.wait();
 		return register;
 	}
 
 	public async studentUpdateName(newName: string) {
 		const name = ethers.utils.formatBytes32String(newName);
 		const register = await this.studentContractInstance.changeName(name);
-		await register.wait();
 		return register;
 	}
 
@@ -490,12 +497,12 @@ export class baseClientService {
 		);
 	}
 
-	async approveDAI(input: number) {
+	async approveDAI(
+		input: number,
+		address: string = this.universityContractInstance.address
+	) {
 		const val = ethers.utils.parseEther(input.toString());
-		const tx = await this.DAIContract.approve(
-			this.universityContractInstance.address,
-			val
-		);
+		const tx = await this.DAIContract.approve(address, val);
 		return tx;
 	}
 
@@ -532,7 +539,6 @@ export class baseClientService {
 			ethers.utils.solidityKeccak256(['string'], [label]),
 			environment.UniversityAddress
 		);
-		await tx.wait();
 	}
 
 	async setResolver(node: string) {
@@ -540,7 +546,6 @@ export class baseClientService {
 			node,
 			environment.ENSPulbicResolverAddress
 		);
-		await tx.wait();
 	}
 
 	async setAddr(node: string, address: string) {
@@ -548,14 +553,12 @@ export class baseClientService {
 			node,
 			address
 		);
-		await tx.wait();
 	}
 
 	async setReverse(name: string) {
 		const tx = await this.universityContractInstance.registerInReverseRegistrar(
 			name
 		);
-		await tx.wait();
 	}
 
 	public async setTxRecord(_node, key, text) {
@@ -565,7 +568,6 @@ export class baseClientService {
 			text,
 			environment.ENSPulbicResolverAddress
 		);
-		await tx.wait();
 	}
 
 	public async claimSubnodeClassroom(_node, label, owner, classroom) {
@@ -577,7 +579,6 @@ export class baseClientService {
 			0,
 			classroom
 		);
-		await tx.wait();
 	}
 
 	public async claimSubnodeStudent(_node, label, owner, student) {
@@ -589,7 +590,6 @@ export class baseClientService {
 			0,
 			student
 		);
-		await tx.wait();
 	}
 
 	// Student actions
@@ -598,46 +598,67 @@ export class baseClientService {
 		const application = await this.studentContractInstance.applyToClassroom(
 			classroomAddress
 		);
-		await application.wait();
 		return application;
 	}
 
 	public async setAnswerSecret(classroomAddress: string, secret: string) {
 		const secret32 = ethers.utils.formatBytes32String(secret);
 		const answer = await this.studentContractInstance.setAnswerSecret(
-			classroomAddress, secret32
+			classroomAddress,
+			secret32
 		);
-		await answer.wait();
 		return answer;
 	}
 
-	public async withdrawAllResultsFromClassroom(classroomAddress: string, studentAddress: string) {
+	public async withdrawAllResultsFromClassroom(
+		classroomAddress: string,
+		studentAddress: string
+	) {
 		const withdraw = await this.studentContractInstance.withdrawAllResultsFromClassroom(
-			classroomAddress, studentAddress
+			classroomAddress,
+			studentAddress
 		);
-		await withdraw.wait();
 		return withdraw;
 	}
 
 	public async payEntryPrice() {
 		const tx = await this.studentApplicationContractInstance.payEntryPrice();
-		await tx.wait();
 		return tx;
 	}
 
 	// Uniswap trades
 
-	public async uniswapETHForDAI(units: string|number, addressReceiver: string, timestampsToWait: number = 1000) {
-		const route_buyDai = [environment.WETHAddress , environment.DAIAddress];
+	public async uniswapETHForDAI(
+		units: string | number,
+		addressReceiver: string,
+		timestampsToWait: number = 60
+	) {
+		const route_buyDai = [environment.WETHAddress, environment.DAIAddress];
 		const val = ethers.utils.parseEther(units.toString());
-		const tx = this.UniswapRouter.swapExactTokensForTokens(val, 0, route_buyDai, addressReceiver, timestampsToWait)
+		const tx = this.UniswapRouter.swapExactTokensForTokens(
+			val,
+			0,
+			route_buyDai,
+			addressReceiver,
+			timestampsToWait
+		);
 		return tx;
 	}
 
-	public async uniswapDAIForETH(units: string|number, addressReceiver: string, timestampsToWait: number = 1000) {
+	public async uniswapDAIForETH(
+		units: string | number,
+		addressReceiver: string,
+		timestampsToWait: number = 60
+	) {
 		const route_sellDai = [environment.DAIAddress, environment.WETHAddress];
 		const val = ethers.utils.parseEther(units.toString());
-		const tx = this.UniswapRouter.swapExactTokensForTokens(val, 0, route_sellDai, addressReceiver, timestampsToWait)
+		const tx = this.UniswapRouter.swapExactTokensForTokens(
+			val,
+			0,
+			route_sellDai,
+			addressReceiver,
+			timestampsToWait
+		);
 		return tx;
 	}
 
