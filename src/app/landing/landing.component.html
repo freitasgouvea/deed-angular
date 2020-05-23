@@ -168,7 +168,8 @@
                                             <span *ngIf=classroom.state.isClassroomActive class="badge badge-pill badge-primary">Ongoing</span>
                                             <span *ngIf=classroom.state.isCourseFinished class="badge badge-pill badge-dark">Finished</span>
                                         </div>
-                                        <p class="description mt-3" style="height: 32px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{classroom.metadata.description}}</p>
+                                        <p class="description mt-3" style="height: 32px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                            {{classroom.metadata.description}}</p>
                                         <a [class.selected]="classroom === globals.selectedClassroom" (click)="onSelect(classroom);openModal('custom-modal-classroomInfo')" class="btn btn-default mt-4 text-white">Details</a>
                                     </div>
                                 </div>
@@ -257,7 +258,7 @@
                                 </div>
                                 <div class="pl-4">
                                     <h5 class="title text-primary">University Status</h5>
-                                    <ul>
+                                    <ul class="list-unstyled">
                                         <li id="university.name">Name: <strong>{{globals.universityName}}</strong></li>
                                         <li id="university.name">ENS Name:
                                             <strong>{{globals.universityENSName}}</strong></li>
@@ -405,16 +406,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                                        <div class="input-group input-group-alternative mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                            </div>
-                                            <input class="form-control" readonly placeholder="Address" value={{globals.address}} type="text" (focus)="focus1=true" (blur)="focus1=false">
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-12">
@@ -423,13 +414,15 @@
                                             wallet!</strong>
                                     </div>
                                     <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
-                                        <strong>Wait!</strong> Registering at University...
+                                        <strong>Wait!</strong> Registering your account ...
                                     </div>
                                     <div *ngIf="txMode=='successTX'" class="alert alert-success" role="alert">
-                                        <strong>Success!</strong> This is a success alert—check it out!
+                                        <strong>Success!</strong> Transaction Hash {{hashTx}}
+                                        <a href="https://ropsten.etherscan.io/tx/{{hashTx}}" target="_blank">See On
+                                            Etherscan</a>
                                     </div>
                                     <div *ngIf="txMode=='failedTX'" class="alert alert-danger" role="alert">
-                                        <strong>Failed!</strong> This is a danger alert—check it out!
+                                        <strong>Failed!</strong> Transaction didn't complete. Try again!
                                     </div>
                                 </div>
                             </div>
@@ -464,279 +457,345 @@
                 </div>
             </div>
         </div>
-        <div id="UniversityInfo" *ngIf="modeUniversityAdmin=='loaded'" class="container py-lg-md d-flex">
+        <div id="UniversityInfo" *ngIf="modeUniversityAdmin=='loaded'" class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="card shadow border-0">
                         <div class="card-body py-5">
-                            <h3>University Admin <span class="badge badge-pill badge-success">ready</span></h3>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4 class="UniversityAdmins mt-3">University Admins:</h4>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6 class="UniversityAdmins mt-3">University parameters</h6>
-                                                <label for="inputObjUpdateUniversity_Owner" class="UniversityAdmins mt-3">Owner: <span class="text-default">{{globals.universityAdmin}}</span></label>
-                                                <input id="inputObjUpdateUniversity_Owner" #inputUniversity_Owner class="form-control" type="text" size=32>
-                                                <button type="button" (click)="setUniversityOwner(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button><br>
-                                                <label for="inputObjUpdateUniversity_Name" class="UniversityAdmins mt-3">Name: <span class="text-default">{{globals.universityName}}</span></label>
-                                                <input id="inputObjUpdateUniversity_Name" #inputUniversity_Name class="form-control" type="text" size=32>
-                                                <button type="button" (click)="setUniversityName(inputUniversity_Name.value)" class="btn btn-sm btn-default text-white">Set</button><br>
-                                                <label for="inputObjUpdateUniversity_Cut" class="UniversityAdmins mt-3">Cut: <span class="text-default">{{globals.universityCut}}</span></label>
-                                                <input id="inputObjUpdateUniversity_Cut" #inputUniversity_Cut class="form-control" type="text" size=32>
-                                                <button type="button" (click)="setUniversityCut(inputUniversity_Cut.value)" class="btn btn-sm btn-default text-white">Set</button><br>
-                                                <label for="inputObjUpdateUniversity_ConfigAddress" class="UniversityAdmins mt-3">Config address:</label>
-                                                <br><textarea class="form-control" rows="10" wrap="hard">{{globals.universityParams}}</textarea>
-                                                <input id="inputObjUpdateUniversity_ConfigAddress" #inputUniversity_Configaddress class="form-control" type="text" size=32 rows="10">
-                                                <button type="button" (click)="setUniversityParams(inputUniversity_Configaddress.value)" class="btn btn-sm btn-default text-white">Set</button><br>
+                                    <h4>University parameters</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputObjUpdateUniversity_Owner" class="UniversityAdmins mt-3">Owner:
+                                        <span class="text-default">{{globals.universityAdmin}}</span></label>
+                                    <input id="inputObjUpdateUniversity_Owner" #inputUniversity_Owner class="form-control" type="text" size=32>
+                                    <button type="button" (click)="setUniversityOwner(inputUniversity_Owner.value)" class="btn btn-sm btn-default text-white">Set</button>
+                                    <br>
+                                    <label for="inputObjUpdateUniversity_Name" class="UniversityAdmins mt-3">Name: <span
+                                            class="text-default">{{globals.universityName}}</span></label>
+                                    <input id="inputObjUpdateUniversity_Name" #inputUniversity_Name class="form-control" type="text" size=32>
+                                    <button type="button" (click)="setUniversityName(inputUniversity_Name.value)" class="btn btn-sm btn-default text-white">Set</button>
+                                    <br>
+                                    <label for="inputObjUpdateUniversity_Cut" class="UniversityAdmins mt-3">Cut: <span
+                                            class="text-default">{{globals.universityCut}}</span></label>
+                                    <input id="inputObjUpdateUniversity_Cut" #inputUniversity_Cut class="form-control" type="text" size=32>
+                                    <button type="button" (click)="setUniversityCut(inputUniversity_Cut.value)" class="btn btn-sm btn-default text-white">Set</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputObjUpdateUniversity_ConfigAddress" class="UniversityAdmins mt-3">Config address:</label>
+                                    <textarea class="form-control" rows="10" wrap="hard">{{globals.universityParams}}</textarea>
+                                    <input id="inputObjUpdateUniversity_ConfigAddress" #inputUniversity_Configaddress class="form-control" type="text" size=32 rows="10">
+                                    <button type="button" (click)="setUniversityParams(inputUniversity_Configaddress.value)" class="btn btn-sm btn-default text-white">Set</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>University Admins</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['DEFAULT_ADMIN_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('DEFAULT_ADMIN_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-link"></i></span>
                                             </div>
+                                            <input #inputUniversityAdmins class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('DEFAULT_ADMIN_ROLE',inputUniversityAdmins.value)">Add</button>
                                         </div>
-                                    </div>
-                                    <div class="mt-2 py-5 border-top">
-                                        <h4 class="UniversityAdmins mt-3">University Roles:</h4>
-                                        <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngFor="let genericUser of roleMembersAdmin['DEFAULT_ADMIN_ROLE']">
-                                                <tr>
-                                                    <th scope="row">{{ genericUser.id }}</th>
-                                                    <td>{{ genericUser.address }}</td>
-                                                    <td><a (click)="revokeRole('DEFAULT_ADMIN_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="col-md-6">
-                                            <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                                                <div class="input-group input-group-alternative mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                                    </div>
-                                                    <input #inputUniversityAdmins class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('DEFAULT_ADMIN_ROLE',inputUniversityAdmins.value)">Add</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4 class="classroomListAdmins mt-3">Student List Admins:</h4>
-                                        <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngFor="let genericUser of roleMembersAdmin['READ_STUDENT_LIST_ROLE']">
-                                                <tr>
-                                                    <th scope="row">{{ genericUser.id }}</th>
-                                                    <td>{{ genericUser.address }}</td>
-                                                    <td><a (click)="revokeRole('READ_STUDENT_LIST_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="col-md-6">
-                                            <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                                                <div class="input-group input-group-alternative mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                                    </div>
-                                                    <input #inputUniversityAdminStudentListAdmins class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('READ_STUDENT_LIST_ROLE',inputUniversityAdminStudentListAdmins.value)">Add</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4 class="GrantsManagers mt-3">Funds Managers:</h4>
-                                        <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngFor="let genericUser of roleMembersAdmin['FUNDS_MANAGER_ROLE']">
-                                                <tr>
-                                                    <th scope="row">{{ genericUser.id }}</th>
-                                                    <td>{{ genericUser.address }}</td>
-                                                    <td><a (click)="revokeRole('FUNDS_MANAGER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="col-md-6">
-                                            <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                                                <div class="input-group input-group-alternative mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                                    </div>
-                                                    <input #inputUniversityAdminFundsManagers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('FUNDS_MANAGER_ROLE',inputUniversityAdminFundsManagers.value)">Add</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4 class="FundsManagers mt-3">Classlist Managers:</h4>
-                                        <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngFor="let genericUser of roleMembersAdmin['CLASSLIST_ADMIN_ROLE']">
-                                                <tr>
-                                                    <th scope="row">{{ genericUser.id }}</th>
-                                                    <td>{{ genericUser.address }}</td>
-                                                    <td><a (click)="revokeRole('CLASSLIST_ADMIN_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="col-md-6">
-                                            <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                                                <div class="input-group input-group-alternative mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                                    </div>
-                                                    <input #inputUniversityAdminClasslistManagers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('CLASSLIST_ADMIN_ROLE',inputUniversityAdminClasslistManagers.value)">Add</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4 class="Overseers mt-3">Grants Managers:</h4>
-                                        <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngFor="let genericUser of roleMembersAdmin['GRANTS_MANAGER_ROLE']">
-                                                <tr>
-                                                    <th scope="row">{{ genericUser.id }}</th>
-                                                    <td>{{ genericUser.address }}</td>
-                                                    <td><a (click)="revokeRole('GRANTS_MANAGER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="col-md-6">
-                                            <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                                                <div class="input-group input-group-alternative mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                                    </div>
-                                                    <input #inputUniversityAdminGrantsManagers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('GRANTS_MANAGER_ROLE',inputUniversityAdminGrantsManagers.value)">Add</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4 class="RegisteredProviders mt-3">University Overseers:</h4>
-                                        <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngFor="let genericUser of roleMembersAdmin['UNIVERSITY_OVERSEER_ROLE']">
-                                                <tr>
-                                                    <th scope="row">{{ genericUser.id }}</th>
-                                                    <td>{{ genericUser.address }}</td>
-                                                    <td><a (click)="revokeRole('UNIVERSITY_OVERSEER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="col-md-6">
-                                            <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                                                <div class="input-group input-group-alternative mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                                    </div>
-                                                    <input #inputUniversityAdminUniversityOverseers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('UNIVERSITY_OVERSEER_ROLE',inputUniversityAdminUniversityOverseers.value)">Add</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4 class="ReadStudentList mt-3">University Registered Suplier:</h4>
-                                        <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngFor="let genericUser of roleMembersAdmin['REGISTERED_SUPPLIER_ROLE']">
-                                                <tr>
-                                                    <th scope="row">{{ genericUser.id }}</th>
-                                                    <td>{{ genericUser.address }}</td>
-                                                    <td><a (click)="revokeRole('REGISTERED_SUPPLIER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="col-md-6">
-                                            <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                                                <div class="input-group input-group-alternative mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fa fa-link"></i></span>
-                                                    </div>
-                                                    <input #inputUniversityAdminRegisteredSuplier class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('REGISTERED_SUPPLIER_ROLE',inputUniversityAdminRegisteredSuplier.value)">Add</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4 class="StudentList mt-3">Students:</h4>
-                                        <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngFor="let genericUser of roleMembersAdmin['STUDENT_IDENTITY_ROLE']">
-                                                <tr>
-                                                    <th scope="row">{{ genericUser.id }}</th>
-                                                    <td>{{ genericUser.address }}</td>
-                                                    <td><a (click)="revokeRole('STUDENT_IDENTITY_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Remove</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <h4 class="ReadStudentList mt-3">Classrooms:</h4>
-                                        <table id="UniversityAdminsTable" class="table table-borderless table-striped table-earning">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngFor="let genericUser of roleMembersAdmin['CLASSROOM_PROFESSOR_ROLE']">
-                                                <tr>
-                                                    <th scope="row">{{ genericUser.id }}</th>
-                                                    <td>{{ genericUser.address }}</td>
-                                                    <td><a (click)="revokeRole('CLASSROOM_PROFESSOR_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Remove</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="mt-2 py-5 border-top">
-                                        <h4 class="UniversityAdmins mt-3">University ENS Admin</h4>
-                                        <h4 class="UniversityAdmins mt-3">ENS Name: <span class="text-default">{{globals.universityENSName}}</span> <span *ngIf=globals.universityENSNameRecord class="badge badge-pill badge-success">Recorded</span><span *ngIf=!globals.universityENSNameRecord
-                                                class="badge badge-pill badge-warning">Not Recorded</span></h4>
-                                        <h4 class="UniversityAdmins mt-3">ENS TTL: <span class="text-default">{{globals.universityENSTTL}}</span> </h4>
-                                        <h4 class="UniversityAdmins mt-3">Description: <span class="text-default">{{globals.universityENSDescription}}</span> </h4>
-                                        <input #inputUniversityAdminENSDescription class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="updateENSDescription(inputUniversityAdminENSDescription.value)">Update</button>
-                                        <h4 class="UniversityAdmins mt-3">Notice: <span class="text-default">{{globals.universityENSNotice}}</span> </h4>
-                                        <input #inputUniversityAdminENSNotice class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="updateENSNotice(inputUniversityAdminENSNotice.value)">Update</button>
-                                        <button *ngIf=!globals.universityENSNameRecord type="button" class="btn btn-warning" (click)="setupUniversityENS()">Setup ENS</button>
-                                        <h4 class="UniversityAdmins mt-3">Attach University Fund</h4>
-                                        <input #inputFundAddress class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="attachFund(inputFundAddress.value)">Attach fund</button>
-                                        <h4 class="UniversityAdmins mt-3">University Fund Admin</h4>
-                                        <input #inputFundAdminAddress class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-warning" (click)="grantFundAdmin(inputFundAdminAddress.value)">Give fund admin</button>
-                                        <h4 class="UniversityAdmins mt-3">Apply funds in University Fund</h4>
-                                        <input #inputFundApply class="form-control" placeholder="DAI value" type="text" size=32> <button type="button" class="btn btn-primary" (click)="applyFunds(inputFundApply.value)">Apply funds</button>
-                                        <h4 class="UniversityAdmins mt-3">Recover funds from University Fund</h4>
-                                        <input #inputFundRecover class="form-control" placeholder="DAI value" type="text" size=32> <button type="button" class="btn btn-primary" (click)="recoverFunds(inputFundRecover.value)">Recover funds</button>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Student List Admins:</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="StudentListTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['READ_STUDENT_LIST_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('READ_STUDENT_LIST_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                            </div>
+                                            <input #inputUniversityAdminStudentListAdmins class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('READ_STUDENT_LIST_ROLE',inputUniversityAdminStudentListAdmins.value)">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Funds Managers:</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="FundsManagersTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['FUNDS_MANAGER_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('FUNDS_MANAGER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                            </div>
+                                            <input #inputUniversityAdminFundsManagers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('FUNDS_MANAGER_ROLE',inputUniversityAdminFundsManagers.value)">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Classlist Managers:</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="ClasslistManagersTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['CLASSLIST_ADMIN_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('CLASSLIST_ADMIN_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                            </div>
+                                            <input #inputUniversityAdminClasslistManagers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('CLASSLIST_ADMIN_ROLE',inputUniversityAdminClasslistManagers.value)">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Grants Managers:</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="GrantsManagersTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['GRANTS_MANAGER_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('GRANTS_MANAGER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                            </div>
+                                            <input #inputUniversityAdminGrantsManagers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('GRANTS_MANAGER_ROLE',inputUniversityAdminGrantsManagers.value)">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>University Overseers:</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="UniversityOverseersTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['UNIVERSITY_OVERSEER_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('UNIVERSITY_OVERSEER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                            </div>
+                                            <input #inputUniversityAdminUniversityOverseers class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('UNIVERSITY_OVERSEER_ROLE',inputUniversityAdminUniversityOverseers.value)">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>University Registered Suplier:</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="RegisteredSuplierTable" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['REGISTERED_SUPPLIER_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('REGISTERED_SUPPLIER_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Revoke</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                        <div class="input-group input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                            </div>
+                                            <input #inputUniversityAdminRegisteredSuplier class="form-control" placeholder="Address" type="text" size=32> <button type="button" class="btn btn-primary" (click)="grantRole('REGISTERED_SUPPLIER_ROLE',inputUniversityAdminRegisteredSuplier.value)">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Students:</h4>
+                                    <table id="StudentList" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['STUDENT_IDENTITY_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('STUDENT_IDENTITY_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Remove</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4>Classrooms:</h4>
+                                    <table id="ClassroomList" class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let genericUser of roleMembersAdmin['CLASSROOM_PROFESSOR_ROLE']">
+                                            <tr>
+                                                <th scope="row">{{ genericUser.id }}</th>
+                                                <td>{{ genericUser.address }}</td>
+                                                <td><a (click)="revokeRole('CLASSROOM_PROFESSOR_ROLE',genericUser.address)" class="btn btn-sm btn-default text-white">Remove</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>University ENS Admin</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>ENS Name: <span class="text-default">{{globals.universityENSName}}</span> <span *ngIf=globals.universityENSNameRecord class="badge badge-pill badge-success">Recorded</span><span *ngIf=!globals.universityENSNameRecord
+                                            class="badge badge-pill badge-warning">Not Recorded</span></p>
+                                    <p>ENS TTL: <span class="text-default">{{globals.universityENSTTL}}</span> </p>
+                                    <button *ngIf=!globals.universityENSNameRecord type="button" class="btn btn-warning" (click)="setupUniversityENS()">Setup ENS</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>Description: <span class="text-default">{{globals.universityENSDescription}}</span> </p>
+                                    <input #inputUniversityAdminENSDescription class="form-control" placeholder="Address" type="text" size=32>
+                                    <button type="button" class="btn btn-primary" (click)="updateENSDescription(inputUniversityAdminENSDescription.value)">Update</button>
+                                    <p>Notice: <span class="text-default">{{globals.universityENSNotice}}</span> </p>
+                                    <input #inputUniversityAdminENSNotice class="form-control" placeholder="Address" type="text" size=32>
+                                    <button type="button" class="btn btn-primary" (click)="updateENSNotice(inputUniversityAdminENSNotice.value)">Update</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Fund Admin:</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <p>Attach University Fund</p>
+                                    <input #inputFundAddress class="form-control" placeholder="Address" type="text" size=32>
+                                    <button type="button" class="btn btn-primary" (click)="attachFund(inputFundAddress.value)">Attach fund</button>
+                                    <p>University Fund Admin</p>
+                                    <input #inputFundAdminAddress class="form-control" placeholder="Address" type="text" size=32>
+                                    <button type="button" class="btn btn-warning" (click)="grantFundAdmin(inputFundAdminAddress.value)">Give fund admin</button>
+                                    <p>Apply funds in University Fund</p>
+                                    <input #inputFundApply class="form-control" placeholder="DAI value" type="text" size=32>
+                                    <button type="button" class="btn btn-primary" (click)="applyFunds(inputFundApply.value)">Apply funds</button>
+                                    <p>Recover funds from University Fund</p>
+                                    <input #inputFundRecover class="form-control" placeholder="DAI value" type="text" size=32>
+                                    <button type="button" class="btn btn-primary" (click)="recoverFunds(inputFundRecover.value)">Recover funds</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="#information" (click)="closeModal('custom-modal-university-admin')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
-                                <span class="btn-inner--text">Back</span>
-                            </a>
-                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#information" (click)="closeModal('custom-modal-university-admin')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                            <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                            <span class="btn-inner--text">Back</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -805,23 +864,25 @@
     <jw-modal id="transfer-dai">
         <div id="donationInfo" class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
-                <div class="cmodal-body p-0">
+                <div class="modal-body p-0">
                     <div class="card shadow border-0 bg-gradient-success">
                         <div class="card-header justify-content-center bg-gradient-success">
-                            <h3 class="text-center text-white">Make a Donation</h3>
+                            <h4 class="text-center text-white">Make a Donation (DAI)</h4>
+                            <button type="button" (click)="closeModal('transfer-dai')" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="card-body justify-content-center bg-gradient-success">
-                            <h4 class="text-center text-white">All donations go directly to the university endowment, helping good students to get grants</h4>
-                            <input #donationInputVal class="form-control" type="number" (focus)="focus=true" (blur)="focus=false">
-                            <div class="card-footer justify-content-center bg-gradient-success">
-                                <button (click)="closeModal('transfer-dai')" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
-                                    <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
-                                    <span class="btn-inner--text">Back</span>
-                                </button>
-                                <button type="submit" (click)="donateDAi(donationInputVal.value)" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
-                                    <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
-                                    <span class="btn-inner--text">Donate</span>
-                                </button>
+                            <h5 class="text-center text-white">All donations go directly to the university endowment, helping good students to get grants</h5>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6 align-content-center mt-2">
+                                    <input #donationInputVal class="form-control" placeholder="DAI" type="number" (focus)="focus=true" (blur)="focus=false">
+                                </div>
+                                <div class="col-md-6 align-content-center mt-2">
+                                    <button type="submit" (click)="donateDAi(donationInputVal.value)" class="btn btn-neutral btn-block btn-icon mb-3 mb-sm-0">
+                                        <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
+                                        <span class="btn-inner--text">Donate</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -829,15 +890,5 @@
             </div>
         </div>
     </jw-modal>
-    <div id="overlay">
-        <span id="nav" *ngIf="globals.overlayLoader">
-			<div class="spinner" style="display: block; position: fixed">
-			</div>
-		</span>
-        <span id="nav" *ngIf="globals.overlayLoader">
-			<div class="submit-message" style="display: block; color: #FFFFFF; position: fixed; left: 49.7%; top: 54.5%;">
-				Loading Transaction...
-			</div>
-		</span>
-    </div>
+    <ngx-ui-loader></ngx-ui-loader>
 </main>
