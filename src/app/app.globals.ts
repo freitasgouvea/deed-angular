@@ -5,6 +5,7 @@ import { Classroom } from 'src/models/classroom.model';
 import { ENSService } from './services/ens.service';
 import { Student } from 'src/models/student.model';
 import { baseClientService } from './services/baseClient.service';
+import { MetamaskService } from './services/metamask.service';
 
 @Injectable()
 export class Globals {
@@ -13,7 +14,7 @@ export class Globals {
 
 	public overlayLoader = false;
 
-	public service: PortisService | InfuraService;
+	public service: PortisService | InfuraService | MetamaskService;
 	public ensService = new ENSService();
 	public address: string;
 	public mode = 'unconnected';
