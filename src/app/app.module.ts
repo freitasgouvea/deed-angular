@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { ModalModule } from './_modal';
-import { Globals } from './app.globals'
+import { Globals } from './app.globals';
 
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
@@ -12,7 +12,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { StudentComponent } from './student/student.component';
 import { ClassroomInfoComponent } from './classroom/classroomInfo.component';
-import { FundComponent } from './fund/fund.component'
+import { FundComponent } from './fund/fund.component';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { FundComponent } from './fund/fund.component'
     BrowserModule,
     RouterModule,
     ModalModule,
-    AppRoutingModule
+	AppRoutingModule,
+	NgxUiLoaderModule
   ],
   providers: [Globals],
   bootstrap: [AppComponent],

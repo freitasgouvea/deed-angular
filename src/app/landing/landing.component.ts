@@ -8,6 +8,7 @@ import { Student } from 'src/models/student.model';
 import { ModalService } from '../_modal';
 import { Globals } from '../app.globals';
 import { ClassroomInfoComponent } from '../classroom/classroomInfo.component';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
@@ -44,7 +45,8 @@ export class LandingComponent implements OnInit {
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
-		public portisService: PortisService
+		public portisService: PortisService,
+		private ngxLoader: NgxUiLoaderService
 	) {}
 
 	async ngOnInit() {
@@ -117,6 +119,7 @@ export class LandingComponent implements OnInit {
 	}
 
 	private async initSigner() {
+		this.globals.address = await this.globals.service.getAddress();
 		this.globals.ensService.configureProvider(this.portisService.provider);
 		if (this.roleMembersAdmin &&
 			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find((element) => element.address == this.globals.address))
@@ -429,12 +432,16 @@ export class LandingComponent implements OnInit {
 
 	async donateDAi(val: number) {
 		const tx1 = await this.globals.service.approveDAI(val);
+		this.ngxLoader.start();
 		this.globals.overlayLoader = true;
 		await tx1.wait();
+		this.ngxLoader.stop();
 		this.globals.overlayLoader = false;
 		const tx2 = await this.globals.service.donateDAI(val);
+		this.ngxLoader.start();
 		this.globals.overlayLoader = true;
 		await tx1.wait();
+		this.ngxLoader.stop();
 		this.globals.overlayLoader = false;
 	}
 }

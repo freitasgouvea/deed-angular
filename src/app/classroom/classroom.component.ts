@@ -13,6 +13,7 @@ import { ethers } from 'ethers';
 import * as Web3 from 'web3';
 import { StudentApplication } from 'src/models/studentApplication.model';
 import { Student } from 'src/models/student.model';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
 	selector: 'app-classroom',
@@ -34,7 +35,8 @@ export class ClassroomComponent implements OnInit {
 	constructor(
 		public globals: Globals,
 		private modalService: ModalService,
-		public portisService: PortisService
+		public portisService: PortisService,
+		private ngxLoader: NgxUiLoaderService
 	) {}
 
 	async ngOnInit() {
@@ -93,10 +95,11 @@ export class ClassroomComponent implements OnInit {
 				(material) => (this.myStudentApplication.material = material)
 			);
 		this.globals.service.studentApplicationContractInstance
-				.verifyAnswer()
-				.then(
-					(correct) => (this.myStudentApplication.correctAnswer = correct)
-				);
+			.verifyAnswer()
+			.then(
+				(correct: boolean) => (this.myStudentApplication.correctAnswer = correct),
+				() => {console.warn("Answer not found")}
+			);
 
 		this.updatePhase(state);
 	}
@@ -248,6 +251,7 @@ export class ClassroomComponent implements OnInit {
 				this.refreshClassroomParams();
 				this.refreshClassroomData();
 			}
+			this.ngxLoader.stop();
 		});
 		this.refreshClassroomFunds();
 		this.refreshClassroomMetadata();
@@ -314,6 +318,7 @@ export class ClassroomComponent implements OnInit {
 				node,
 				this.globals.selectedClassroom.smartcontract
 			);
+		this.ngxLoader.stop();
 	}
 
 	async teacherClaimSubnode(label, owner, classroom) {
@@ -332,7 +337,10 @@ export class ClassroomComponent implements OnInit {
 			.toLowerCase()
 			.replace(/\s/g, '');
 		const node = this.globals.ensService.getSubNode(normalName);
-		await this.globals.ensService.setTxRecord(type, text, node);
+		const tx = await this.globals.ensService.setTxRecord(type, text, node);
+		this.ngxLoader.start();
+		await tx.wait();
+		this.ngxLoader.stop();
 	}
 
 	async refreshClassroomMetadata(
@@ -550,43 +558,43 @@ export class ClassroomComponent implements OnInit {
 	openApplications() {
 		this.globals.service.classroomContractInstance
 			.openApplications()
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	closeApplications() {
 		this.globals.service.classroomContractInstance
 			.closeApplications()
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	applyDAI() {
 		this.globals.service.classroomContractInstance
 			.applyDAI()
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	beginCourse() {
 		this.globals.service.classroomContractInstance
 			.beginCourse(false)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	finishCourse() {
 		this.globals.service.classroomContractInstance
 			.finishCourse()
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	processResults() {
 		this.globals.service.classroomContractInstance
 			.processResults()
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	withdrawAllResults() {
 		this.globals.service.classroomContractInstance
 			.withdrawAllResults()
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	configureUniswap(
@@ -608,49 +616,53 @@ export class ClassroomComponent implements OnInit {
 	changeName(val) {
 		this.globals.service.classroomContractInstance
 			.changeName(val)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	changePrincipalCut(percentage) {
 		this.globals.service.classroomContractInstance
 			.changePrincipalCut(percentage * 1e4)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	changePoolCut(percentage) {
 		this.globals.service.classroomContractInstance
 			.changePoolCut(percentage * 1e4)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	changeMinScore(val) {
 		this.globals.service.classroomContractInstance
 			.changeMinScore(val)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	changeEntryPrice(val: string) {
 		this.globals.service.classroomContractInstance
 			.changeEntryPrice(ethers.utils.parseEther(val))
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	changeDuration(val) {
 		this.globals.service.classroomContractInstance
 			.changeDuration(val)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	changeCompoundApplyPercentage(percentage) {
+
 		this.globals.service.classroomContractInstance
 			.changeCompoundApplyPercentage(percentage * 1e4)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
 	}
 
 	changeChallenge(addr) {
 		this.globals.service.classroomContractInstance
 			.changeChallenge(addr)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomInfo()));
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	configureOracles(
@@ -693,7 +705,10 @@ export class ClassroomComponent implements OnInit {
 				linkToken,
 				true
 			)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomConfigs());
+			});
 	}
 
 	configureAave(lendingPoolAddressesProvider: string) {
@@ -702,7 +717,10 @@ export class ClassroomComponent implements OnInit {
 			: environment.AaveLendingPoolAddressesProvider;
 		this.globals.service.classroomContractInstance
 			.configureAave(lendingPoolAddressesProvider)
-			.then((tx) => tx.wait().then(() => this.refreshClassroomConfigs()));
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomConfigs());
+			});
 	}
 
 	async studentSelfRegister(_name: string): Promise<any> {
@@ -714,6 +732,7 @@ export class ClassroomComponent implements OnInit {
 			const selfRegister = await this.globals.service.studentSelfRegister(
 				_name
 			);
+			this.ngxLoader.start();
 			if (!selfRegister) {
 				this.txMode = 'failedTX';
 			} else {
@@ -721,6 +740,7 @@ export class ClassroomComponent implements OnInit {
 				this.txMode = 'successTX';
 			}
 		}
+		this.ngxLoader.stop();
 	}
 
 	async applyClassroom(): Promise<any> {
@@ -733,6 +753,7 @@ export class ClassroomComponent implements OnInit {
 			const application = await this.globals.service.applyToClassroom(
 				classroomAddress
 			);
+			this.ngxLoader.start();
 			if (!application) {
 				this.txMode = 'failedTX';
 			} else {
@@ -740,6 +761,7 @@ export class ClassroomComponent implements OnInit {
 				this.txMode = 'successTX';
 			}
 		}
+		this.ngxLoader.stop();
 	}
 
 	async approveStart(): Promise<any> {
@@ -750,6 +772,7 @@ export class ClassroomComponent implements OnInit {
 			value,
 			this.myStudentApplication.address
 		);
+		this.ngxLoader.start();
 		if (!approve) {
 			this.txMode = 'failedTX';
 		} else {
@@ -757,6 +780,7 @@ export class ClassroomComponent implements OnInit {
 			this.txMode = 'successTX';
 			this.allowanceMode = 1;
 		}
+		this.ngxLoader.stop();
 	}
 
 	allowanceMode = -1;
@@ -782,6 +806,7 @@ export class ClassroomComponent implements OnInit {
 		this.txOn();
 		this.txMode = 'processingTX';
 		const pay = await this.globals.service.payEntryPrice();
+		this.ngxLoader.start();
 		if (!pay) {
 			this.txMode = 'failedTX';
 		} else {
@@ -790,6 +815,7 @@ export class ClassroomComponent implements OnInit {
 			this.allowanceMode = 3;
 			this.phase = 2;
 		}
+		this.ngxLoader.stop();
 	}
 
 	async sendAnswer(secret: string): Promise<any> {
@@ -803,6 +829,7 @@ export class ClassroomComponent implements OnInit {
 				classroomAddress,
 				secret
 			);
+			this.ngxLoader.start();
 			if (!sendTx) {
 				this.txMode = 'failedTX';
 			} else {
@@ -810,6 +837,7 @@ export class ClassroomComponent implements OnInit {
 				this.txMode = 'successTX';
 			}
 		}
+		this.ngxLoader.stop();
 	}
 
 	async colletcReward(): Promise<any> {
@@ -824,6 +852,7 @@ export class ClassroomComponent implements OnInit {
 				classroomAddress,
 				studentAddress
 			);
+			this.ngxLoader.start();
 			if (!collectTx) {
 				this.txMode = 'failedTX';
 			} else {
@@ -831,5 +860,6 @@ export class ClassroomComponent implements OnInit {
 				this.txMode = 'successTX';
 			}
 		}
+		this.ngxLoader.stop();
 	}
 }

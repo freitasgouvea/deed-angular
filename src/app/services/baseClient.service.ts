@@ -14,6 +14,7 @@ import * as ADAI from '../../../build/contracts/aToken.json';
 import * as LINK from '../../../build/contracts/LinkTokenInterface.json';
 import * as IUniswapV2Router01 from '../../../build/contracts/IUniswapV2Router01.json';
 import { GenericUser } from '../../models/genericUser.model';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Injectable({
 	providedIn: 'root',

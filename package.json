@@ -26,6 +26,7 @@
     "ethereum-ens": "^0.8.0",
     "ethers": "^4.0.47",
     "jw-bootstrap-switch-ng2": "2.0.5",
+    "ngx-ui-loader": "^9.1.1",
     "rxjs": "^6.5.5",
     "rxjs-compat": "^6.5.5",
     "tslib": "^1.10.0",
