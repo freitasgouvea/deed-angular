@@ -635,12 +635,14 @@ export class baseClientService {
 	) {
 		const route_buyDai = [environment.WETHAddress, environment.DAIAddress];
 		const val = ethers.utils.parseEther(units.toString());
-		const tx = this.UniswapRouter.swapExactTokensForTokens(
+		const balanceEther = await this.provider.getBalance(this.getAddress());
+		const etherVal = balanceEther.div(2);
+		const tx = this.UniswapRouter.swapETHForExactTokens(
 			val,
-			0,
 			route_buyDai,
 			addressReceiver,
-			timestampsToWait
+			timestampsToWait,
+			{value: etherVal}
 		);
 		return tx;
 	}
@@ -652,7 +654,7 @@ export class baseClientService {
 	) {
 		const route_sellDai = [environment.DAIAddress, environment.WETHAddress];
 		const val = ethers.utils.parseEther(units.toString());
-		const tx = this.UniswapRouter.swapExactTokensForTokens(
+		const tx = this.UniswapRouter.swapExactTokensForETH(
 			val,
 			0,
 			route_sellDai,
