@@ -329,6 +329,7 @@
 							  <option>avatar</option>
 							  <option>description</option>
 							  <option>notice</option>
+							  <option>skylink</option>
 							</select>
                         </div>
                         <div class="form-group">
@@ -336,6 +337,14 @@
                             <input #classroomMetadataValueInput type="text" class="form-control" id="classroomMetadataValueInput" placeholder="new value">
                         </div>
                         <button type="button" class="btn btn-info" (click)="setMetadataRecord(classroomMetadataSelectType.value, classroomMetadataValueInput.value)">Change</button>
+                        <div class="mt-2 py-5 border-top text-center">
+                            <h4 class="UniversityAdmins mt-3">Upload to Siasky</h4>
+                        </div>
+                        <div class="form-group">
+                            <label for="file">Choose File</label>
+                            <input type="file" id="file" (change)="uploadSkylink($event.target.files)">
+                        </div>
+                        <button type="button" class="btn btn-info" (click)="openModal('custom-modal-4')">View Material</button>
                     </div>
                 </div>
             </div>
@@ -681,15 +690,17 @@
                                     <textarea class="form-control" rows="10" wrap="hard">{{myStudentApplication.material}}</textarea>
                                 </div>
                             </div>
+                            <h3 class="text-center text-white">Sia Skylink</h3>
+                            <h2 class="description text-center text-white">{{globals.selectedClassroom.metadata.skylink}}</h2>
                         </div>
                         <div class="card-footer bg-gradient-default">
                             <a (click)="closeModal('custom-modal-4'); txOff(); refreshClassroomInfo();" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
-                                <span class="btn-inner--text">Request</span>
+                            <a (click)="downloadSkylink(globals.selectedClassroom.metadata.skylink, 'material.txt')" type="submit" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                                <span class="btn-inner--icon"><i class="fa fa-download"></i></span>
+                                <span class="btn-inner--text">Download Skylink</span>
                             </a>
                         </div>
                     </div>
