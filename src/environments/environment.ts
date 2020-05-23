@@ -4,6 +4,7 @@
 
 export const environment = {
 	production: false,
+	connectMetamskForTests: true,
 	UniversityAddress: '0xa03E45a84E253aE34C1298615cC3d140Bc69ECc9',
 	InfuraKey: '50d52dadc1054facbb36bd19254da96e',
 	network: 'ropsten',

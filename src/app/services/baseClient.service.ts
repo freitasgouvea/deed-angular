@@ -13,8 +13,6 @@ import * as CDAI from '../../../build/contracts/CERC20.json';
 import * as ADAI from '../../../build/contracts/aToken.json';
 import * as LINK from '../../../build/contracts/LinkTokenInterface.json';
 import * as IUniswapV2Router01 from '../../../build/contracts/IUniswapV2Router01.json';
-import * as ExampleRightStudentAnswer from '../../../build/contracts/ExampleStudentAnswer.json';
-import * as ExampleWrongStudentAnswer from '../../../build/contracts/ExampleWrongStudentAnswer.json';
 import { GenericUser } from '../../models/genericUser.model';
 
 @Injectable({
@@ -34,6 +32,8 @@ export class baseClientService {
 	public provider: any;
 	public networkName: any;
 	public useSigner = false;
+
+	account: any;
 
 	constructor() {}
 
@@ -78,8 +78,10 @@ export class baseClientService {
 	}
 
 	async getAddress() {
+		if (this.account) return this.account;
 		const addresses = await this.provider.listAccounts();
-		return addresses[0];
+		this.account = addresses[0];
+		return this.account;
 	}
 
 	async connectUniversity() {

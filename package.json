@@ -29,7 +29,7 @@
     "rxjs": "^6.5.5",
     "rxjs-compat": "^6.5.5",
     "tslib": "^1.10.0",
-    "web3": "^1.2.7",
+    "web3": "^1.2.8",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

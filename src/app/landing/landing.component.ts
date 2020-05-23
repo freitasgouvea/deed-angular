@@ -13,6 +13,10 @@ import { PortisService } from '../services/portis.service';
 import { InfuraService } from '../services/infura.service';
 import { ENSService } from '../services/ens.service';
 import { environment } from 'src/environments/environment';
+import Web3 from 'web3';
+import { MetamaskService } from '../services/metamask.service';
+
+const web3 = new Web3(Web3.givenProvider);
 
 @Component({
 	selector: 'app-landing',
@@ -45,15 +49,21 @@ export class LandingComponent implements OnInit {
 
 	async ngOnInit() {
 		if (!this.globals.service) {
-			this.globals.service = new InfuraService();
+			if (environment.connectMetamskForTests)
+				this.connectMetamaskForTests();
+			else this.globals.service = new InfuraService();
 			await this.globals.ensService.configureProvider(
 				this.globals.service.provider,
 				false
 			);
-			console.log('Connected to infura');
 		}
 		if (this.globals.universityInfoNeedsRefresh)
 			this.refreshUniversityInfo();
+	}
+
+	connectMetamaskForTests() {
+		this.globals.service = new MetamaskService();
+		this.initSigner();
 	}
 
 	openModal(id: string) {
@@ -75,7 +85,11 @@ export class LandingComponent implements OnInit {
 
 	onConnect(student: Student | void): void {
 		if (student) this.globals.selectedStudent = student;
-		else this.globals.selectedStudent = new Student(this.globals, this.globals.ADDR0);
+		else
+			this.globals.selectedStudent = new Student(
+				this.globals,
+				this.globals.ADDR0
+			);
 	}
 
 	txOn() {
@@ -99,24 +113,23 @@ export class LandingComponent implements OnInit {
 		}
 		this.globals.address = await this.portisService.getAddress();
 		this.globals.service = this.portisService;
+		await this.initSigner();
+	}
+
+	private async initSigner() {
 		this.globals.ensService.configureProvider(this.portisService.provider);
-		if (
-			this.roleMembersAdmin &&
-			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(
-				(element) => element.address == this.globals.address
-			)
-		)
+		if (this.roleMembersAdmin &&
+			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find((element) => element.address == this.globals.address))
 			this.globals.userIsUniversityAdmin = true;
 		const isRegistered = await this.globals.service.isStudentRegistred();
 		if (!isRegistered) {
 			this.globals.mode = 'connected';
-			return;
-		} else {
+		}
+		else {
 			this.globals.userIsStudent = true;
 			this.globals.mode = 'registered';
 			const studentSmartContract = await this.globals.service.getStudentSmartContract();
-			this.onConnect(new Student(this.globals, studentSmartContract))
-			return;
+			this.onConnect(new Student(this.globals, studentSmartContract));
 		}
 	}
 
@@ -249,7 +262,8 @@ export class LandingComponent implements OnInit {
 		classroom.metadata.avatar = await this.globals.ensService.getTxAvatar(
 			node
 		);
-		if (classroom.metadata.avatar.length < 5) classroom.metadata.avatar = this.globals.defaultClassroomImg;
+		if (classroom.metadata.avatar.length < 5)
+			classroom.metadata.avatar = this.globals.defaultClassroomImg;
 		classroom.metadata.description = await this.globals.ensService.getTxDescription(
 			node
 		);
@@ -312,11 +326,11 @@ export class LandingComponent implements OnInit {
 		this.globals.service.grantFundAdmin(address);
 	}
 
-	applyFunds(val: number){
+	applyFunds(val: number) {
 		this.globals.service.applyFunds(val);
 	}
 
-	recoverFunds(val: number){
+	recoverFunds(val: number) {
 		this.globals.service.recoverFunds(val);
 	}
 
@@ -413,7 +427,7 @@ export class LandingComponent implements OnInit {
 		return await this.globals.service.listRoles(role);
 	}
 
-	async donateDAi(val: number){
+	async donateDAi(val: number) {
 		const tx1 = await this.globals.service.approveDAI(val);
 		this.globals.overlayLoader = true;
 		await tx1.wait();
