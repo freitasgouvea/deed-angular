@@ -97,8 +97,11 @@ export class ClassroomComponent implements OnInit {
 		this.globals.service.studentApplicationContractInstance
 			.verifyAnswer()
 			.then(
-				(correct: boolean) => (this.myStudentApplication.correctAnswer = correct),
-				() => {console.warn("Answer not found")}
+				(correct: boolean) =>
+					(this.myStudentApplication.correctAnswer = correct),
+				() => {
+					console.warn('Answer not found');
+				}
 			);
 
 		this.updatePhase(state);
@@ -108,11 +111,13 @@ export class ClassroomComponent implements OnInit {
 		const state = stateBN.toNumber();
 		if (state > 2) {
 			this.phase = 5;
-			if (this.myStudentApplication.funds == 0) this.phase++;
-			return;
+			this.globals.service.getDAIBalance(this.myStudentApplication.address).then((val) => {
+				if (val == 0) this.phase++;
+			});
+		} else {
+			this.phase = state + 1;
+			if (this.myStudentApplication.verifyAnswer) this.phase++;
 		}
-		this.phase = state + 1;
-		if (this.myStudentApplication.verifyAnswer) this.phase++;
 	}
 
 	refreshApplication() {
@@ -243,6 +248,45 @@ export class ClassroomComponent implements OnInit {
 	}
 
 	public refreshClassroomInfo() {
+		this.globals.service
+			.getClassroomInfo(this.globals.selectedClassroom.id)
+			.then(
+				([
+					title,
+					smartcontract,
+					startDate,
+					finishDate,
+					duration,
+					price,
+					minScore,
+					cutPrincipal,
+					cutPool,
+					isOpen,
+					isEmpty,
+					isActive,
+					isFinished,
+					addressChallenge,
+					owner,
+				]) =>
+					this.globals.selectedClassroom.setupInfo(
+						this.globals.selectedClassroom.id,
+						title,
+						smartcontract,
+						startDate,
+						finishDate,
+						duration / (60 * 60 * 24),
+						price,
+						minScore,
+						cutPrincipal / 1e4,
+						cutPool / 1e4,
+						isOpen,
+						isEmpty,
+						isActive,
+						isFinished,
+						addressChallenge,
+						owner
+					)
+			);
 		this.globals.service.getClassroomOwner().then((adminAddress) => {
 			this.globals.userIsClassroomAdmin =
 				this.globals.address == adminAddress;
@@ -521,6 +565,13 @@ export class ClassroomComponent implements OnInit {
 				(val) =>
 					(this.globals.selectedClassroom.classdata.validStudents = val)
 			);
+		this.globals.service.classroomContractInstance
+			.courseBalance()
+			.then(
+				(val) =>
+					(this.globals.selectedClassroom.classdata.courseBalance =
+						val / 1e18)
+			);
 		this.courseFunds();
 	}
 
@@ -558,43 +609,87 @@ export class ClassroomComponent implements OnInit {
 	openApplications() {
 		this.globals.service.classroomContractInstance
 			.openApplications()
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	closeApplications() {
 		this.globals.service.classroomContractInstance
 			.closeApplications()
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	applyDAI() {
 		this.globals.service.classroomContractInstance
-			.applyDAI()
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.applyDAI({ gasLimit: 821000 })
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	beginCourse() {
 		this.globals.service.classroomContractInstance
 			.beginCourse(false)
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	finishCourse() {
 		this.globals.service.classroomContractInstance
-			.finishCourse()
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.finishCourse({ gasLimit: 1210000 })
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
-	processResults() {
-		this.globals.service.classroomContractInstance
-			.processResults()
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+	async processResults() {
+		let tx;
+		tx = await this.globals.service.classroomContractInstance.processResults();
+		this.ngxLoader.start();
+		await tx.wait();
+		this.ngxLoader.stop();
+		tx = await this.globals.service.classroomContractInstance.startAnswerVerification();
+		this.ngxLoader.start();
+		await tx.wait();
+		this.ngxLoader.stop();
+		tx = await this.globals.service.classroomContractInstance.accountValues();
+		this.ngxLoader.start();
+		await tx.wait();
+		this.ngxLoader.stop();
+		tx = await this.globals.service.classroomContractInstance.resolveStudentAllowances();
+		this.ngxLoader.start();
+		await tx.wait();
+		this.ngxLoader.stop();
+		tx = await this.globals.service.classroomContractInstance.resolveUniversityCut();
+		this.ngxLoader.start();
+		await tx.wait();
+		this.ngxLoader.stop();
+		tx = await this.globals.service.classroomContractInstance.updateStudentScores();
+		this.ngxLoader.start();
+		await tx.wait();
+		this.ngxLoader.stop();
+		tx = await this.globals.service.classroomContractInstance.endProcessResults();
+		this.ngxLoader.start();
+		await tx.wait();
+		this.refreshClassroomInfo();
 	}
 
 	withdrawAllResults() {
 		this.globals.service.classroomContractInstance
 			.withdrawAllResults()
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	configureUniswap(
@@ -616,44 +711,64 @@ export class ClassroomComponent implements OnInit {
 	changeName(val) {
 		this.globals.service.classroomContractInstance
 			.changeName(val)
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	changePrincipalCut(percentage) {
 		this.globals.service.classroomContractInstance
 			.changePrincipalCut(percentage * 1e4)
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	changePoolCut(percentage) {
 		this.globals.service.classroomContractInstance
 			.changePoolCut(percentage * 1e4)
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	changeMinScore(val) {
 		this.globals.service.classroomContractInstance
 			.changeMinScore(val)
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	changeEntryPrice(val: string) {
 		this.globals.service.classroomContractInstance
 			.changeEntryPrice(ethers.utils.parseEther(val))
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	changeDuration(val) {
 		this.globals.service.classroomContractInstance
 			.changeDuration(val)
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	changeCompoundApplyPercentage(percentage) {
-
 		this.globals.service.classroomContractInstance
 			.changeCompoundApplyPercentage(percentage * 1e4)
-			.then((tx) => {this.ngxLoader.start();tx.wait().then(() => this.refreshClassroomInfo())});
+			.then((tx) => {
+				this.ngxLoader.start();
+				tx.wait().then(() => this.refreshClassroomInfo());
+			});
 	}
 
 	changeChallenge(addr) {
@@ -736,6 +851,7 @@ export class ClassroomComponent implements OnInit {
 			if (!selfRegister) {
 				this.txMode = 'failedTX';
 			} else {
+				await selfRegister.wait();
 				this.hashTx = selfRegister.hash;
 				this.txMode = 'successTX';
 			}
@@ -757,6 +873,7 @@ export class ClassroomComponent implements OnInit {
 			if (!application) {
 				this.txMode = 'failedTX';
 			} else {
+				await application.wait();
 				this.hashTx = application.hash;
 				this.txMode = 'successTX';
 			}
@@ -776,9 +893,10 @@ export class ClassroomComponent implements OnInit {
 		if (!approve) {
 			this.txMode = 'failedTX';
 		} else {
+			await approve.wait();
 			this.hashTx = approve.hash;
 			this.txMode = 'successTX';
-			this.allowanceMode = 1;
+			this.allowanceMode = 2;
 		}
 		this.ngxLoader.stop();
 	}
@@ -810,6 +928,7 @@ export class ClassroomComponent implements OnInit {
 		if (!pay) {
 			this.txMode = 'failedTX';
 		} else {
+			await pay.wait();
 			this.hashTx = pay.hash;
 			this.txMode = 'successTX';
 			this.allowanceMode = 3;
@@ -833,6 +952,7 @@ export class ClassroomComponent implements OnInit {
 			if (!sendTx) {
 				this.txMode = 'failedTX';
 			} else {
+				await sendTx.wait();
 				this.hashTx = sendTx.hash;
 				this.txMode = 'successTX';
 			}
@@ -856,6 +976,7 @@ export class ClassroomComponent implements OnInit {
 			if (!collectTx) {
 				this.txMode = 'failedTX';
 			} else {
+				await collectTx.wait();
 				this.hashTx = collectTx.hash;
 				this.txMode = 'successTX';
 			}

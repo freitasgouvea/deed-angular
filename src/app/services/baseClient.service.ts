@@ -446,7 +446,7 @@ export class baseClientService {
 			roleBytes,
 			address
 		);
-		await transaction.wait();
+		return transaction;
 	}
 
 	async grantRole(role: string, address: string) {
@@ -458,7 +458,7 @@ export class baseClientService {
 			roleBytes,
 			address
 		);
-		await transaction.wait();
+		return transaction;
 	}
 
 	public async studentSelfRegister(_name: string) {
@@ -466,14 +466,12 @@ export class baseClientService {
 		const register = await this.universityContractInstance.studentSelfRegister(
 			name
 		);
-		await register.wait();
 		return register;
 	}
 
 	public async studentUpdateName(newName: string) {
 		const name = ethers.utils.formatBytes32String(newName);
 		const register = await this.studentContractInstance.changeName(name);
-		await register.wait();
 		return register;
 	}
 
@@ -505,14 +503,12 @@ export class baseClientService {
 	) {
 		const val = ethers.utils.parseEther(input.toString());
 		const tx = await this.DAIContract.approve(address, val);
-		await tx.wait();
 		return tx;
 	}
 
 	async donateDAI(input: number) {
 		const val = ethers.utils.parseEther(input.toString());
 		const tx = await this.universityContractInstance.donateDAI(val);
-		await tx.wait();
 		return tx;
 	}
 
@@ -543,7 +539,6 @@ export class baseClientService {
 			ethers.utils.solidityKeccak256(['string'], [label]),
 			environment.UniversityAddress
 		);
-		await tx.wait();
 	}
 
 	async setResolver(node: string) {
@@ -551,7 +546,6 @@ export class baseClientService {
 			node,
 			environment.ENSPulbicResolverAddress
 		);
-		await tx.wait();
 	}
 
 	async setAddr(node: string, address: string) {
@@ -559,14 +553,12 @@ export class baseClientService {
 			node,
 			address
 		);
-		await tx.wait();
 	}
 
 	async setReverse(name: string) {
 		const tx = await this.universityContractInstance.registerInReverseRegistrar(
 			name
 		);
-		await tx.wait();
 	}
 
 	public async setTxRecord(_node, key, text) {
@@ -576,7 +568,6 @@ export class baseClientService {
 			text,
 			environment.ENSPulbicResolverAddress
 		);
-		await tx.wait();
 	}
 
 	public async claimSubnodeClassroom(_node, label, owner, classroom) {
@@ -588,7 +579,6 @@ export class baseClientService {
 			0,
 			classroom
 		);
-		await tx.wait();
 	}
 
 	public async claimSubnodeStudent(_node, label, owner, student) {
@@ -600,7 +590,6 @@ export class baseClientService {
 			0,
 			student
 		);
-		await tx.wait();
 	}
 
 	// Student actions
@@ -609,7 +598,6 @@ export class baseClientService {
 		const application = await this.studentContractInstance.applyToClassroom(
 			classroomAddress
 		);
-		await application.wait();
 		return application;
 	}
 
@@ -619,7 +607,6 @@ export class baseClientService {
 			classroomAddress,
 			secret32
 		);
-		await answer.wait();
 		return answer;
 	}
 
@@ -631,13 +618,11 @@ export class baseClientService {
 			classroomAddress,
 			studentAddress
 		);
-		await withdraw.wait();
 		return withdraw;
 	}
 
 	public async payEntryPrice() {
 		const tx = await this.studentApplicationContractInstance.payEntryPrice();
-		await tx.wait();
 		return tx;
 	}
 
