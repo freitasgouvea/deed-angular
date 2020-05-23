@@ -68,6 +68,10 @@ export class LandingComponent implements OnInit {
 		this.initSigner();
 	}
 
+	connectGSN() {
+		console.warn("Not compatible with this application, call the relayer directly with the university contract address and method as required");
+	}
+
 	openModal(id: string) {
 		this.modalService.open(id);
 	}
