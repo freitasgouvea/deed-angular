@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import * as skynet from '@nebulous/skynet';
+//import * as skynet from '@nebulous/skynet';
 
 import { Classroom } from 'src/models/classroom.model';
 import { ModalService } from '../_modal';
@@ -431,15 +431,15 @@ export class ClassroomComponent implements OnInit {
 			this.warned = true;
 			return;
 		}
-		this.ngxLoader.start();
-		const file = files[0];
-		console.log(file);
-		const skylink = await skynet.UploadFile(
-			file,
-			skynet.DefaultUploadOptions
-		);
-		console.log(`Upload successful, skylink: ${skylink}`);
-		this.ngxLoader.stop();
+		// this.ngxLoader.start();
+		// const file = files[0];
+		// console.log(file);
+		// const skylink = await skynet.UploadFile(
+		// 	file,
+		// 	skynet.DefaultUploadOptions
+		// );
+		// console.log(`Upload successful, skylink: ${skylink}`);
+		// this.ngxLoader.stop();
 	}
 
 	downloadSkylink(skylink, filename) {
@@ -448,10 +448,10 @@ export class ClassroomComponent implements OnInit {
 			this.warned = true;
 			return;
 		}
-		skynet.DownloadFile(
-			filename,
-			skylink,
-			skynet.DefaultDownloadOptions
+		// skynet.DownloadFile(
+		// 	filename,
+		// 	skylink,
+		// 	skynet.DefaultDownloadOptions
 		);
 	}
 

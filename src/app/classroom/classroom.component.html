@@ -340,6 +340,7 @@
                         <div class="mt-2 py-5 border-top text-center">
                             <h4 class="UniversityAdmins mt-3">Upload to Siasky</h4>
                         </div>
+                        <h2 class="description text-center text-warning">Please upload the file to siasky and paste the record to register. We are working to fix this issue</h2>
                         <div class="form-group">
                             <label for="file">Choose File</label>
                             <input type="file" id="file" (change)="uploadSkylink($event.target.files)">
@@ -692,6 +693,7 @@
                             </div>
                             <h3 class="text-center text-white">Sia Skylink</h3>
                             <h2 class="description text-center text-white">{{globals.selectedClassroom.metadata.skylink}}</h2>
+                            <h2 class="description text-center text-warning">Please copy the link and download the file from siasky. We are working to fix this issue</h2>
                         </div>
                         <div class="card-footer bg-gradient-default">
                             <a (click)="closeModal('custom-modal-4'); txOff(); refreshClassroomInfo();" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
