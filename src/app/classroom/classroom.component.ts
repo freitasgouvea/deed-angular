@@ -87,6 +87,7 @@ export class ClassroomComponent implements OnInit {
 			this.globals.address
 		);
 		this.myStudentApplication.connectService();
+		this.myStudentApplication.updateState();
 		this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
 		this.myStudentApplication.state = state;
 		//TODO: abstract service
