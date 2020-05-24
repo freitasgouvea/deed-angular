@@ -198,4 +198,42 @@ export class StudentComponent implements OnInit {
 		);
 		await this.refreshAccountInfo();
 	}
+
+	async buyDAI(value: string): Promise<any> {
+		this.txOn();
+		const studentAddress = await this.globals.service.getAddress();
+		if (value == '') {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'processingTX';
+			const tx = await this.globals.service.uniswapETHForDAI(
+				value, studentAddress
+			)
+			if (tx == null) {
+				this.txMode = 'failedTX';
+			} else {
+				this.hashTx = tx.hash;
+				this.txMode = 'successTX';
+			}
+		}
+	}
+
+	async sellDAI(value: string): Promise<any> {
+		this.txOn();
+		const studentAddress = await this.globals.service.getAddress();
+		if (value == '') {
+			this.txMode = 'failedTX';
+		} else {
+			this.txMode = 'processingTX';
+			const tx = await this.globals.service.uniswapDAIForETH(
+				value, studentAddress
+			)
+			if (tx == null) {
+				this.txMode = 'failedTX';
+			} else {
+				this.hashTx = tx.hash;
+				this.txMode = 'successTX';
+			}
+		}
+	}
 }

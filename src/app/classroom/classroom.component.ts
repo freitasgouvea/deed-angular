@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+//import * as skynet from '@nebulous/skynet';
 
 import { Classroom } from 'src/models/classroom.model';
 import { ModalService } from '../_modal';
@@ -86,6 +87,7 @@ export class ClassroomComponent implements OnInit {
 			this.globals.address
 		);
 		this.myStudentApplication.connectService();
+		this.myStudentApplication.updateState();
 		this.myStudentApplication.classroomAddress = this.globals.selectedClassroom.smartcontract;
 		this.myStudentApplication.state = state;
 		//TODO: abstract service
@@ -416,6 +418,42 @@ export class ClassroomComponent implements OnInit {
 		classroom.metadata.keywords = await this.globals.ensService.getTxKeywordsArray(
 			node
 		);
+		classroom.metadata.skylink = await this.globals.ensService.getTxRecord(
+			node,
+			'skylink'
+		);
+	}
+
+	warned = false;
+
+	async uploadSkylink(files) {
+		if (!this.warned){
+			console.warn("Please upload the file to siasky and paste the record to register. We are working to fix this issue");
+			this.warned = true;
+			return;
+		}
+		// this.ngxLoader.start();
+		// const file = files[0];
+		// console.log(file);
+		// const skylink = await skynet.UploadFile(
+		// 	file,
+		// 	skynet.DefaultUploadOptions
+		// );
+		// console.log(`Upload successful, skylink: ${skylink}`);
+		// this.ngxLoader.stop();
+	}
+
+	downloadSkylink(skylink, filename) {
+		if (!this.warned){
+			console.warn("Please copy the link and download the file from siasky. We are working to fix this issue");
+			this.warned = true;
+			return;
+		}
+		// skynet.DownloadFile(
+		// 	filename,
+		// 	skylink,
+		// 	skynet.DefaultDownloadOptions
+		//);
 	}
 
 	refreshClassroomFunds(
