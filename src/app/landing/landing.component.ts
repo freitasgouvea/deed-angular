@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+//import { RelayProvider } from '@opengsn/gsn';
 
 import { Classroom } from 'src/models/classroom.model';
 import { GenericUser } from 'src/models/genericUser.model';
@@ -16,6 +17,7 @@ import { ENSService } from '../services/ens.service';
 import { environment } from 'src/environments/environment';
 import Web3 from 'web3';
 import { MetamaskService } from '../services/metamask.service';
+import { ethers } from 'ethers';
 
 const web3 = new Web3(Web3.givenProvider);
 
@@ -69,7 +71,25 @@ export class LandingComponent implements OnInit {
 	}
 
 	connectGSN() {
-		console.warn("Not compatible with this application, call the relayer directly with the university contract address and method as required");
+		// const relayHubAddress = environment.DefaultGasRelayHub;
+		// const paymasterAddress = environment.DefaultTestPaymaster;
+		// const stakeManagerAddress = environment.DefaultStakeManager;
+		// const gsnConfig = {
+		// 	relayHubAddress,
+		// 	paymasterAddress,
+		// 	stakeManagerAddress,
+		// 	methodSuffix: '_v4',
+		// 	jsonStringifyRequest: true,
+		// 	chainId: 3,
+		// };
+		// const gsnProvider = new RelayProvider(
+		// 	this.globals.service.provider,
+		// 	gsnConfig
+		// );
+		// const provider = new ethers.providers.Web3Provider(gsnProvider);
+		// this.globals.service.provider = provider;
+		// console.log("GSN Registered as provider");
+		// this.globals.useGSN = true;
 	}
 
 	openModal(id: string) {
@@ -125,14 +145,17 @@ export class LandingComponent implements OnInit {
 	private async initSigner() {
 		this.globals.address = await this.globals.service.getAddress();
 		this.globals.ensService.configureProvider(this.portisService.provider);
-		if (this.roleMembersAdmin &&
-			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find((element) => element.address == this.globals.address))
+		if (
+			this.roleMembersAdmin &&
+			this.roleMembersAdmin['DEFAULT_ADMIN_ROLE'].find(
+				(element) => element.address == this.globals.address
+			)
+		)
 			this.globals.userIsUniversityAdmin = true;
 		const isRegistered = await this.globals.service.isStudentRegistred();
 		if (!isRegistered) {
 			this.globals.mode = 'connected';
-		}
-		else {
+		} else {
 			this.globals.userIsStudent = true;
 			this.globals.mode = 'registered';
 			const studentSmartContract = await this.globals.service.getStudentSmartContract();
@@ -293,7 +316,8 @@ export class LandingComponent implements OnInit {
 		} else {
 			this.txMode = 'processingTX';
 			const selfRegister = await this.globals.service.studentSelfRegister(
-				_name
+				_name,
+				this.globals.useGSN
 			);
 			if (!selfRegister) {
 				this.txMode = 'failedTX';
