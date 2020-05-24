@@ -83,7 +83,7 @@ export class LandingComponent implements OnInit {
 		// 	chainId: 3,
 		// };
 		// const gsnProvider = new RelayProvider(
-		// 	this.globals.service.provider,
+		// 	this.globals.service.portis,
 		// 	gsnConfig
 		// );
 		// const provider = new ethers.providers.Web3Provider(gsnProvider);
