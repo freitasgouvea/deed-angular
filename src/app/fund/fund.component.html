@@ -81,18 +81,6 @@
                         </div>
                         <div class="card mb-4">
                             <div class="card-body">
-                                <h5 class="card-title text-success">Uniswap liquidity providing</h5>
-                                <ul class="list-unstyled">
-                                    <li *ngFor="let item of uniswapData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="provide(item.key, operationSize)">Provide</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="remove(item.key, operationSize)">Remove</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, true)">Swap A for B</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, false)">Swap B for
-                                            A</button>{{item.key}}: <strong>{{item.value}}</strong></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-body">
                                 <h5 class="card-title text-danger">Aave open positions</h5>
                                 <ul class="list-unstyled">
                                     <li *ngFor="let item of aaveBorrowData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="enterMarket(item.key, operationSize, false)">Enter</button>
@@ -102,6 +90,18 @@
                                         <strong>{{item.value}}</strong></li>
                                     <li class="title text-success">Aave total colateral:
                                         <strong>{{aaveColateral}}</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title text-success">Uniswap liquidity providing</h5>
+                                <ul class="list-unstyled">
+                                    <li *ngFor="let item of uniswapData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="provide(item.key, operationSize)">Provide</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="remove(item.key, operationSize)">Remove</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, true)">Swap A for B</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, false)">Swap B for
+                                            A</button>{{item.key}}: <strong>{{item.value}}</strong></li>
                                 </ul>
                             </div>
                         </div>
