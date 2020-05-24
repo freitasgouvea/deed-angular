@@ -10,11 +10,17 @@
         <div class="col-md-6">
           <ul class="nav nav-footer justify-content-end">
             <li class="nav-item">
-              <a href="/" class="nav-link" target="_blank">DeEd</a>
-            </li>
-            <li class="nav-item">
-                <a href="/classroom" class="nav-link" target="_blank">Classroom</a>
-              </li>
+              <a [routerLink]="['/']" class="nav-link no-caret">university</a>
+          </li>
+          <li class="nav-item">
+              <a [routerLink]="['/classroom']" class="nav-link no-caret">classroom</a>
+          </li>
+          <li class="nav-item">
+              <a [routerLink]="['/student']" class="nav-link no-caret">account</a>
+          </li>
+          <li class="nav-item">
+              <a [routerLink]="['/fund']" class="nav-link no-caret">fund</a>
+          </li>
           </ul>
         </div>
       </div>
