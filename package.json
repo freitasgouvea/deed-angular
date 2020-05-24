@@ -22,6 +22,7 @@
         "@angular/router": "~9.1.1",
         "@babel/core": "^7.9.6",
         "@ng-bootstrap/ng-bootstrap": "^6.0.0",
+        "@openeth/truffle-typings": "^0.0.5",
         "@opengsn/gsn": "https://github.com/opengsn/gsn",
         "@portis/web3": "^2.0.0-beta.55",
         "ethereum-ens": "^0.8.0",
@@ -55,4 +56,7 @@
         "tslint": "~6.1.0",
         "typescript": "~3.8.3"
     },
+    "browser": {
+        "fs": false
+    }
 }

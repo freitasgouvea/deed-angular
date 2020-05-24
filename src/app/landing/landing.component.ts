@@ -89,6 +89,7 @@ export class LandingComponent implements OnInit {
 		const provider = new ethers.providers.Web3Provider(gsnProvider);
 		this.globals.service.provider = provider;
 		console.log("GSN Registered as provider");
+		this.globals.useGSN = true;
 	}
 
 	openModal(id: string) {
@@ -315,7 +316,8 @@ export class LandingComponent implements OnInit {
 		} else {
 			this.txMode = 'processingTX';
 			const selfRegister = await this.globals.service.studentSelfRegister(
-				_name
+				_name,
+				this.globals.useGSN
 			);
 			if (!selfRegister) {
 				this.txMode = 'failedTX';

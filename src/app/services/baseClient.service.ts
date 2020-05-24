@@ -410,7 +410,10 @@ export class baseClientService {
 		isFinished = await classroomContractInstance.courseFinished();
 		duration = await classroomContractInstance.duration();
 		startDate = await classroomContractInstance.startDate();
-		finishDate = startDate.toNumber() > 0 ? startDate.toNumber() + duration.toNumber() : 0;
+		finishDate =
+			startDate.toNumber() > 0
+				? startDate.toNumber() + duration.toNumber()
+				: 0;
 		addressChallenge = await classroomContractInstance.challengeAddress();
 		owner = await classroomContractInstance.owner();
 		return [
@@ -461,11 +464,11 @@ export class baseClientService {
 		return transaction;
 	}
 
-	public async studentSelfRegister(_name: string) {
+	public async studentSelfRegister(_name: string, gsn: boolean = false) {
 		const name = ethers.utils.formatBytes32String(_name);
-		const register = await this.universityContractInstance.studentSelfRegister(
-			name
-		);
+		const register = gsn
+			? await this.universityContractInstance.studentSelfRegisterGSN(name)
+			: await this.universityContractInstance.studentSelfRegister(name);
 		return register;
 	}
 
@@ -642,7 +645,7 @@ export class baseClientService {
 			route_buyDai,
 			addressReceiver,
 			timestampsToWait,
-			{value: etherVal}
+			{ value: etherVal }
 		);
 		return tx;
 	}
