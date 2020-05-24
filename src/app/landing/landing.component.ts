@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { RelayProvider } from '@opengsn/gsn';
+//import { RelayProvider } from '@opengsn/gsn';
 
 import { Classroom } from 'src/models/classroom.model';
 import { GenericUser } from 'src/models/genericUser.model';
@@ -71,25 +71,25 @@ export class LandingComponent implements OnInit {
 	}
 
 	connectGSN() {
-		const relayHubAddress = environment.DefaultGasRelayHub;
-		const paymasterAddress = environment.DefaultTestPaymaster;
-		const stakeManagerAddress = environment.DefaultStakeManager;
-		const gsnConfig = {
-			relayHubAddress,
-			paymasterAddress,
-			stakeManagerAddress,
-			methodSuffix: '_v4',
-			jsonStringifyRequest: true,
-			chainId: 3,
-		};
-		const gsnProvider = new RelayProvider(
-			this.globals.service.provider,
-			gsnConfig
-		);
-		const provider = new ethers.providers.Web3Provider(gsnProvider);
-		this.globals.service.provider = provider;
-		console.log("GSN Registered as provider");
-		this.globals.useGSN = true;
+		// const relayHubAddress = environment.DefaultGasRelayHub;
+		// const paymasterAddress = environment.DefaultTestPaymaster;
+		// const stakeManagerAddress = environment.DefaultStakeManager;
+		// const gsnConfig = {
+		// 	relayHubAddress,
+		// 	paymasterAddress,
+		// 	stakeManagerAddress,
+		// 	methodSuffix: '_v4',
+		// 	jsonStringifyRequest: true,
+		// 	chainId: 3,
+		// };
+		// const gsnProvider = new RelayProvider(
+		// 	this.globals.service.provider,
+		// 	gsnConfig
+		// );
+		// const provider = new ethers.providers.Web3Provider(gsnProvider);
+		// this.globals.service.provider = provider;
+		// console.log("GSN Registered as provider");
+		// this.globals.useGSN = true;
 	}
 
 	openModal(id: string) {
