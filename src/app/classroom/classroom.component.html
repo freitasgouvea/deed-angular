@@ -144,7 +144,7 @@
                                 <h6 *ngIf=!globals.selectedClassroom class="text-white text-uppercase">Search</h6>
                                 <button *ngIf="globals.selectedClassroom&&(globals.mode=='unconnected')" class="btn btn-neutral mt-4" (click)="conectPortis()">Conect Portis</button>
                                 <button *ngIf="globals.selectedClassroom&&(globals.mode=='connected')" class="btn btn-neutral mt-4" (click)="openModal('custom-modal-register'); txOn();">Register DeEd</button>
-                                <a *ngIf=!globals.selectedClassroom (click)="openModal('custom-modal-search-classroom')" class="btn btn-info mt-4">Search</a>
+                                <a *ngIf=!globals.selectedClassroom (click)="openModal('custom-modal-search-classroom')" class="btn btn-neutral text-default mt-4">Search</a>
                             </div>
                         </div>
                     </div>

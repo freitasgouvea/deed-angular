@@ -31,7 +31,7 @@
                             <div class="btn-wrapper">
                                 <a href="#classrooms" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                     <span class="btn-inner--icon"><i class="fa fa-university"></i></span>
-                                    <span class="btn-inner--text">Classroms</span>
+                                    <span class="btn-inner--text">Classrooms</span>
                                 </a>
                                 <a href="#Informations" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                     <span class="btn-inner--icon"><i class="fa fa-info-circle"></i></span>
@@ -232,9 +232,13 @@
                     <span class="btn-inner--icon"><i class="fa fa-cogs"></i></span>
                     <span class="btn-inner--text">Admin</span>
                 </button>
-                <button *ngIf=globals.userIsStudent href="#" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                <button *ngIf=globals.userIsStudent [routerLink]="['/student']" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                     <span class="btn-inner--icon"><i class="fa fa-user"></i></span>
-                    <span class="btn-inner--text">My Student Profile</span>
+                    <span class="btn-inner--text">Account</span>
+                </button>
+                <button [routerLink]="['/fund']" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                    <span class="btn-inner--icon"><i class="fa fa-signal"></i></span>
+                    <span class="btn-inner--text">Funds</span>
                 </button>
                 <button (click)="openModal('transfer-dai')" class="btn btn-success btn-icon mb-3 mb-sm-0">
                     <span class="btn-inner--icon"><i class="fa fa-gratipay"></i></span>
@@ -292,8 +296,8 @@
                                 </div>
                                 <div class="pl-4">
                                     <h5 class="title text-success">Make a Donation</h5>
-                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
-                                    <a href="javascript:void(0)" class="text-success">Support Now</a>
+                                    <p>Deed is completely free, anyone can build on top of it with no additional expenses. We do, however, appreciate any donations to help us keep pushing forward with this ambitious concept.</p>
+                                    <a (click)="openModal('transfer-dai')" class="text-success">Support Now</a>
                                 </div>
                             </div>
                         </div>
@@ -308,8 +312,8 @@
                                 </div>
                                 <div class="pl-4">
                                     <h5 class="title text-danger">Smart Contract</h5>
-                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
-                                    <a href="javascript:void(0)" class="text-danger">Show the Code</a>
+                                    <p>Deed is built on top of the Ethereum blockchain, using several different smart contracts created from scratch to perform all sorts of different functions. Everything is open source, so feel free to check our code!</p>
+                                    <a href="javascript:void(0)" class="text-danger">See the Code</a>
                                 </div>
                             </div>
                         </div>
@@ -324,7 +328,7 @@
                                 </div>
                                 <div class="pl-4">
                                     <h5 class="title text-info">White Papper</h5>
-                                    <p>The Arctic Ocean freezes every winter and much of the sea-ice then thaws every summer, and that process will continue whatever.</p>
+                                    <p>Deed is committed to change the way education is spread around the world. Our application, future milestones and more can be checked in our whitepaper. (Work in progress).</p>
                                     <a href="javascript:void(0)" class="text-info">Read White Papper</a>
                                 </div>
                             </div>
@@ -360,11 +364,10 @@
         <div class="container">
             <div class="row row-grid justify-content-center">
                 <div class="col-lg-8 text-center">
-                    <h2 class="display-3">Do you like this
-                        <span class="text-success">Defi DAPP?</span>
+                    <h2 class="display-3">Want your own
+                        <span class="text-success">DeFi University DAPP?</span>
                     </h2>
-                    <p class="lead">Cause if you do, it can be yours for FREE. Hit the button below to navigate to Creative Tim where you can find the Design System in Angular. Start a new project or give an old Angular project a new look!
-                    </p>
+                    <p class="lead">You can create your own education institution, with any parameters for FREE. Click the link below to see our github page</p>
                     <div class="btn-wrapper">
                         <a href="https://github.com/MatheusDaros/Uproot" class="btn btn-default mb-3 mb-sm-0">See Repo
                             on Github</a>
