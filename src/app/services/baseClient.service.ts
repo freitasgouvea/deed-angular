@@ -34,6 +34,7 @@ export class baseClientService {
 	public networkName: any;
 	public useSigner = false;
 
+	portis: any;
 	account: any;
 
 	constructor() {}
