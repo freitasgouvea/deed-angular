@@ -18,9 +18,11 @@
                             <div class="row align-items-center">
                                 <div class="col-lg-8">
                                     <h4 class="text-white">Connect to your account to begin.</h4>
-                                    <p class="lead text-white mt-3">You will need to connect to a wallet service in order to interact with this dApp.</p>
+                                    <p class="lead text-white mt-3">You will need to connect to a wallet service in
+                                        order to interact with this dApp.</p>
                                 </div>
-                                <div class="col-lg-3 ml-lg-auto"><a [routerLink]="['/']" class="btn btn-lg btn-block btn-white">CONNECT</a></div>
+                                <div class="col-lg-3 ml-lg-auto"><a [routerLink]="['/']"
+                                        class="btn btn-lg btn-block btn-white">CONNECT</a></div>
                             </div>
                         </div>
                     </div>
@@ -30,32 +32,46 @@
         <div *ngIf=globals.selectedStudent class="container py-lg-md d-flex">
             <div class="col">
                 <div class="row mb-4">
-                    <div class="col-lg-12 mb-4">
+                    <div class="col-lg-8 mb-4">
                         <h1 class="display-3  text-white">account
                             <span>{{globals.selectedStudent.name}}</span>
-                            <span *ngIf=globals.selectedStudent.metadata.ENSName class="text-muted" style="font-size:smaller;">@{{globals.selectedStudent.metadata.ENSName}}</span>
+                            <span *ngIf=globals.selectedStudent.metadata.ENSName class="text-muted"
+                                style="font-size:smaller;">@{{globals.selectedStudent.metadata.ENSName}}</span>
                         </h1>
                         <h3 class="lead  text-white">{{globals.selectedStudent.metadata.description}}</h3>
                         <p class="lead text-white">Address: {{globals.selectedStudent.address}}</p>
-                        <p class="lead text-white">Student Smart Contract: {{globals.selectedStudent.smartContractAddress}}</p>
+                        <p class="lead text-white">Student Smart Contract:
+                            {{globals.selectedStudent.smartContractAddress}}</p>
+                        <p class="lead text-white">Applications: {{globals.selectedStudent.score}} DAI</p>
                         <p class="lead text-white">Score: {{globals.selectedStudent.score}} </p>
                         <div class="btn-wrapper">
                             <a [routerLink]="['/']" class="btn btn-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
-                            <a (click)="openModal('custom-modal-dai'); txOn();" class="btn btn-info text-white btn-icon mb-3 mb-sm-0">
+                            <a (click)="openModal('custom-modal-dai'); txOn();"
+                                class="btn btn-info text-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-star"></i></span>
                                 <span class="btn-inner--text">Trade DAI</span>
                             </a>
-                            <a *ngIf=!globals.selectedStudent.studentENSNameRecord (click)="openModal('custom-modal-setup'); txOn();" class="btn btn-success text-white btn-icon mb-3 mb-sm-0">
-                                <span class="btn-inner--icon"><i class="fa fa-star"></i></span>
-                                <span class="btn-inner--text">Register ENS</span>
-                            </a>
-                            <a (click)="openModal('custom-modal-edit'); txOn();" class="btn btn-primary text-white btn-icon mb-3 mb-sm-0">
+                            <a (click)="openModal('custom-modal-edit'); txOn();"
+                                class="btn btn-primary text-white btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-edit"></i></span>
                                 <span class="btn-inner--text">Edit Profile</span>
                             </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="card bg-dark">
+                            <img class="card-img-top" src="../assets/img/student/avatar.jpg" alt="Avatar">
+                            <div class="card-footer">
+                                <a *ngIf=!globals.selectedStudent.studentENSNameRecord
+                                    (click)="openModal('custom-modal-setup'); txOn();"
+                                    class="btn btn-primary text-white btn-block btn-icon mb-3 mb-sm-0">
+                                    <span class="btn-inner--icon"><i class="fa fa-star"></i></span>
+                                    <span class="btn-inner--text">Register ENS</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,9 +101,11 @@
                                 <div class="row align-items-center">
                                     <div class="col-lg-8">
                                         <h4 class="text-white">Start by choosing the perfect classroom for you.</h4>
-                                        <p class="lead text-white mt-3">You will need to connect to a wallet service in order to interact with this dApp.</p>
+                                        <p class="lead text-white mt-3">You will need to connect to a wallet service in
+                                            order to interact with this dApp.</p>
                                     </div>
-                                    <div class="col-lg-3 ml-lg-auto"><a [routerLink]="['/']" fragment=classrooms class="btn btn-lg btn-block btn-white">SELECT CLASSROOM</a></div>
+                                    <div class="col-lg-3 ml-lg-auto"><a [routerLink]="['/']" fragment=classrooms
+                                            class="btn btn-lg btn-block btn-white">SELECT CLASSROOM</a></div>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +133,9 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                             </div>
-                                            <input id="inputObjNewName" #inputObjNewName class="form-control" placeholder="New Student Name" type="text" (focus)="focus=true" (blur)="focus=false">
+                                            <input id="inputObjNewName" #inputObjNewName class="form-control"
+                                                placeholder="New Student Name" type="text" (focus)="focus=true"
+                                                (blur)="focus=false">
                                         </div>
                                     </div>
                                 </div>
@@ -123,14 +143,16 @@
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <div *ngIf="txMode=='preTX'" class="alert alert-neutral" role="alert">
-                                        <strong class="text-default">You need confirm this transaction on your portis wallet!</strong>
+                                        <strong class="text-default">You need confirm this transaction on your portis
+                                            wallet!</strong>
                                     </div>
                                     <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
                                         <strong>Wait!</strong> Updating your account ...
                                     </div>
                                     <div *ngIf="txMode=='successTX'" class="alert alert-success" role="alert">
                                         <strong>Success!</strong> Transaction Hash {{hashTx}}
-                                        <a href="https://ropsten.etherscan.io/tx/{{hashTx}}" target="_blank">See On Etherscan</a>
+                                        <a href="https://ropsten.etherscan.io/tx/{{hashTx}}" target="_blank">See On
+                                            Etherscan</a>
                                     </div>
                                     <div *ngIf="txMode=='failedTX'" class="alert alert-danger" role="alert">
                                         <strong>Failed!</strong> Transaction didn't complete. Try again!
@@ -139,11 +161,13 @@
                             </div>
                         </div>
                         <div class="card-footer bg-gradient-default">
-                            <a *ngIf="txMode=='preTX'" type="submit" (click)="updateName(inputObjNewName.value)" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="updateName(inputObjNewName.value)"
+                                class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Update</span>
                             </a>
-                            <a (click)="closeModal('custom-modal-edit'); txOff(); refreshAccountInfo();" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                            <a (click)="closeModal('custom-modal-edit'); txOff(); refreshAccountInfo();"
+                                class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
@@ -162,13 +186,15 @@
                             <h3 class="text-center text-white">Active Your Student ENS</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-white">Here you can active your student ENS subdomain.</h2>
+                                    <h2 class="description text-white">Here you can active your student ENS subdomain.
+                                    </h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <div *ngIf="txMode=='preTX'" class="alert alert-neutral" role="alert">
-                                        <strong class="text-default">You need confirm this transaction on your portis wallet!</strong>
+                                        <strong class="text-default">You need confirm this transaction on your portis
+                                            wallet!</strong>
                                     </div>
                                     <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
                                         <strong>Wait!</strong> Registering your ENS subdomain...
@@ -183,11 +209,13 @@
                             </div>
                         </div>
                         <div class="card-footer bg-gradient-default">
-                            <a *ngIf="txMode=='preTX'" type="submit" (click)="registerStudentENS()" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="registerStudentENS()"
+                                class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Register Subdomain</span>
                             </a>
-                            <a (click)="closeModal('custom-modal-setup'); txOff(); refreshAccountInfo();" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                            <a (click)="closeModal('custom-modal-setup'); txOff(); refreshAccountInfo();"
+                                class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>
@@ -206,7 +234,8 @@
                             <h3 class="text-center text-white">Buy or Sell DAI</h3>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h2 class="description text-center text-white">Here you can buy or sell DAI with ETH at Uniswap.</h2>
+                                    <h2 class="description text-center text-white">Here you can buy or sell DAI with ETH
+                                        at Uniswap.</h2>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -216,7 +245,9 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                             </div>
-                                            <input id="inputObjAmount" #inputObjAmount class="form-control" placeholder="Amount" type="number" (focus)="focus=true" (blur)="focus=false">
+                                            <input id="inputObjAmount" #inputObjAmount class="form-control"
+                                                placeholder="Amount" type="number" (focus)="focus=true"
+                                                (blur)="focus=false">
                                         </div>
                                     </div>
                                 </div>
@@ -224,14 +255,16 @@
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <div *ngIf="txMode=='preTX'" class="alert alert-neutral" role="alert">
-                                        <strong class="text-default">You need confirm this transaction on your portis wallet!</strong>
+                                        <strong class="text-default">You need confirm this transaction on your portis
+                                            wallet!</strong>
                                     </div>
                                     <div *ngIf="txMode=='processingTX'" class="alert alert-warning" role="alert">
                                         <strong>Wait!</strong> Loading your transaction ...
                                     </div>
                                     <div *ngIf="txMode=='successTX'" class="alert alert-success" role="alert">
                                         <strong>Success!</strong> Transaction Hash {{hashTx}}
-                                        <a href="https://ropsten.etherscan.io/tx/{{hashTx}}" target="_blank">See On Etherscan</a>
+                                        <a href="https://ropsten.etherscan.io/tx/{{hashTx}}" target="_blank">See On
+                                            Etherscan</a>
                                     </div>
                                     <div *ngIf="txMode=='failedTX'" class="alert alert-danger" role="alert">
                                         <strong>Failed!</strong> Transaction didn't complete. Try again!
@@ -240,15 +273,18 @@
                             </div>
                         </div>
                         <div class="card-footer bg-gradient-default">
-                            <a *ngIf="txMode=='preTX'" type="submit" (click)="buyDAI(inputObjAmount.value)" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="buyDAI(inputObjAmount.value)"
+                                class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Buy</span>
                             </a>
-                            <a *ngIf="txMode=='preTX'" type="submit" (click)="sellDAI(inputObjAmount.value)" class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
+                            <a *ngIf="txMode=='preTX'" type="submit" (click)="sellDAI(inputObjAmount.value)"
+                                class="btn btn-success btn-icon text-white mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-send"></i></span>
                                 <span class="btn-inner--text">Sell</span>
                             </a>
-                            <a (click)="closeModal('custom-modal-dai'); txOff(); refreshAccountInfo();" class="btn btn-neutral btn-icon mb-3 mb-sm-0">
+                            <a (click)="closeModal('custom-modal-dai'); txOff(); refreshAccountInfo();"
+                                class="btn btn-neutral btn-icon mb-3 mb-sm-0">
                                 <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
                                 <span class="btn-inner--text">Back</span>
                             </a>

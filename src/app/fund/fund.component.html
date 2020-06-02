@@ -29,43 +29,13 @@
                                 </li>
                                 <li class="lead  text-white">Reinvesting inside the endowment locked value</li>
                             </ul>
-                            <div class="btn-wrapper mt-4">
-                                <a [routerLink]="['/']" class="btn btn-white btn-icon mb-3 mb-sm-0">
-                                    <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
-                                    <span class="btn-inner--text">Back</span>
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="separator separator-bottom separator-skew">
-                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                    <polygon class="fill-secondary" points="2560 0 2560 100 0 100"></polygon>
-                </svg>
-            </div>
-        </section>
-        <section id="fundsinfo" class="section bg-secondary mt-0">
             <div class="container">
                 <div class="row row-grid align-items-center">
-                    <div class="card-columns">
-                        <div *ngIf=userIsFundManager class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title text-primary">Fund Manager</h5>
-                                <input #inputSize class="form-control" placeholder="Operation Size (in 1e18)" type="text" size=32>
-                                <button class="btn btn-sm btn-primary" (click)="setOperationSize(inputSize.value)">Set
-                                    Operation Size</button>
-                            </div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title text-primary">Stored assets</h5>
-                                <ul class="list-unstyled">
-                                    <li *ngFor="let item of assetsData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="withdrawToken(item.key, operationSize)">Withdraw</button>{{item.key}}:
-                                        <strong>{{item.value}}</strong></li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
                         <div class="card mb-4">
                             <div class="card-body">
                                 <h5 class="card-title text-primary">Invested underlying assets</h5>
@@ -87,16 +57,37 @@
                         </div>
                         <div class="card mb-4">
                             <div class="card-body">
-                                <h5 class="card-title text-danger">Aave open positions</h5>
+                                <h5 class="card-title text-success">Total Colateral</h5>
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let item of aaveBorrowData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="enterMarket(item.key, operationSize, false)">Enter</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="exitMarket(item.key, operationSize, false)">Exit</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="borrow(item.key, operationSize)">Borrow</button>
-                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="repay(item.key, operationSize)">Repay</button>{{item.key}}:
-                                        <strong>{{item.value}}</strong></li>
-                                    <li class="title text-success">Aave total colateral:
-                                        <strong>{{aaveColateral}}</strong></li>
+                                    <li class="title ">Aave: <strong>{{aaveColateral}}</strong> ETH equivalent
+                                    </li>
+                                    <li class="title ">Compound: <strong>{{compoundColateral}}</strong> ETH equivalent</li>
                                 </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Stored assets</h5>
+                                <ul class="list-unstyled">
+                                    <li *ngFor="let item of assetsData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="withdrawToken(item.key, operationSize)">Withdraw</button>{{item.key}}:
+                                        <strong>{{item.value}}</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row row-grid align-items-center">
+                    <div class="card-columns">
+                        <div *ngIf=userIsFundManager class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Fund Manager</h5>
+                                <input #inputSize class="form-control" placeholder="Operation Size (in 1e18)" type="text" size=32>
+                                <button class="btn btn-sm btn-primary" (click)="setOperationSize(inputSize.value)">Set
+                                    Operation Size</button>
                             </div>
                         </div>
                         <div class="card mb-4">
@@ -108,6 +99,20 @@
                                         <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, true)">Swap A for B</button>
                                         <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="swap(item.key, operationSize, false)">Swap B for
                                             A</button>{{item.key}}: <strong>{{item.value}}</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title text-danger">Aave open positions</h5>
+                                <ul class="list-unstyled">
+                                    <li *ngFor="let item of aaveBorrowData | keyvalue"><button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="enterMarket(item.key, operationSize, false)">Enter</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-primary" (click)="exitMarket(item.key, operationSize, false)">Exit</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-warning" (click)="borrow(item.key, operationSize)">Borrow</button>
+                                        <button *ngIf=userIsFundManager class="btn btn-sm btn-success" (click)="repay(item.key, operationSize)">Repay</button>{{item.key}}:
+                                        <strong>{{item.value}}</strong></li>
+                                    <li class="title text-success">Aave total colateral:
+                                        <strong>{{aaveColateral}}</strong></li>
                                 </ul>
                             </div>
                         </div>
@@ -125,17 +130,13 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title text-success">Total Colateral</h5>
-                                <ul class="list-unstyled">
-                                    <li class="title ">Aave: <strong>{{aaveColateral}}</strong> ETH equivalent
-                                    </li>
-                                    <li class="title ">Compound: <strong>{{compoundColateral}}</strong> ETH equivalent</li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
+                </div>
+                <div class="btn-wrapper mt-4">
+                    <a [routerLink]="['/']" class="btn btn-white btn-icon mb-3 mb-sm-0">
+                        <span class="btn-inner--icon"><i class="fa fa-arrow-left"></i></span>
+                        <span class="btn-inner--text">Back</span>
+                    </a>
                 </div>
             </div>
         </section>

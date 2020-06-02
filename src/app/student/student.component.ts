@@ -1,6 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { Classroom } from 'src/models/classroom.model';
+import { GenericUser } from 'src/models/genericUser.model';
+import { CLASSROOMS } from 'src/models/mock-classroom';
 import { ModalService } from '../_modal';
 import { Globals } from '../app.globals';
 
